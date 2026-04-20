@@ -105,11 +105,85 @@ ax_draw2d(
 
 Critical for image-processing notebook — without `reversescale`, grayscale images appear inverted (white=high, black=low is the opposite of photographic convention).
 
-## Not needed (for now)
+## Priority 4: Animation support
 
-### Animations
+### Problem
 
-Multi-frame animations would enhance heat-equation and ODE trajectory demos, but the implementation complexity is high (Plotly animation frames, play/pause controls, slider). The demos can use sequential heatmap snapshots instead.
+Several demos want to show time evolution: heat diffusion, wave propagation, ODE trajectories, pendulum motion. Currently these must be shown as a sequence of static plots (one per cell), losing the sense of dynamics.
+
+### Plotly animation support
+
+Plotly.js has native animation support via `frames` and `animation` in the JSON spec:
+
+```json
+{
+  "data": [{"z": [[...]], "type": "heatmap"}],
+  "layout": {
+    "updatemenus": [{"type": "buttons", "buttons": [{"method": "animate", "label": "Play"}]}],
+    "sliders": [{"steps": [{"args": [["frame_0"]], "label": "t=0"}, ...]}]
+  },
+  "frames": [
+    {"name": "frame_0", "data": [{"z": [[...]]}]},
+    {"name": "frame_1", "data": [{"z": [[...]]}]},
+    ...
+  ]
+}
+```
+
+Since Aximar already renders Plotly JSON via Plotly.js, animation should work without IDE changes — the IDE just needs to pass through the `frames` array and `updatemenus`/`sliders` layout properties.
+
+### Proposed API
+
+```maxima
+/* Build frames from a list of plot specifications */
+ax_animate(
+  frame_data,               /* list of [label, plot_objects...] */
+  frame_duration = 100,     /* ms per frame */
+  transition = 50,          /* ms transition */
+  title = "Heat Diffusion")$
+
+/* Example: animate a heatmap over time */
+frames : makelist(
+  [sconcat("t=", t),
+   ax_heatmap(compute_heat(t))],
+  t, 0, 10, 0.5)$
+ax_animate(frames, title = "1D Heat Equation")$
+
+/* Example: animate a 2D trajectory */
+frames : makelist(
+  [sconcat("t=", t),
+   points(trajectory_up_to(t)),
+   explicit(potential, x, -3, 3)],
+  t, 0, 50)$
+ax_animate(frames, title = "Gradient Descent")$
+```
+
+### Implementation
+
+1. Accept a list of frame specs, each containing plot objects (same types as `ax_draw2d`)
+2. Generate the initial `data` array from the first frame
+3. Generate `frames` array with delta data for each subsequent frame
+4. Add `updatemenus` with Play/Pause buttons and a `sliders` timeline
+5. Write single Plotly JSON — Plotly.js handles the rest
+
+Medium-sized change: reuses existing trace generation, adds frame/slider wiring.
+
+### IDE requirements
+
+- **Aximar:** Should work if the Plotly JSON passthrough is clean (no filtering of `frames`, `updatemenus`, `sliders`). Needs testing.
+- **VSCode extension:** Same — the custom Plotly renderer must not strip unknown JSON keys.
+
+### Impact on demos
+
+| Notebook | Animation use |
+|----------|---------------|
+| animations | Dedicated showcase: wave, diffusion, pendulum, Lorenz attractor |
+| heat-equation | Temperature evolution over time |
+| gradient-descent | Optimiser trajectory on cost surface |
+| pid-tuning | Step response as gains change |
+| matrix-exponential-odes | Trajectory evolution in phase space |
+
+### Not needed (for now)
 
 ### Secondary axes
 

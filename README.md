@@ -23,6 +23,7 @@ brew install duckdb          # for DuckDB notebooks only
 |----------|--------|-------------|----------|
 | [surface-gallery.macnb](notebooks/surface-gallery.macnb) | Mathematics | Interactive 3D surfaces — saddles, torus, trig surfaces with rotation and zoom. [S+N] Compute gradient/curvature symbolically | numerics, ax-plots |
 | [vector-fields.macnb](notebooks/vector-fields.macnb) | Physics | Electromagnetic fields, fluid flow, gradient fields. [S+N] Derive fields from symbolic potentials | numerics, ax-plots |
+| [animations.macnb](notebooks/animations.macnb) | Mathematics / Physics | Animated visualizations: wave propagation, diffusion, ODE trajectories, pendulum. Uses Plotly animation frames | numerics, ax-plots |
 
 ### Symbolic-Numeric Bridge
 
@@ -68,13 +69,20 @@ brew install duckdb          # for DuckDB notebooks only
 | [image-processing.macnb](notebooks/image-processing.macnb) | Computer Vision | [S+N] Load real images with `np_imread`, point ops, convolution (blur, sharpen, edge detection). Derive Gaussian kernel symbolically | numerics, ax-plots |
 | [spectral-analysis.macnb](notebooks/spectral-analysis.macnb) | Physics | [S+N] Chirp, AM, square wave — PSD, windowing, spectrogram. Symbolic Fourier series and Gibbs phenomenon | numerics, ax-plots |
 
+### Optimisation & Control
+
+| Notebook | Domain | Description | Packages |
+|----------|--------|-------------|----------|
+| [pid-tuning.macnb](notebooks/pid-tuning.macnb) | Control Engineering | [S+N] Derive PID controller C(s) symbolically, closed-loop transfer function, numeric parameter sweep over Kp/Ki/Kd, cost surface visualisation, step response comparison | numerics, ax-plots |
+| [gradient-descent.macnb](notebooks/gradient-descent.macnb) | Mathematics / ML | [S+N] Symbolic gradient via `diff()`, numeric descent on Rosenbrock and quadratic surfaces, trajectory overlay on contour plots | numerics, ax-plots |
+
 ### Engineering Applications
 
 | Notebook | Domain | Description | Packages |
 |----------|--------|-------------|----------|
 | [beam-deflection.macnb](notebooks/beam-deflection.macnb) | Civil/Mechanical Engineering | [S+N] Derive beam ODE symbolically, solve with `ode2()`, compare against FEM with `np_solve` | numerics, ax-plots |
 | [rc-circuit.macnb](notebooks/rc-circuit.macnb) | Electrical Engineering | [S+N] Symbolic KVL → state-space → `np_expm` transient, symbolic H(s), numeric Bode plot | numerics, ax-plots |
-| [heat-equation.macnb](notebooks/heat-equation.macnb) | Mechanical Engineering | [S+N] Symbolic PDE → FD stencil → stability analysis → numeric time-stepping → heatmap | numerics, ax-plots |
+| [heat-equation.macnb](notebooks/heat-equation.macnb) | Mechanical Engineering | [S+N] Symbolic PDE → FD stencil → stability analysis → numeric time-stepping → animated heatmap | numerics, ax-plots |
 
 ## Feature Coverage Matrix
 
@@ -84,7 +92,7 @@ brew install duckdb          # for DuckDB notebooks only
 | `np_eig` | eigenvalue-analysis, pca, phase-portraits, control-systems |
 | `np_svd` | svd-low-rank, pca |
 | `np_lstsq` | least-squares |
-| `np_expm` | matrix-exponential-odes, control-systems, rc-circuit |
+| `np_expm` | matrix-exponential-odes, control-systems, rc-circuit, pid-tuning |
 | `np_matmul` | heat-equation, pca, monte-carlo |
 | `np_fft` / `np_ifft` | signal-processing, spectral-analysis |
 | `np_convolve` | signal-processing, image-processing |
@@ -100,11 +108,12 @@ brew install duckdb          # for DuckDB notebooks only
 | `ax_heatmap` | correlation-heatmap, heat-equation, image-processing, spectral-analysis |
 | `ax_vector_field` / `ax_streamline` | phase-portraits, vector-fields |
 | `ax_bar` / `ax_histogram` | eda-pipeline, monte-carlo |
-| `ax_contour` | surface-gallery |
-| Symbolic `diff()` | symbolic-jacobian, phase-portraits, surface-gallery, vector-fields, eigenvalue-analysis |
+| `ax_contour` | surface-gallery, gradient-descent, pid-tuning |
+| `ax_animate` | animations, heat-equation |
+| Symbolic `diff()` | symbolic-jacobian, phase-portraits, surface-gallery, vector-fields, eigenvalue-analysis, gradient-descent |
 | Symbolic `integrate()` | symbolic-integration, signal-processing |
 | Symbolic `taylor()` | taylor-convergence |
-| Symbolic `solve()` | control-systems, rc-circuit |
+| Symbolic `solve()` | control-systems, rc-circuit, pid-tuning |
 | Symbolic `ode2()` | beam-deflection |
 
 ## License
