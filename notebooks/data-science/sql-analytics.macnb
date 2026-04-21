@@ -1,0 +1,246 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 5,
+  "metadata": {
+    "kernelspec": {
+      "name": "maxima",
+      "display_name": "Maxima",
+      "language": "maxima"
+    },
+    "aximar": {}
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "source": "# SQL Analytics in Maxima\n\nThis notebook demonstrates how to use **DuckDB's SQL engine** from\nwithin Maxima for data analysis. The `dataframes-duckdb` package lets\nyou register tables and run full SQL — including window functions,\nCTEs, and joins — then combine the results with Maxima's symbolic\ncomputer algebra system.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "load(\"numerics\")$\nload(\"dataframes\")$\nload(\"dataframes-duckdb\")$\nload(\"ax-plots\")$",
+      "metadata": {},
+      "execution_count": 1,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Loading and Registering Data\n\nLoad the CSV into a dataframe table, then register it so DuckDB can\nquery it by name.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "sales : df_read_csv(\"../../data/sales.csv\")$\ndf_register(sales, \"sales\")$\nprint(\"Registered 'sales' table:\", df_table_shape(sales))$",
+      "metadata": {},
+      "execution_count": 2,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Registered 'sales' table: [100,6]"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Basic SQL Queries\n\nAggregate and filter data using familiar SQL syntax.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "df_sql(\"SELECT region, COUNT(*) as n, SUM(revenue) as total_rev FROM sales GROUP BY region ORDER BY total_rev DESC\")",
+      "metadata": {},
+      "execution_count": 3,
+      "outputs": [
+        {
+          "data": {
+            "text/latex": [
+              "\\begin{array}{lll} \\textbf{region} & \\textbf{n} & \\textbf{total\\_rev} \\\\\\\\ \\textit{str} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & 35.00     & 1.1290e+5 \\\\\\\\ \\text{North} & 32.00     & 8.9261e+4 \\\\\\\\ \\text{West} & 17.00     & 1.8711e+4 \\\\\\\\ \\text{South} & 16.00     & 1.2042e+4 \\\\\\\\ \\hline \\text{4 rows} \\times \\text{3 cols} \\end{array}"
+            ]
+          },
+          "execution_count": 3,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "df_sql(\"SELECT product, AVG(price) as avg_price, AVG(units) as avg_units FROM sales WHERE region = 'North' GROUP BY product\")",
+      "metadata": {},
+      "execution_count": 4,
+      "outputs": [
+        {
+          "data": {
+            "text/latex": [
+              "\\begin{array}{lll} \\textbf{product} & \\textbf{avg\\_price} & \\textbf{avg\\_units} \\\\\\\\ \\textit{str} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{Gizmo} & 44.49     & 101.8     \\\\\\\\ \\text{Widget} & 16.99     & 97.83     \\\\\\\\ \\text{Gadget} & 29.49     & 93.83     \\\\\\\\ \\hline \\text{3 rows} \\times \\text{3 cols} \\end{array}"
+            ]
+          },
+          "execution_count": 4,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Window Functions\n\nWindow functions compute running totals and rankings without collapsing\nrows — a powerful SQL feature for analytical queries.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "df_sql(\"SELECT region, product, revenue, SUM(revenue) OVER (PARTITION BY region ORDER BY revenue) as running_total FROM sales ORDER BY region, revenue LIMIT 15\")",
+      "metadata": {},
+      "execution_count": 5,
+      "outputs": [
+        {
+          "data": {
+            "text/latex": [
+              "\\begin{array}{llll} \\textbf{region} & \\textbf{product} & \\textbf{revenue} & \\textbf{running\\_total} \\\\\\\\ \\textit{str} & \\textit{str} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & \\text{Widget} & 1130.     & 1130.     \\\\\\\\ \\text{East} & \\text{Widget} & 1228.     & 2358.     \\\\\\\\ \\text{East} & \\text{Widget} & 1237.     & 3594.     \\\\\\\\ \\text{East} & \\text{Widget} & 1511.     & 5105.     \\\\\\\\ \\text{East} & \\text{Widget} & 1518.     & 6623.     \\\\\\\\ \\text{East} & \\text{Widget} & 1533.     & 8156.     \\\\\\\\ \\text{East} & \\text{Widget} & 1574.     & 9730.     \\\\\\\\ \\text{East} & \\text{Widget} & 1619.     & 1.1349e+4 \\\\\\\\ \\text{East} & \\text{Widget} & 1733.     & 1.3082e+4 \\\\\\\\ \\text{East} & \\text{Widget} & 1871.     & 1.4953e+4 \\\\\\\\ \\cdots & \\cdots & \\cdots & \\cdots \\\\\\\\ \\text{East} & \\text{Widget} & 2241.     & 2.1229e+4 \\\\\\\\ \\text{East} & \\text{Widget} & 2374.     & 2.3603e+4 \\\\\\\\ \\text{East} & \\text{Gadget} & 2419.     & 2.6022e+4 \\\\\\\\ \\hline \\text{15 rows} \\times \\text{4 cols} \\end{array}"
+            ]
+          },
+          "execution_count": 5,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "df_sql(\"SELECT region, product, revenue, RANK() OVER (PARTITION BY region ORDER BY revenue DESC) as rank FROM sales ORDER BY region, rank LIMIT 20\")",
+      "metadata": {},
+      "execution_count": 6,
+      "outputs": [
+        {
+          "data": {
+            "text/latex": [
+              "\\begin{array}{llll} \\textbf{region} & \\textbf{product} & \\textbf{revenue} & \\textbf{rank} \\\\\\\\ \\textit{str} & \\textit{str} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & \\text{Gizmo} & 8598.     & 1.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 8138.     & 2.000     \\\\\\\\ \\text{East} & \\text{Gadget} & 6368.     & 3.000     \\\\\\\\ \\text{East} & \\text{Gadget} & 5374.     & 4.000     \\\\\\\\ \\text{East} & \\text{Gadget} & 4768.     & 5.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 4591.     & 6.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 4493.     & 7.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 4218.     & 8.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 3943.     & 9.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 3905.     & 10.00     \\\\\\\\ \\cdots & \\cdots & \\cdots & \\cdots \\\\\\\\ \\text{East} & \\text{Gadget} & 2669.     & 18.00     \\\\\\\\ \\text{East} & \\text{Gadget} & 2521.     & 19.00     \\\\\\\\ \\text{East} & \\text{Widget} & 2473.     & 20.00     \\\\\\\\ \\hline \\text{20 rows} \\times \\text{4 cols} \\end{array}"
+            ]
+          },
+          "execution_count": 6,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Common Table Expressions (CTEs)\n\nCTEs let you build multi-step analyses in a single query. Here we\ncompute per-region averages and compare each to the grand average.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "result : df_sql(\"\n  WITH region_stats AS (\n    SELECT region, \n           AVG(revenue) as avg_rev,\n           COUNT(*) as n\n    FROM sales \n    GROUP BY region\n  ),\n  overall AS (\n    SELECT AVG(revenue) as grand_avg FROM sales\n  )\n  SELECT rs.region, rs.avg_rev, rs.n,\n         rs.avg_rev - o.grand_avg as diff_from_avg\n  FROM region_stats rs, overall o\n  ORDER BY rs.avg_rev DESC\n\")$\nresult;",
+      "metadata": {},
+      "execution_count": 7,
+      "outputs": [
+        {
+          "data": {
+            "text/latex": [
+              "\\begin{array}{llll} \\textbf{region} & \\textbf{avg\\_rev} & \\textbf{n} & \\textbf{diff\\_from\\_avg} \\\\\\\\ \\textit{str} & \\textit{f64} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & 3226.     & 35.00     & 896.5     \\\\\\\\ \\text{North} & 2789.     & 32.00     & 460.3     \\\\\\\\ \\text{West} & 1101.     & 17.00     & -1228.     \\\\\\\\ \\text{South} & 752.6     & 16.00     & -1577.     \\\\\\\\ \\hline \\text{4 rows} \\times \\text{4 cols} \\end{array}"
+            ]
+          },
+          "execution_count": 7,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Joins\n\nCreate a lookup table with region metadata and join it to the sales\ndata for enriched analysis.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "region_meta : df_sql(\"SELECT * FROM (VALUES \n  ('North', 'Urban', 1.2), \n  ('South', 'Suburban', 0.9),\n  ('East', 'Urban', 1.1), \n  ('West', 'Rural', 0.8)\n) AS t(region, type, market_factor)\")$\ndf_register(region_meta, \"regions\")$",
+      "metadata": {},
+      "execution_count": 8,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": "df_sql(\"SELECT s.region, r.type, r.market_factor,\n        SUM(s.revenue) as total_rev,\n        SUM(s.revenue) * r.market_factor as adjusted_rev\n FROM sales s \n JOIN regions r ON s.region = r.region\n GROUP BY s.region, r.type, r.market_factor\n ORDER BY adjusted_rev DESC\")",
+      "metadata": {},
+      "execution_count": 9,
+      "outputs": [
+        {
+          "data": {
+            "text/latex": [
+              "\\begin{array}{lllll} \\textbf{region} & \\textbf{type} & \\textbf{market\\_factor} & \\textbf{total\\_rev} & \\textbf{adjusted\\_rev} \\\\\\\\ \\textit{str} & \\textit{str} & \\textit{f64} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & \\text{Urban} & 1.100     & 1.1290e+5 & 1.2419e+5 \\\\\\\\ \\text{North} & \\text{Urban} & 1.200     & 8.9261e+4 & 1.0711e+5 \\\\\\\\ \\text{West} & \\text{Rural} & 0.8000     & 1.8711e+4 & 1.4969e+4 \\\\\\\\ \\text{South} & \\text{Suburban} & 0.9000     & 1.2042e+4 & 1.0837e+4 \\\\\\\\ \\hline \\text{4 rows} \\times \\text{5 cols} \\end{array}"
+            ]
+          },
+          "execution_count": 9,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Visualizing SQL Results\n\nQuery results are regular dataframe tables, so we can extract columns\nand pass them directly to ax-plots.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "prod_rev : df_sql(\"SELECT product, SUM(revenue) as total FROM sales GROUP BY product ORDER BY total DESC\")$\nax_draw2d(\n  ax_bar(\n    df_to_string_list(df_table_column(prod_rev, \"product\")),\n    np_to_list(df_table_column(prod_rev, \"total\"))\n  ),\n  title=\"Total Revenue by Product\",\n  ylabel=\"Revenue ($)\", grid=true\n)$",
+      "metadata": {},
+      "execution_count": 10,
+      "outputs": [
+        {
+          "data": {
+            "application/x-maxima-plotly": [
+              "{\"data\":[{\"x\":[\"Gizmo\",\"Gadget\",\"Widget\"],\"y\":[95890.27999999998,82611.12000000002,54408.880000000005],\"type\":\"bar\",\"name\":\"bar\"}],\"layout\":{\"title\":{\"text\":\"Total Revenue by Product\"},\"width\":700,\"height\":450,\"plot_bgcolor\":\"white\",\"paper_bgcolor\":\"white\",\"xaxis\":{\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"yaxis\":{\"title\":{\"text\":\"Revenue ($)\"},\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1}}}"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "cross : df_sql(\"SELECT region, product, SUM(revenue) as rev FROM sales GROUP BY region, product ORDER BY region, product\")$\ncross;",
+      "metadata": {},
+      "execution_count": 11,
+      "outputs": [
+        {
+          "data": {
+            "text/latex": [
+              "\\begin{array}{lll} \\textbf{region} & \\textbf{product} & \\textbf{rev} \\\\\\\\ \\textit{str} & \\textit{str} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & \\text{Gadget} & 4.0793e+4 \\\\\\\\ \\text{East} & \\text{Gizmo} & 4.5317e+4 \\\\\\\\ \\text{East} & \\text{Widget} & 2.6786e+4 \\\\\\\\ \\text{North} & \\text{Gadget} & 3.3048e+4 \\\\\\\\ \\text{North} & \\text{Gizmo} & 3.6185e+4 \\\\\\\\ \\text{North} & \\text{Widget} & 2.0028e+4 \\\\\\\\ \\text{South} & \\text{Gadget} & 3505.     \\\\\\\\ \\text{South} & \\text{Gizmo} & 5487.     \\\\\\\\ \\text{South} & \\text{Widget} & 3050.     \\\\\\\\ \\text{West} & \\text{Gadget} & 5264.     \\\\\\\\ \\text{West} & \\text{Gizmo} & 8902.     \\\\\\\\ \\text{West} & \\text{Widget} & 4545.     \\\\\\\\ \\hline \\text{12 rows} \\times \\text{3 cols} \\end{array}"
+            ]
+          },
+          "execution_count": 11,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Combining SQL with Symbolic Math\n\nOne of Maxima's unique strengths: use the CAS to verify or extend\nresults from SQL queries. Here we check whether `revenue ~ units * price`\nholds on average for each region.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Fit a symbolic model to the per-region data */\nstats : df_sql(\"SELECT region, AVG(units) as avg_u, AVG(price) as avg_p, AVG(revenue) as avg_r FROM sales GROUP BY region\")$\n/* Revenue should approximately equal units * price */\nprint(\"Revenue ~ units * price check:\")$\nfor i : 0 thru 3 do block([u, p, r],\n  u : np_ref(df_table_column(stats, \"avg_u\"), i),\n  p : np_ref(df_table_column(stats, \"avg_p\"), i),\n  r : np_ref(df_table_column(stats, \"avg_r\"), i),\n  print(\"  \", df_string_column_ref(df_table_column(stats, \"region\"), i+1),\n        \": u*p =\", float(u*p), \"actual =\", r)\n)$",
+      "metadata": {},
+      "execution_count": 12,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Revenue ~ units * price check:\n   East : u*p = 3185.6314285714293 actual = 3225.6028571428574\n   West : u*p = 1089.2702422145333 actual = 1100.664705882353\n   North : u*p = 2778.5151562500005 actual = 2789.4175\n   South : u*p = 714.5910937500001 actual = 752.5949999999999"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Summary\n\nThe **dataframes-duckdb** package brings full SQL analytics into the\nMaxima environment. CTEs, window functions, and joins provide powerful\ndata transformation, while Maxima's symbolic engine lets you verify\nrelationships and build mathematical models on top of query results.",
+      "metadata": {}
+    }
+  ]
+}

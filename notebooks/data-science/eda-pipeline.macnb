@@ -1,0 +1,264 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 5,
+  "metadata": {
+    "kernelspec": {
+      "name": "maxima",
+      "display_name": "Maxima",
+      "language": "maxima"
+    },
+    "aximar": {}
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "source": "# Exploratory Data Analysis Pipeline\n\nThis notebook demonstrates a complete EDA workflow in Maxima: load a\ndataset, inspect its structure, compute summary statistics, and\nvisualize distributions and relationships — all using the\n**dataframes** and **ax-plots** packages.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "load(\"numerics\")$\nload(\"dataframes\")$\nload(\"dataframes-duckdb\")$\nload(\"ax-plots\")$",
+      "metadata": {},
+      "execution_count": 1,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Loading Data",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "T : df_read_csv(\"../../data/sales.csv\")$\nprint(\"Shape:\", df_table_shape(T))$\nprint(\"Columns:\", df_table_names(T))$",
+      "metadata": {},
+      "execution_count": 2,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Shape: [100,6]\nColumns: [\"date\",\"region\",\"product\",\"units\",\"price\",\"revenue\"]"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "df_table_head(T)",
+      "metadata": {},
+      "execution_count": 3,
+      "outputs": [
+        {
+          "data": {
+            "text/latex": [
+              "\\begin{array}{llllll} \\textbf{date} & \\textbf{region} & \\textbf{product} & \\textbf{units} & \\textbf{price} & \\textbf{revenue} \\\\\\\\ \\textit{str} & \\textit{str} & \\textit{str} & \\textit{f64} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{2024-01-01T00:00:00.000000Z} & \\text{East} & \\text{Widget} & 78.00     & 14.49     & 1130.     \\\\\\\\ \\text{2024-01-08T00:00:00.000000Z} & \\text{North} & \\text{Gadget} & 52.00     & 27.99     & 1455.     \\\\\\\\ \\text{2024-01-08T00:00:00.000000Z} & \\text{South} & \\text{Gizmo} & 31.00     & 39.99     & 1240.     \\\\\\\\ \\text{2024-01-15T00:00:00.000000Z} & \\text{East} & \\text{Gadget} & 95.00     & 22.49     & 2137.     \\\\\\\\ \\text{2024-01-15T00:00:00.000000Z} & \\text{West} & \\text{Widget} & 38.00     & 12.99     & 493.6     \\\\\\\\ \\hline \\text{5 rows} \\times \\text{6 cols} \\end{array}"
+            ]
+          },
+          "execution_count": 3,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Summary Statistics\n\n`df_describe` computes count, mean, standard deviation, min, quartiles\n(25%, 50%, 75%), and max for every numeric column.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "df_describe(T)",
+      "metadata": {},
+      "execution_count": 4,
+      "outputs": [
+        {
+          "data": {
+            "text/latex": [
+              "\\begin{array}{llll} \\textbf{stat} & \\textbf{units} & \\textbf{price} & \\textbf{revenue} \\\\\\\\ \\textit{str} & \\textit{f64} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{count} & 100.0     & 100.0     & 100.0     \\\\\\\\ \\text{mean} & 86.72     & 25.99     & 2329.     \\\\\\\\ \\text{std} & 44.07     & 11.17     & 1722.     \\\\\\\\ \\text{min} & 19.00     & 9.990     & 189.8     \\\\\\\\ \\text{25\\%} & 43.75     & 15.99     & 1085.     \\\\\\\\ \\text{50\\%} & 86.50     & 24.74     & 1875.     \\\\\\\\ \\text{75\\%} & 113.3     & 34.62     & 3134.     \\\\\\\\ \\text{max} & 190.0     & 49.99     & 8598.     \\\\\\\\ \\hline \\text{8 rows} \\times \\text{4 cols} \\end{array}"
+            ]
+          },
+          "execution_count": 4,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Distribution of Revenue\n\nA histogram shows how revenue values are spread across the dataset.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "ax_draw2d(\n  ax_histogram(df_table_column(T, \"revenue\")),\n  title=\"Revenue Distribution\",\n  xlabel=\"Revenue\", ylabel=\"Count\",\n  grid=true, nbins=15\n)$",
+      "metadata": {},
+      "execution_count": 5,
+      "outputs": [
+        {
+          "data": {
+            "application/x-maxima-plotly": [
+              "{\"data\":[{\"x\":[1130.22,1455.48,1239.69,2136.55,493.62,3059.32,1732.98,275.76,3358.88,1614.15,1014.71,1227.59,1824.27,1055.67,3783.12,1381.71,1086.09,3647.04,1573.95,241.78,2243.83,559.65,2418.9,3477.26,1236.51,923.72,2336.18,2241.35,887.63,1451.12,3905.07,189.81,2355.24,1510.92,1167.68,2521.03,1534.67,620.73,4493.49,826.31,579.6,3897.37,2768.29,449.75,1518.02,2364.14,1495.66,1532.82,2865.59,1295.64,2669.41,1879.06,461.56,4590.88,2399.2,494.7,1618.8,4175.13,1080.54,2373.75,944.65,1379.08,3942.84,503.58,2729.16,3507.79,402.74,4093.11,1871.43,838.11,1520.22,4217.86,884.21,1281.55,3772.52,5416.74,985.42,2473.35,2027.48,4690.62,8598.28,1371.89,2440.68,4768.41,558.57,5850.09,2846.22,2344.33,3986.05,5374.32,436.62,2718.64,8138.15,961.95,3798.48,1898.1,7345.42,6368.18,2879.28,2000.57],\"type\":\"histogram\",\"name\":\"histogram\"}],\"layout\":{\"title\":{\"text\":\"Revenue Distribution\"},\"width\":700,\"height\":450,\"plot_bgcolor\":\"white\",\"paper_bgcolor\":\"white\",\"xaxis\":{\"title\":{\"text\":\"Revenue\"},\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"yaxis\":{\"title\":{\"text\":\"Count\"},\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1}}}"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Sales by Region\n\nGroup the data by region and compute total revenue and average units\nsold per region.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "by_region : df_group_by(T, \"region\")$\nregion_totals : df_summarize(by_region,\n  \"total_revenue\", lambda([revenue], np_sum(revenue)),\n  \"avg_units\", lambda([units], np_mean(units))\n)$\nregion_totals;",
+      "metadata": {},
+      "execution_count": 6,
+      "outputs": [
+        {
+          "data": {
+            "text/latex": [
+              "\\begin{array}{lll} \\textbf{region} & \\textbf{total\\_revenue} & \\textbf{avg\\_units} \\\\\\\\ \\textit{str} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & 1.1290e+5 & 122.6     \\\\\\\\ \\text{North} & 8.9261e+4 & 97.31     \\\\\\\\ \\text{South} & 1.2042e+4 & 31.13     \\\\\\\\ \\text{West} & 1.8711e+4 & 45.29     \\\\\\\\ \\hline \\text{4 rows} \\times \\text{3 cols} \\end{array}"
+            ]
+          },
+          "execution_count": 6,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "ax_draw2d(\n  ax_bar(\n    df_to_string_list(df_table_column(region_totals, \"region\")),\n    np_to_list(df_table_column(region_totals, \"total_revenue\"))\n  ),\n  title=\"Total Revenue by Region\",\n  ylabel=\"Revenue ($)\", grid=true\n)$",
+      "metadata": {},
+      "execution_count": 7,
+      "outputs": [
+        {
+          "data": {
+            "application/x-maxima-plotly": [
+              "{\"data\":[{\"x\":[\"East\",\"North\",\"South\",\"West\"],\"y\":[112896.1,89261.36,12041.519999999999,18711.300000000003],\"type\":\"bar\",\"name\":\"bar\"}],\"layout\":{\"title\":{\"text\":\"Total Revenue by Region\"},\"width\":700,\"height\":450,\"plot_bgcolor\":\"white\",\"paper_bgcolor\":\"white\",\"xaxis\":{\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"yaxis\":{\"title\":{\"text\":\"Revenue ($)\"},\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1}}}"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Product Analysis\n\nHow many sales does each product have, and what are the average price\nand total units?",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "df_value_counts(df_table_column(T, \"product\"))",
+      "metadata": {},
+      "execution_count": 8,
+      "outputs": [
+        {
+          "data": {
+            "text/latex": [
+              "\\begin{array}{ll} \\textbf{value} & \\textbf{count} \\\\\\\\ \\textit{str} & \\textit{f64} \\\\\\\\ \\hline \\text{Widget} & 42.00     \\\\\\\\ \\text{Gadget} & 32.00     \\\\\\\\ \\text{Gizmo} & 26.00     \\\\\\\\ \\hline \\text{3 rows} \\times \\text{2 cols} \\end{array}"
+            ]
+          },
+          "execution_count": 8,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "by_product : df_group_by(T, \"product\")$\nproduct_stats : df_summarize(by_product,\n  \"avg_price\", lambda([price], np_mean(price)),\n  \"total_units\", lambda([units], np_sum(units))\n)$\nproduct_stats;",
+      "metadata": {},
+      "execution_count": 9,
+      "outputs": [
+        {
+          "data": {
+            "text/latex": [
+              "\\begin{array}{lll} \\textbf{product} & \\textbf{avg\\_price} & \\textbf{total\\_units} \\\\\\\\ \\textit{str} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{Widget} & 15.16     & 3512.     \\\\\\\\ \\text{Gadget} & 27.97     & 2888.     \\\\\\\\ \\text{Gizmo} & 41.07     & 2272.     \\\\\\\\ \\hline \\text{3 rows} \\times \\text{3 cols} \\end{array}"
+            ]
+          },
+          "execution_count": 9,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "ax_draw2d(\n  ax_bar(\n    df_to_string_list(df_table_column(product_stats, \"product\")),\n    np_to_list(df_table_column(product_stats, \"avg_price\"))\n  ),\n  title=\"Average Price by Product\",\n  ylabel=\"Price ($)\", grid=true\n)$",
+      "metadata": {},
+      "execution_count": 10,
+      "outputs": [
+        {
+          "data": {
+            "application/x-maxima-plotly": [
+              "{\"data\":[{\"x\":[\"Widget\",\"Gadget\",\"Gizmo\"],\"y\":[15.156666666666673,27.974375000000006,41.066923076923075],\"type\":\"bar\",\"name\":\"bar\"}],\"layout\":{\"title\":{\"text\":\"Average Price by Product\"},\"width\":700,\"height\":450,\"plot_bgcolor\":\"white\",\"paper_bgcolor\":\"white\",\"xaxis\":{\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"yaxis\":{\"title\":{\"text\":\"Price ($)\"},\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1}}}"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Scatter: Units vs Revenue\n\nDo more units sold correspond to higher revenue? A scatter plot reveals\nthe relationship.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "ax_draw2d(\n  color=blue, marker_size=5,\n  points(np_to_list(df_table_column(T, \"units\")),\n         np_to_list(df_table_column(T, \"revenue\"))),\n  title=\"Units Sold vs Revenue\",\n  xlabel=\"Units\", ylabel=\"Revenue\",\n  grid=true\n)$",
+      "metadata": {},
+      "execution_count": 11,
+      "outputs": [
+        {
+          "data": {
+            "application/x-maxima-plotly": [
+              "{\"data\":[{\"x\":[78.0,52.0,31.0,95.0,38.0,68.0,102.0,24.0,112.0,85.0,29.0,91.0,73.0,33.0,88.0,79.0,41.0,96.0,105.0,22.0,67.0,35.0,110.0,74.0,99.0,28.0,82.0,115.0,37.0,88.0,93.0,19.0,76.0,108.0,32.0,97.0,83.0,27.0,101.0,69.0,40.0,113.0,71.0,25.0,98.0,86.0,34.0,118.0,91.0,36.0,109.0,94.0,44.0,112.0,80.0,30.0,120.0,87.0,46.0,125.0,35.0,92.0,116.0,42.0,84.0,121.0,26.0,89.0,107.0,39.0,78.0,114.0,29.0,95.0,148.0,126.0,58.0,165.0,52.0,138.0,172.0,61.0,132.0,159.0,43.0,141.0,178.0,67.0,145.0,168.0,38.0,136.0,185.0,55.0,152.0,190.0,158.0,182.0,72.0,143.0],\"y\":[1130.22,1455.48,1239.69,2136.55,493.62,3059.32,1732.98,275.76,3358.88,1614.15,1014.71,1227.59,1824.27,1055.67,3783.12,1381.71,1086.09,3647.04,1573.95,241.78,2243.83,559.65,2418.9,3477.26,1236.51,923.72,2336.18,2241.35,887.63,1451.12,3905.07,189.81,2355.24,1510.92,1167.68,2521.03,1534.67,620.73,4493.49,826.31,579.6,3897.37,2768.29,449.75,1518.02,2364.14,1495.66,1532.82,2865.59,1295.64,2669.41,1879.06,461.56,4590.88,2399.2,494.7,1618.8,4175.13,1080.54,2373.75,944.65,1379.08,3942.84,503.58,2729.16,3507.79,402.74,4093.11,1871.43,838.11,1520.22,4217.86,884.21,1281.55,3772.52,5416.74,985.42,2473.35,2027.48,4690.62,8598.28,1371.89,2440.68,4768.41,558.57,5850.09,2846.22,2344.33,3986.05,5374.32,436.62,2718.64,8138.15,961.95,3798.48,1898.1,7345.42,6368.18,2879.28,2000.57],\"type\":\"scatter\",\"mode\":\"markers\",\"marker\":{\"color\":\"blue\",\"size\":5},\"name\":\"points\"}],\"layout\":{\"title\":{\"text\":\"Units Sold vs Revenue\"},\"width\":700,\"height\":450,\"plot_bgcolor\":\"white\",\"paper_bgcolor\":\"white\",\"xaxis\":{\"title\":{\"text\":\"Units\"},\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"yaxis\":{\"title\":{\"text\":\"Revenue\"},\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1}}}"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Filtering — High-Value Sales\n\nFilter the dataset to keep only rows where revenue exceeds 3000.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "high_value : df_filter(T, lambda([revenue], is(revenue > 3000)))$\nprint(\"High-value sales:\", df_table_shape(high_value))$\ndf_table_head(high_value);",
+      "metadata": {},
+      "execution_count": 12,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "High-value sales: [26,6]"
+          ]
+        },
+        {
+          "data": {
+            "text/latex": [
+              "\\begin{array}{llllll} \\textbf{date} & \\textbf{region} & \\textbf{product} & \\textbf{units} & \\textbf{price} & \\textbf{revenue} \\\\\\\\ \\textit{str} & \\textit{str} & \\textit{str} & \\textit{f64} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{2024-01-22T00:00:00.000000Z} & \\text{North} & \\text{Gizmo} & 68.00     & 44.99     & 3059.     \\\\\\\\ \\text{2024-02-05T00:00:00.000000Z} & \\text{East} & \\text{Gadget} & 112.0     & 29.99     & 3359.     \\\\\\\\ \\text{2024-02-26T00:00:00.000000Z} & \\text{East} & \\text{Gizmo} & 88.00     & 42.99     & 3783.     \\\\\\\\ \\text{2024-03-11T00:00:00.000000Z} & \\text{East} & \\text{Gizmo} & 96.00     & 37.99     & 3647.     \\\\\\\\ \\text{2024-04-01T01:00:00.000000+01:00} & \\text{North} & \\text{Gizmo} & 74.00     & 46.99     & 3477.     \\\\\\\\ \\hline \\text{5 rows} \\times \\text{6 cols} \\end{array}"
+            ]
+          },
+          "execution_count": 12,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Summary\n\nWith **dataframes** for tabular manipulation and **ax-plots** for\nvisualization, Maxima provides a complete exploratory data analysis\nworkflow: load data, inspect structure, compute statistics, visualize\ndistributions and relationships, and filter for subsets of interest.",
+      "metadata": {}
+    }
+  ]
+}
