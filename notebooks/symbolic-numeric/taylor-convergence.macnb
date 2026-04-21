@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 85,
+      "execution_count": 97,
       "outputs": []
     },
     {
@@ -31,7 +31,7 @@
       "cell_type": "code",
       "source": "/* Symbolic Taylor expansion of exp(x) to order 5 */\nf : exp(x)$\nT5 : taylor(f, x, 0, 5);\nT5_poly : ratdisrep(T5);",
       "metadata": {},
-      "execution_count": 86,
+      "execution_count": 98,
       "outputs": [
         {
           "name": "stdout",
@@ -46,7 +46,7 @@
               "{{x^5}\\over{120}}+{{x^4}\\over{24}}+{{x^3}\\over{6}}+{{x^2}\\over{2}}+x+1"
             ]
           },
-          "execution_count": 86,
+          "execution_count": 98,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -56,7 +56,7 @@
       "cell_type": "code",
       "source": "/* Compare exp(x) and its 5th-order Taylor polynomial */\nax_draw2d(\n  color=blue, name=\"exp(x)\",\n  explicit(exp(x), x, -4, 4),\n  color=red, dash=\"dash\", name=\"Taylor O(5)\",\n  explicit(T5_poly, x, -4, 4),\n  title=\"exp(x) vs Taylor Polynomial (order 5)\",\n  yrange=[-1, 20], grid=true\n)$",
       "metadata": {},
-      "execution_count": 87,
+      "execution_count": 99,
       "outputs": [
         {
           "data": {
@@ -78,7 +78,7 @@
       "cell_type": "code",
       "source": "/* Compute Taylor polynomials of sin(x) at several orders */\norders : [1, 3, 5, 7, 9]$\npolys : makelist(\n  ratdisrep(taylor(sin(x), x, 0, orders[i])),\n  i, 1, length(orders)\n)$\n\n/* Display each polynomial */\nfor i: 1 thru length(orders) do\n  print(sconcat(\"Order \", orders[i], \":\"), polys[i])$",
       "metadata": {},
-      "execution_count": 88,
+      "execution_count": 100,
       "outputs": [
         {
           "name": "stdout",
@@ -93,7 +93,7 @@
       "cell_type": "code",
       "source": "/* Plot sin(x) and all Taylor approximations */\ncolors : [\"#e41a1c\", \"#ff7f00\", \"#4daf4a\", \"#377eb8\", \"#984ea3\"]$\n\nax_draw2d(\n  color=black, line_width=3, name=\"sin(x)\",\n  explicit(sin(x), x, -2*%pi, 2*%pi),\n  color=colors[1], name=\"Order 1\",\n  explicit(polys[1], x, -2*%pi, 2*%pi),\n  color=colors[2], name=\"Order 3\",\n  explicit(polys[2], x, -2*%pi, 2*%pi),\n  color=colors[3], name=\"Order 5\",\n  explicit(polys[3], x, -2*%pi, 2*%pi),\n  color=colors[4], name=\"Order 7\",\n  explicit(polys[4], x, -2*%pi, 2*%pi),\n  color=colors[5], name=\"Order 9\",\n  explicit(polys[5], x, -2*%pi, 2*%pi),\n  title=\"Successive Taylor Approximations of sin(x)\",\n  yrange=[-2, 2], grid=true\n)$",
       "metadata": {},
-      "execution_count": 89,
+      "execution_count": 101,
       "outputs": [
         {
           "data": {
@@ -115,14 +115,14 @@
       "cell_type": "code",
       "source": "/* Symbolic Taylor polynomials for exp(x) at orders 2, 4, 6, 8 */\nerr_orders : [2, 4, 6, 8]$\nexp_polys : makelist(\n  ratdisrep(taylor(exp(x), x, 0, err_orders[i])),\n  i, 1, length(err_orders)\n)$\n\n/* Error expressions: log10(|exp(x) - T_n(x)| + 1e-16) to avoid log(0) */\nerr_exprs : makelist(\n  log(abs(exp(x) - exp_polys[i]) + 1e-16) / log(10),\n  i, 1, length(err_orders)\n)$",
       "metadata": {},
-      "execution_count": 90,
+      "execution_count": 102,
       "outputs": []
     },
     {
       "cell_type": "code",
       "source": "/* Plot log10(error) for each order */\nax_draw2d(\n  color=\"#e41a1c\", name=\"Order 2\",\n  explicit(err_exprs[1], x, -3, 3),\n  color=\"#ff7f00\", name=\"Order 4\",\n  explicit(err_exprs[2], x, -3, 3),\n  color=\"#4daf4a\", name=\"Order 6\",\n  explicit(err_exprs[3], x, -3, 3),\n  color=\"#377eb8\", name=\"Order 8\",\n  explicit(err_exprs[4], x, -3, 3),\n  title=\"Approximation Error: log10(|exp(x) - T_n(x)|)\",\n  ylabel=\"log10(error)\", xlabel=\"x\",\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 91,
+      "execution_count": 103,
       "outputs": [
         {
           "data": {
@@ -144,7 +144,7 @@
       "cell_type": "code",
       "source": "/* Taylor expansion of 1/(1+x^2) — converges only for |x| < 1 */\ng : 1/(1 + x^2)$\nT10 : ratdisrep(taylor(g, x, 0, 10))$\nT20 : ratdisrep(taylor(g, x, 0, 20))$\n\nprint(\"T_10 =\", T10)$\nprint(\"T_20 =\", T20)$",
       "metadata": {},
-      "execution_count": 92,
+      "execution_count": 104,
       "outputs": [
         {
           "name": "stdout",
@@ -159,7 +159,7 @@
       "cell_type": "code",
       "source": "/* Plot: the Taylor series diverges wildly outside |x| < 1 */\nax_draw2d(\n  color=black, line_width=3, name=\"1/(1+x^2)\",\n  explicit(g, x, -2, 2),\n  color=red, name=\"Taylor order 10\",\n  explicit(T10, x, -2, 2),\n  color=blue, name=\"Taylor order 20\",\n  explicit(T20, x, -2, 2),\n  title=\"Radius of Convergence: 1/(1+x^2)\",\n  yrange=[-2, 3], grid=true\n)$",
       "metadata": {},
-      "execution_count": 93,
+      "execution_count": 105,
       "outputs": [
         {
           "data": {
@@ -186,7 +186,7 @@
       "cell_type": "code",
       "source": "/* Multivariate Taylor expansion */\nh : sin(x)*cos(y)$\nT_xy : taylor(h, [x, y], [0, 0], 4);\nT_xy_poly : ratdisrep(T_xy);",
       "metadata": {},
-      "execution_count": 94,
+      "execution_count": 106,
       "outputs": [
         {
           "name": "stdout",
@@ -201,7 +201,7 @@
               "x-{{3\\,x\\,y^2+x^3}\\over{6}}"
             ]
           },
-          "execution_count": 94,
+          "execution_count": 106,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -211,7 +211,7 @@
       "cell_type": "code",
       "source": "/* 3D surface: actual function */\nax_draw3d(\n  explicit(sin(x)*cos(y), x, -%pi, %pi, y, -%pi, %pi),\n  title=\"sin(x) cos(y)\", colorscale=\"Viridis\"\n)$",
       "metadata": {},
-      "execution_count": 95,
+      "execution_count": 107,
       "outputs": [
         {
           "data": {
@@ -228,7 +228,7 @@
       "cell_type": "code",
       "source": "/* 3D surface: Taylor approximation */\nax_draw3d(\n  explicit(T_xy_poly, x, -%pi, %pi, y, -%pi, %pi),\n  title=\"Taylor Approximation (order 4)\", colorscale=\"Viridis\"\n)$",
       "metadata": {},
-      "execution_count": 96,
+      "execution_count": 108,
       "outputs": [
         {
           "data": {

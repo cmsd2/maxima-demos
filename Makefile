@@ -6,7 +6,7 @@ NOTEBOOKS := $(wildcard notebooks/*/*.macnb)
 # Map notebooks/category/name.macnb -> docs/pages/name.html
 HTML_FILES := $(addprefix $(OUTPUT_DIR)/,$(addsuffix .html,$(basename $(notdir $(NOTEBOOKS)))))
 
-.PHONY: all clean index
+.PHONY: all clean index html
 
 all: $(HTML_FILES) index
 
@@ -24,6 +24,14 @@ $(OUTPUT_DIR):
 	mkdir -p $@
 
 index: $(HTML_FILES) | $(OUTPUT_DIR)
+	@./gen-index.sh
+
+html: | $(OUTPUT_DIR)
+	@for nb in $(NOTEBOOKS); do \
+		name=$$(basename "$$nb" .macnb); \
+		echo "$$nb -> $(OUTPUT_DIR)/$$name.html"; \
+		uv run jupyter nbconvert --to $(FORMAT) --output-dir $(OUTPUT_DIR) --output "$$name" "$$nb"; \
+	done
 	@./gen-index.sh
 
 clean:

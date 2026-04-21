@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 85,
+      "execution_count": 97,
       "outputs": []
     },
     {
@@ -31,7 +31,7 @@
       "cell_type": "code",
       "source": "/* Define the system */\nf1 : x*(1 - x) - x*y$\nf2 : y*(x - 1)$\n\n/* Compute the Jacobian symbolically */\nJ : matrix(\n  [diff(f1, x), diff(f1, y)],\n  [diff(f2, x), diff(f2, y)]\n);\n\nprint(\"Jacobian:\")$\nJ;",
       "metadata": {},
-      "execution_count": 86,
+      "execution_count": 98,
       "outputs": [
         {
           "name": "stdout",
@@ -46,7 +46,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi -y-2\\,x+1&-x\\cr y&x-1\\cr \\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 86,
+          "execution_count": 98,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -61,7 +61,7 @@
       "cell_type": "code",
       "source": "/* Find all equilibrium points */\nfps : solve([f1 = 0, f2 = 0], [x, y]);\n\nprint(\"Fixed points:\")$\nfor fp in fps do print(fp)$",
       "metadata": {},
-      "execution_count": 87,
+      "execution_count": 99,
       "outputs": [
         {
           "name": "stdout",
@@ -81,7 +81,7 @@
       "cell_type": "code",
       "source": "/* Evaluate Jacobian at each fixed point and classify */\nfor fp in fps do block(\n  [J_fp, ev_list, re1, re2, cl],\n  J_fp : subst(fp, J),\n  ev_list : first(eigenvalues(J_fp)),\n  re1 : float(realpart(ev_list[1])),\n  re2 : float(realpart(ev_list[2])),\n  cl : if is(re1 < 0 and re2 < 0) then \"STABLE\"\n       elseif is(re1 > 0 and re2 > 0) then \"UNSTABLE\"\n       elseif is(re1 * re2 < 0) then \"SADDLE\"\n       else \"MARGINAL / CENTRE\",\n  print(\"--- Fixed point:\", fp, \"---\"),\n  print(\"  J =\", J_fp),\n  print(\"  Eigenvalues =\", ev_list),\n  print(\"  Classification:\", cl)\n)$",
       "metadata": {},
-      "execution_count": 88,
+      "execution_count": 100,
       "outputs": [
         {
           "name": "stdout",
@@ -101,7 +101,7 @@
       "cell_type": "code",
       "source": "/* Numeric eigenvalue computation at (1, 0) using np_eig */\nJ_at_10 : float(subst([x=1, y=0], J))$\nprint(\"J at (1,0) =\", J_at_10)$\n\nA_np : ndarray(J_at_10)$\n[vals, vecs] : np_eig(A_np)$\nprint(\"Eigenvalues (numeric):\", np_to_list(vals))$\nprint(\"Eigenvectors:\")$\nnp_to_matrix(vecs);",
       "metadata": {},
-      "execution_count": 89,
+      "execution_count": 101,
       "outputs": [
         {
           "name": "stdout",
@@ -116,7 +116,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 1.0&-0.7071067811865475\\cr 0.0&0.7071067811865475\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 89,
+          "execution_count": 101,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -131,7 +131,7 @@
       "cell_type": "code",
       "source": "/* Vector field of the predator-prey system */\nax_draw2d(\n  color=\"#cccccc\", ngrid=12,\n  ax_vector_field(f1, f2, x, -0.5, 2.5, y, -0.5, 2.5),\n  title=\"Predator-Prey: Vector Field\",\n  xlabel=\"x (prey)\", ylabel=\"y (predator)\",\n  aspect_ratio=true\n)$",
       "metadata": {},
-      "execution_count": 90,
+      "execution_count": 102,
       "outputs": [
         {
           "data": {
@@ -148,7 +148,7 @@
       "cell_type": "code",
       "source": "/* Phase portrait: vector field with streamlines */\nax_draw2d(\n  color=\"#dddddd\", ngrid=12,\n  ax_vector_field(f1, f2, x, -0.5, 2.5, y, -0.5, 2.5),\n  color=\"#e41a1c\",\n  initial_points=[[0.1, 0.1], [0.5, 0.5], [1.5, 0.2],\n                  [0.2, 1.0], [2.0, 0.5], [0.8, 1.5]],\n  ax_streamline(f1, f2, x, -0.5, 2.5, y, -0.5, 2.5),\n  title=\"Predator-Prey: Phase Portrait\",\n  xlabel=\"x (prey)\", ylabel=\"y (predator)\",\n  aspect_ratio=true\n)$",
       "metadata": {},
-      "execution_count": 91,
+      "execution_count": 103,
       "outputs": [
         {
           "data": {
@@ -170,7 +170,7 @@
       "cell_type": "code",
       "source": "/* Van der Pol system with mu = 1 */\nmu : 1$\ng1 : y$\ng2 : mu*(1 - x^2)*y - x$\n\n/* Symbolic Jacobian */\nJ_vdp : matrix(\n  [diff(g1, x), diff(g1, y)],\n  [diff(g2, x), diff(g2, y)]\n);\n\nprint(\"Van der Pol Jacobian:\")$\nJ_vdp;",
       "metadata": {},
-      "execution_count": 92,
+      "execution_count": 104,
       "outputs": [
         {
           "name": "stdout",
@@ -185,7 +185,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 0&1\\cr -\\left(2\\,x\\,y\\right)-1&1-x^2\\cr \\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 92,
+          "execution_count": 104,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -195,7 +195,7 @@
       "cell_type": "code",
       "source": "/* Evaluate at the origin — the only fixed point */\nJ_vdp_origin : subst([x=0, y=0], J_vdp)$\nprint(\"J at origin:\", J_vdp_origin)$\n\n/* Symbolic eigenvalues */\nevals_vdp : eigenvalues(J_vdp_origin);\nprint(\"Eigenvalues:\", evals_vdp[1])$\n\n/* Numeric check via np_eig */\nA_vdp : ndarray(float(J_vdp_origin))$\n[vals_vdp, vecs_vdp] : np_eig(A_vdp)$\nprint(\"Eigenvalues (numeric):\", np_to_list(vals_vdp))$",
       "metadata": {},
-      "execution_count": 93,
+      "execution_count": 105,
       "outputs": [
         {
           "name": "stdout",
@@ -215,7 +215,7 @@
       "cell_type": "code",
       "source": "/* Phase portrait of the Van der Pol oscillator */\nax_draw2d(\n  color=\"#dddddd\", ngrid=12,\n  ax_vector_field(g1, g2, x, -4, 4, y, -4, 4),\n  color=\"#377eb8\",\n  initial_points=[[0.1, 0.0], [3.5, 0.0], [0.0, 0.5],\n                  [-2.0, 2.0], [1.0, -3.0]],\n  t_range=[0, 30],\n  ax_streamline(g1, g2, x, -4, 4, y, -4, 4),\n  title=\"Van der Pol Oscillator (mu=1): Limit Cycle\",\n  xlabel=\"x\", ylabel=\"y\",\n  aspect_ratio=true\n)$",
       "metadata": {},
-      "execution_count": 94,
+      "execution_count": 106,
       "outputs": [
         {
           "data": {
@@ -237,7 +237,7 @@
       "cell_type": "code",
       "source": "/* Eigenvalues at origin for varying mu — symbolic formula */\nJ_vdp_general : matrix(\n  [0, 1],\n  [-1, mu_var]\n)$\nevals_general : eigenvalues(J_vdp_general);\n\nprint(\"General eigenvalues at origin:\")$\nprint(evals_general[1])$\n\n/* Evaluate for specific mu values */\nfor m in [0.1, 0.5, 1.0, 2.0, 5.0] do block(\n  [ev : float(subst(mu_var=m, evals_general[1]))],\n  print(sconcat(\"mu = \", m, \":\"), ev)\n)$",
       "metadata": {},
-      "execution_count": 95,
+      "execution_count": 107,
       "outputs": [
         {
           "name": "stdout",
@@ -252,7 +252,7 @@
       "cell_type": "code",
       "source": "/* Phase portrait with mu = 3: strongly nonlinear limit cycle */\ng2_strong : 3*(1 - x^2)*y - x$\n\nax_draw2d(\n  color=\"#dddddd\", ngrid=12,\n  ax_vector_field(g1, g2_strong, x, -4, 4, y, -6, 6),\n  color=\"#e41a1c\",\n  initial_points=[[0.1, 0.0], [3.5, 0.0], [-2.0, 3.0]],\n  t_range=[0, 40],\n  ax_streamline(g1, g2_strong, x, -4, 4, y, -6, 6),\n  title=\"Van der Pol (mu=3): Relaxation Oscillation\",\n  xlabel=\"x\", ylabel=\"y\"\n)$",
       "metadata": {},
-      "execution_count": 96,
+      "execution_count": 108,
       "outputs": [
         {
           "data": {

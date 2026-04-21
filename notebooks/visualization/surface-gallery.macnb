@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 106,
+      "execution_count": 121,
       "outputs": []
     },
     {
@@ -31,7 +31,7 @@
       "cell_type": "code",
       "source": "/* Saddle surface: z = x^2 - y^2 */\nax_draw3d(\n  explicit(x^2 - y^2, x, -2, 2, y, -2, 2),\n  title=\"Saddle Surface\", colorscale=\"RdBu\"\n)$",
       "metadata": {},
-      "execution_count": 107,
+      "execution_count": 122,
       "outputs": [
         {
           "data": {
@@ -48,7 +48,7 @@
       "cell_type": "code",
       "source": "/* Paraboloid: z = x^2 + y^2 */\nax_draw3d(\n  explicit(x^2 + y^2, x, -2, 2, y, -2, 2),\n  title=\"Paraboloid\", colorscale=\"Viridis\"\n)$",
       "metadata": {},
-      "execution_count": 108,
+      "execution_count": 123,
       "outputs": [
         {
           "data": {
@@ -65,7 +65,7 @@
       "cell_type": "code",
       "source": "/* Monkey saddle: z = x^3 - 3*x*y^2 */\nax_draw3d(\n  explicit(x^3 - 3*x*y^2, x, -2, 2, y, -2, 2),\n  title=\"Monkey Saddle\", colorscale=\"Picnic\"\n)$",
       "metadata": {},
-      "execution_count": 109,
+      "execution_count": 124,
       "outputs": [
         {
           "data": {
@@ -87,7 +87,7 @@
       "cell_type": "code",
       "source": "/* Define the surface symbolically */\nf(x, y) := x^2 - y^2$\nf(x, y);",
       "metadata": {},
-      "execution_count": 110,
+      "execution_count": 125,
       "outputs": [
         {
           "data": {
@@ -95,7 +95,7 @@
               "x^2-y^2"
             ]
           },
-          "execution_count": 110,
+          "execution_count": 125,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -105,7 +105,7 @@
       "cell_type": "code",
       "source": "/* Gradient: nabla f */\ngrad_f : [diff(f(x,y), x), diff(f(x,y), y)];",
       "metadata": {},
-      "execution_count": 111,
+      "execution_count": 126,
       "outputs": [
         {
           "data": {
@@ -113,7 +113,7 @@
               "\\left[ 2\\,x , -\\left(2\\,y\\right) \\right] "
             ]
           },
-          "execution_count": 111,
+          "execution_count": 126,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -123,7 +123,7 @@
       "cell_type": "code",
       "source": "/* Hessian matrix */\nH : matrix(\n  [diff(f(x,y), x, 2), diff(f(x,y), x, 1, y, 1)],\n  [diff(f(x,y), y, 1, x, 1), diff(f(x,y), y, 2)]\n);",
       "metadata": {},
-      "execution_count": 112,
+      "execution_count": 127,
       "outputs": [
         {
           "data": {
@@ -131,7 +131,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 2&0\\cr 0&-2\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 112,
+          "execution_count": 127,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -141,7 +141,7 @@
       "cell_type": "code",
       "source": "/* Determinant of the Hessian classifies the critical point.\n   det < 0 => saddle point at the origin. */\ndet_H : determinant(H);",
       "metadata": {},
-      "execution_count": 113,
+      "execution_count": 128,
       "outputs": [
         {
           "data": {
@@ -149,7 +149,7 @@
               "-4"
             ]
           },
-          "execution_count": 113,
+          "execution_count": 128,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -169,7 +169,7 @@
       "cell_type": "code",
       "source": "/* Egg-carton surface */\nax_draw3d(\n  explicit(sin(x)*cos(y), x, -%pi, %pi, y, -%pi, %pi),\n  title=\"sin(x) cos(y)\", colorscale=\"Viridis\"\n)$",
       "metadata": {},
-      "execution_count": 114,
+      "execution_count": 129,
       "outputs": [
         {
           "data": {
@@ -186,7 +186,7 @@
       "cell_type": "code",
       "source": "/* Ripple: radial cosine wave */\nax_draw3d(\n  explicit(cos(sqrt(x^2 + y^2)), x, -10, 10, y, -10, 10),\n  title=\"Ripple: cos(sqrt(x^2+y^2))\", colorscale=\"Blues\",\n  nticks=80\n)$",
       "metadata": {},
-      "execution_count": 115,
+      "execution_count": 130,
       "outputs": [
         {
           "data": {
@@ -208,7 +208,7 @@
       "cell_type": "code",
       "source": "/* Interleaved ridges */\nax_draw3d(\n  explicit(sin(x*y), x, -3, 3, y, -3, 3),\n  title=\"sin(x y)\", colorscale=\"Hot\"\n)$",
       "metadata": {},
-      "execution_count": 116,
+      "execution_count": 131,
       "outputs": [
         {
           "data": {
@@ -225,7 +225,7 @@
       "cell_type": "code",
       "source": "/* Gaussian-damped wave */\nax_draw3d(\n  explicit(exp(-(x^2+y^2)/4)*cos(x)*sin(y),\n           x, -4, 4, y, -4, 4),\n  title=\"Gaussian-damped wave\", colorscale=\"Portland\"\n)$",
       "metadata": {},
-      "execution_count": 117,
+      "execution_count": 132,
       "outputs": [
         {
           "data": {
@@ -247,7 +247,7 @@
       "cell_type": "code",
       "source": "/* Symbolic mean curvature for the saddle f = x^2 - y^2 */\nfx : diff(f(x,y), x)$\nfy : diff(f(x,y), y)$\nfxx : diff(f(x,y), x, 2)$\nfyy : diff(f(x,y), y, 2)$\nfxy : diff(f(x,y), x, 1, y, 1)$\n\nmean_curv : ratsimp(\n  ((1 + fy^2)*fxx - 2*fx*fy*fxy + (1 + fx^2)*fyy)\n  / (2*(1 + fx^2 + fy^2)^(3/2))\n);",
       "metadata": {},
-      "execution_count": 118,
+      "execution_count": 133,
       "outputs": [
         {
           "data": {
@@ -255,7 +255,7 @@
               "{{4\\,y^2-4\\,x^2}\\over{\\left(4\\,y^2+4\\,x^2+1\\right)^{{{3}\\over{2}}}}}"
             ]
           },
-          "execution_count": 118,
+          "execution_count": 133,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -265,7 +265,7 @@
       "cell_type": "code",
       "source": "/* Contour plot of the mean curvature over the domain */\nax_draw2d(\n  ax_contour(mean_curv, x, -2, 2, y, -2, 2),\n  colorscale=\"RdBu\", ncontours=20,\n  title=\"Mean Curvature of x^2 - y^2\"\n)$",
       "metadata": {},
-      "execution_count": 119,
+      "execution_count": 134,
       "outputs": [
         {
           "data": {
@@ -282,7 +282,7 @@
       "cell_type": "code",
       "source": "/* Heatmap view of the same curvature */\nax_draw2d(\n  ax_heatmap(mean_curv, x, -2, 2, y, -2, 2),\n  colorscale=\"RdBu\",\n  title=\"Mean Curvature (heatmap)\"\n)$",
       "metadata": {},
-      "execution_count": 120,
+      "execution_count": 135,
       "outputs": [
         {
           "data": {

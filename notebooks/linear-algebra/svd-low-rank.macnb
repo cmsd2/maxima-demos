@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 78,
+      "execution_count": 89,
       "outputs": []
     },
     {
@@ -31,7 +31,7 @@
       "cell_type": "code",
       "source": "/* Column vector u (6x1) and row vector v (1x4) */\nu : np_reshape(ndarray([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]), [6, 1])$\nv : np_reshape(ndarray([1.0, 0.5, 0.3, 0.1]), [1, 4])$\n\n/* Data = outer product + small noise */\nA : np_add(np_matmul(u, v), np_scale(0.1, np_randn([6, 4])))$\n\nprint(\"Data matrix A (6x4):\")$\nnp_to_matrix(A);",
       "metadata": {},
-      "execution_count": 79,
+      "execution_count": 90,
       "outputs": [
         {
           "name": "stdout",
@@ -46,7 +46,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 1.048122653963567&0.5309751589901769&0.17068447484433122&0.18353285826699453\\cr1.9460857171574635&1.0156456538427945&0.5865290167676315&0.1953629754579393\\cr 2.9375804820271663&1.479359377201386&0.9115809332355824&0.36162505333378653\\cr 4.012362799919125&2.040149729369332&1.087710897894501&0.13268329811650725\\cr 4.983732000739373&2.2777725191487868&1.3694042236366784&0.5762068685933308\\cr 6.072569473023715&2.9927630357805857&1.8472923456020598&0.48033107064815744\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 79,
+          "execution_count": 90,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -61,7 +61,7 @@
       "cell_type": "code",
       "source": "/* SVD decomposition */\n[U, S, Vt] : np_svd(A)$\n\nprint(\"U shape:\", np_shape(U))$\nprint(\"S (singular values):\", np_to_list(S))$\nprint(\"Vt shape:\", np_shape(Vt))$",
       "metadata": {},
-      "execution_count": 80,
+      "execution_count": 91,
       "outputs": [
         {
           "name": "stdout",
@@ -81,7 +81,7 @@
       "cell_type": "code",
       "source": "/* Bar chart of singular values */\nax_draw2d(\n  ax_bar([\"s1\", \"s2\", \"s3\", \"s4\"], np_to_list(S)),\n  title=\"Singular Value Spectrum\",\n  ylabel=\"Singular value\"\n)$",
       "metadata": {},
-      "execution_count": 81,
+      "execution_count": 92,
       "outputs": [
         {
           "data": {
@@ -108,7 +108,7 @@
       "cell_type": "code",
       "source": "/* Extract first singular triplet */\nu1 : np_reshape(np_col(U, 0), [6, 1])$\nv1 : np_reshape(np_row(Vt, 0), [1, 4])$\ns1 : np_ref(S, 0)$\n\n/* Rank-1 reconstruction: A1 = s1 * u1 * v1^T */\nA1 : np_scale(s1, np_matmul(u1, v1))$\n\nprint(\"Rank-1 approximation A1:\")$\nnp_to_matrix(A1);\n\n/* Relative error */\nerr1 : np_norm(np_sub(A, A1)) / np_norm(A)$\nprint(\"Relative error ||A - A1|| / ||A|| =\", err1)$",
       "metadata": {},
-      "execution_count": 82,
+      "execution_count": 93,
       "outputs": [
         {
           "name": "stdout",
@@ -128,7 +128,7 @@
       "cell_type": "code",
       "source": "/* Compute truncated SVD reconstruction for each rank */\ns_list : np_to_list(S)$\nranks : [1, 2, 3, 4]$\nerrors : []$\nnorm_A : np_norm(A)$\n\nfor k in ranks do block(\n  [Ak : np_zeros([6, 4])],\n  /* Accumulate rank-k approximation */\n  for i : 1 thru k do block(\n    [ui, vi, si],\n    ui : np_reshape(np_col(U, i-1), [6, 1]),\n    vi : np_reshape(np_row(Vt, i-1), [1, 4]),\n    si : s_list[i],\n    Ak : np_add(Ak, np_scale(si, np_matmul(ui, vi)))\n  ),\n  errors : append(errors, [np_norm(np_sub(A, Ak)) / norm_A])\n)$\n\nprint(\"Relative reconstruction error by rank:\")$\nfor i : 1 thru length(ranks) do\n  print(sconcat(\"  rank \", ranks[i], \": \", errors[i]))$",
       "metadata": {},
-      "execution_count": 83,
+      "execution_count": 94,
       "outputs": [
         {
           "name": "stdout",
@@ -143,7 +143,7 @@
       "cell_type": "code",
       "source": "/* Plot error vs rank */\nerror_data : makelist([ranks[i], errors[i]], i, 1, length(ranks))$\n\nax_draw2d(\n  color=blue, marker_size=8,\n  points(error_data),\n  color=blue,\n  lines(error_data),\n  title=\"Reconstruction Error vs Rank\",\n  xlabel=\"Rank k\",\n  ylabel=\"Relative error ||A - Ak|| / ||A||\",\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 84,
+      "execution_count": 95,
       "outputs": [
         {
           "data": {
@@ -170,7 +170,7 @@
       "cell_type": "code",
       "source": "/* Original matrix A */\nax_draw2d(\n  ax_heatmap(np_to_matrix(A)),\n  title=\"Original Matrix A\"\n)$",
       "metadata": {},
-      "execution_count": 85,
+      "execution_count": 96,
       "outputs": [
         {
           "data": {
@@ -187,7 +187,7 @@
       "cell_type": "code",
       "source": "/* Rank-1 approximation */\nax_draw2d(\n  ax_heatmap(np_to_matrix(A1)),\n  title=\"Rank-1 Approximation\"\n)$",
       "metadata": {},
-      "execution_count": 86,
+      "execution_count": 97,
       "outputs": [
         {
           "data": {
@@ -204,7 +204,7 @@
       "cell_type": "code",
       "source": "/* Rank-2 approximation */\nu2 : np_reshape(np_col(U, 1), [6, 1])$\nv2 : np_reshape(np_row(Vt, 1), [1, 4])$\ns2 : np_ref(S, 1)$\nA2 : np_add(A1, np_scale(s2, np_matmul(u2, v2)))$\n\nax_draw2d(\n  ax_heatmap(np_to_matrix(A2)),\n  title=\"Rank-2 Approximation\"\n)$",
       "metadata": {},
-      "execution_count": 87,
+      "execution_count": 98,
       "outputs": [
         {
           "data": {
@@ -231,7 +231,7 @@
       "cell_type": "code",
       "source": "/* Compression ratio for our 6x4 example */\nm : 6$ n : 4$\nfull_storage : m * n$\n\nprint(\"Full storage:\", full_storage, \"values\")$\nprint(\"\")$\nfor k in [1, 2, 3] do block(\n  [rank_storage, ratio],\n  rank_storage : k * (m + n + 1),\n  ratio : float(full_storage) / rank_storage,\n  print(sconcat(\"  Rank-\", k, \" storage: \", rank_storage,\n                \" values  (compression ratio: \",\n                ratio, \"x, error: \", errors[k], \")\"))\n)$",
       "metadata": {},
-      "execution_count": 88,
+      "execution_count": 99,
       "outputs": [
         {
           "name": "stdout",

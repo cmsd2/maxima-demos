@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 78,
+      "execution_count": 89,
       "outputs": []
     },
     {
@@ -31,7 +31,7 @@
       "cell_type": "code",
       "source": "/* Define scalar potential and compute gradient symbolically */\nV : x^2 + y^2$\nFx : -diff(V, x)$\nFy : -diff(V, y)$\nprint(\"F =\", [Fx, Fy])$",
       "metadata": {},
-      "execution_count": 79,
+      "execution_count": 90,
       "outputs": [
         {
           "name": "stdout",
@@ -46,7 +46,7 @@
       "cell_type": "code",
       "source": "/* Visualize the gradient field — arrows point toward the origin */\nax_draw2d(\n  ngrid=12,\n  ax_vector_field(Fx, Fy, x, -3, 3, y, -3, 3),\n  title=\"Gradient of V = x^2 + y^2\",\n  aspect_ratio=true\n)$",
       "metadata": {},
-      "execution_count": 80,
+      "execution_count": 91,
       "outputs": [
         {
           "data": {
@@ -68,7 +68,7 @@
       "cell_type": "code",
       "source": "/* Point charge potential (regularized) */\nV_charge : 1/sqrt(x^2 + y^2 + 0.1)$\nEx : -diff(V_charge, x)$\nEy : -diff(V_charge, y)$\nprint(\"E =\", [Ex, Ey])$",
       "metadata": {},
-      "execution_count": 81,
+      "execution_count": 92,
       "outputs": [
         {
           "name": "stdout",
@@ -83,7 +83,7 @@
       "cell_type": "code",
       "source": "/* Electric field radiates outward from the charge */\nax_draw2d(\n  normalize=true, name=\"E\", ngrid=12,\n  ax_vector_field(Ex, Ey, x, -3, 3, y, -3, 3),\n  title=\"Electric Field: Point Charge\",\n  aspect_ratio=true\n)$",
       "metadata": {},
-      "execution_count": 82,
+      "execution_count": 93,
       "outputs": [
         {
           "data": {
@@ -105,7 +105,7 @@
       "cell_type": "code",
       "source": "/* Dipole potential: positive charge at (1,0), negative at (-1,0) */\nV_dipole : 1/sqrt((x-1)^2 + y^2 + 0.1) - 1/sqrt((x+1)^2 + y^2 + 0.1)$\nDx : -diff(V_dipole, x)$\nDy : -diff(V_dipole, y)$\n\nax_draw2d(\n  normalize=true, ngrid=12, name=\"E\",\n  ax_vector_field(Dx, Dy, x, -4, 4, y, -4, 4),\n  title=\"Electric Field: Dipole\",\n  aspect_ratio=true\n)$",
       "metadata": {},
-      "execution_count": 83,
+      "execution_count": 94,
       "outputs": [
         {
           "data": {
@@ -127,7 +127,7 @@
       "cell_type": "code",
       "source": "/* Rotational flow: vector field */\nax_draw2d(\n  ngrid=12,\n  ax_vector_field(-y, x, x, -3, 3, y, -3, 3),\n  title=\"Rotational Flow: Vector Field\",\n  aspect_ratio=true\n)$",
       "metadata": {},
-      "execution_count": 84,
+      "execution_count": 95,
       "outputs": [
         {
           "data": {
@@ -144,7 +144,7 @@
       "cell_type": "code",
       "source": "/* Rotational flow: streamlines trace circular orbits */\nax_draw2d(\n  color=\"#cccccc\", ngrid=12, ax_vector_field(-y, x, x, -3, 3, y, -3, 3),\n  color=\"red\", ax_streamline(-y, x, x, -3, 3, y, -3, 3),\n  aspect_ratio=true, title=\"Rotational Flow: Phase Portrait\"\n)$",
       "metadata": {},
-      "execution_count": 85,
+      "execution_count": 96,
       "outputs": [
         {
           "data": {
@@ -166,7 +166,7 @@
       "cell_type": "code",
       "source": "/* Source flow: vector field + streamlines */\nSx : x/(x^2 + y^2 + 0.1)$\nSy : y/(x^2 + y^2 + 0.1)$\n\nax_draw2d(\n  color=\"#cccccc\", name=\"F\", ngrid=12, ax_vector_field(Sx, Sy, x, -3, 3, y, -3, 3),\n  color=\"blue\", name=\"streamline\", ax_streamline(Sx, Sy, x, -3, 3, y, -3, 3),\n  aspect_ratio=true, title=\"Source Flow\"\n)$",
       "metadata": {},
-      "execution_count": 86,
+      "execution_count": 97,
       "outputs": [
         {
           "data": {
@@ -188,7 +188,7 @@
       "cell_type": "code",
       "source": "/* Define divergence and curl for 2D fields */\ndiv2d(P, Q) := diff(P, x) + diff(Q, y)$\ncurl2d(P, Q) := diff(Q, x) - diff(P, y)$\n\n/* Rotational flow: F = (-y, x) */\nprint(\"=== Rotational flow F = (-y, x) ===\")$\nprint(\"div  =\", div2d(-y, x))$\nprint(\"curl =\", curl2d(-y, x))$",
       "metadata": {},
-      "execution_count": 87,
+      "execution_count": 98,
       "outputs": [
         {
           "name": "stdout",
@@ -203,7 +203,7 @@
       "cell_type": "code",
       "source": "/* Source flow: F = (x, y)/(x^2+y^2+0.1) */\nprint(\"=== Source flow ===\")$\ndiv_source : ratsimp(div2d(Sx, Sy))$\ncurl_source : ratsimp(curl2d(Sx, Sy))$\nprint(\"div  =\", div_source)$\nprint(\"curl =\", curl_source)$",
       "metadata": {},
-      "execution_count": 88,
+      "execution_count": 99,
       "outputs": [
         {
           "name": "stdout",

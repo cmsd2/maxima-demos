@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 99,
+      "execution_count": 113,
       "outputs": []
     },
     {
@@ -31,7 +31,7 @@
       "cell_type": "code",
       "source": "/* True function: f(x) = 0.5*x^2 - 2*x + 1 */\nn : 20$\nx : np_linspace(0, 5, n)$\n\n/* Evaluate f at each x and add noise */\ny : np_add(\n  np_add(\n    np_scale(0.5, np_pow(x, 2)),\n    np_scale(-2.0, x)\n  ),\n  np_add(\n    ndarray(makelist(1.0, i, 1, n)),\n    np_scale(0.3, np_randn([n]))\n  )\n)$\n\nprint(\"x (first 5):\", makelist(np_ref(x, i), i, 0, 4))$\nprint(\"y (first 5):\", makelist(np_ref(y, i), i, 0, 4))$",
       "metadata": {},
-      "execution_count": 100,
+      "execution_count": 114,
       "outputs": [
         {
           "name": "stdout",
@@ -46,7 +46,7 @@
       "cell_type": "code",
       "source": "/* Plot the noisy data */\nax_draw2d(\n  color=red, marker_size=6,\n  name=\"Noisy data\",\n  points(np_to_list(x), np_to_list(y)),\n  color=black, dash=\"dash\", name=\"True: 0.5x^2 - 2x + 1\",\n  explicit(0.5*t^2 - 2*t + 1, t, 0, 5),\n  title=\"Noisy Observations from a Quadratic\",\n  xlabel=\"x\", ylabel=\"y\",\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 101,
+      "execution_count": 115,
       "outputs": [
         {
           "data": {
@@ -68,7 +68,7 @@
       "cell_type": "code",
       "source": "/* Symbolic Vandermonde structure for degree 2 */\nprint(\"Symbolic Vandermonde (degree 2) for points x1..x4:\")$\ngenmatrix(lambda([i, j], x[i]^(j-1)), 4, 3);",
       "metadata": {},
-      "execution_count": 102,
+      "execution_count": 116,
       "outputs": [
         {
           "name": "stdout",
@@ -83,7 +83,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 1&\\left(\\text{ndarray}((20), DOUBLE-FLOAT)\\right)_{1}&\\left(\\text{ndarray}((20), DOUBLE-FLOAT)\\right)_{1}^2\\cr 1&\\left(\\text{ndarray}((20), DOUBLE-FLOAT)\\right)_{2}&\\left(\\text{ndarray}((20), DOUBLE-FLOAT)\\right)_{2}^2\\cr 1&\\left(\\text{ndarray}((20), DOUBLE-FLOAT)\\right)_{3}&\\left(\\text{ndarray}((20), DOUBLE-FLOAT)\\right)_{3}^2\\cr 1&\\left(\\text{ndarray}((20), DOUBLE-FLOAT)\\right)_{4}&\\left(\\text{ndarray}((20), DOUBLE-FLOAT)\\right)_{4}^2\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 102,
+          "execution_count": 116,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -93,7 +93,7 @@
       "cell_type": "code",
       "source": "/* Build the Vandermonde matrix numerically for degree 2 */\n/* Each column is x^j for j = 0, 1, 2 */\nvander(xv, deg) := block([cols],\n  cols : np_reshape(np_ones([np_size(xv)]), [np_size(xv), 1]),\n  for j : 1 thru deg do\n    cols : np_hstack(cols, np_reshape(np_pow(xv, j), [np_size(xv), 1])),\n  cols\n)$\n\nV : vander(x, 2)$\nprint(\"Vandermonde shape:\", np_shape(V))$\nprint(\"First 3 rows:\")$\nfor i : 0 thru 2 do\n  print(\"  \", np_to_list(np_row(V, i)))$",
       "metadata": {},
-      "execution_count": 103,
+      "execution_count": 117,
       "outputs": [
         {
           "name": "stdout",
@@ -113,7 +113,7 @@
       "cell_type": "code",
       "source": "/* Solve the least-squares problem V * a = y */\ny_col : np_reshape(y, [n, 1])$\n[coeffs_nd, residuals, rank_V, sv] : np_lstsq(V, y_col)$\n\ncoeffs_list : np_to_list(coeffs_nd)$\na0 : coeffs_list[1]$\na1 : coeffs_list[2]$\na2 : coeffs_list[3]$\n\nprint(\"Fitted coefficients:\")$\nprint(\"  a0 =\", a0, \"  (true: 1.0)\")$\nprint(\"  a1 =\", a1, \"  (true: -2.0)\")$\nprint(\"  a2 =\", a2, \"  (true: 0.5)\")$\nprint(\"  rank =\", rank_V)$\n\n/* Reconstruct the fitted polynomial symbolically */\np_fit : a0 + a1*t + a2*t^2;\nprint(\"Fitted polynomial: p(t) =\", p_fit)$",
       "metadata": {},
-      "execution_count": 104,
+      "execution_count": 118,
       "outputs": [
         {
           "name": "stdout",
@@ -133,7 +133,7 @@
       "cell_type": "code",
       "source": "ax_draw2d(\n  color=red, marker_size=6,\n  name=\"Data\",\n  points(np_to_list(x), np_to_list(y)),\n  color=blue, line_width=2, name=\"Least-squares fit (deg 2)\",\n  explicit(p_fit, t, 0, 5),\n  color=black, dash=\"dash\", name=\"True curve\",\n  explicit(0.5*t^2 - 2*t + 1, t, 0, 5),\n  title=\"Quadratic Least-Squares Fit\",\n  xlabel=\"x\", ylabel=\"y\",\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 105,
+      "execution_count": 119,
       "outputs": [
         {
           "data": {
@@ -155,7 +155,7 @@
       "cell_type": "code",
       "source": "/* Predicted values and residuals */\ny_pred : np_matmul(V, coeffs_nd)$\nresid : np_sub(y_col, y_pred)$\n\n/* Sum of squared residuals */\nss_res : np_dot(np_flatten(resid), np_flatten(resid))$\n\n/* Total sum of squares */\ny_mean : np_mean(y)$\ny_centered : np_sub(y, y_mean)$\nss_tot : np_dot(y_centered, y_centered)$\n\nR2 : 1 - ss_res / ss_tot;\nprint(\"R^2 =\", R2)$\nprint(\"SS_res =\", ss_res)$\nprint(\"SS_tot =\", ss_tot)$",
       "metadata": {},
-      "execution_count": 106,
+      "execution_count": 120,
       "outputs": [
         {
           "name": "stdout",
@@ -170,7 +170,7 @@
       "cell_type": "code",
       "source": "/* Plot residuals vs x */\nax_draw2d(\n  color=blue, marker_size=6,\n  name=\"Residuals\",\n  points(np_to_list(x), np_to_list(np_flatten(resid))),\n  color=gray, dash=\"dash\",\n  explicit(0, t, 0, 5),\n  title=\"Residuals vs x\",\n  xlabel=\"x\", ylabel=\"Residual\",\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 107,
+      "execution_count": 121,
       "outputs": [
         {
           "data": {
@@ -192,7 +192,7 @@
       "cell_type": "code",
       "source": "/* Helper: fit a polynomial of given degree, return symbolic expression */\npolyfit(xv, yv, deg) := block(\n  [Vm, yc, result, c, poly],\n  Vm : vander(xv, deg),\n  yc : np_reshape(yv, [np_size(yv), 1]),\n  result : np_lstsq(Vm, yc),\n  c : np_to_list(first(result)),\n  poly : sum(c[k+1] * t^k, k, 0, deg),\n  poly\n)$\n\np1  : polyfit(x, y, 1)$\np5  : polyfit(x, y, 5)$\np15 : polyfit(x, y, 15)$\n\nprint(\"Degree 1:\", p1)$\nprint(\"Degree 5:\", expand(p5))$",
       "metadata": {},
-      "execution_count": 108,
+      "execution_count": 122,
       "outputs": [
         {
           "name": "stdout",
@@ -207,7 +207,7 @@
       "cell_type": "code",
       "source": "/* Plot all fits */\nax_draw2d(\n  color=red, marker_size=6,\n  name=\"Data\",\n  points(np_to_list(x), np_to_list(y)),\n  color=\"#e41a1c\", dash=\"dash\", name=\"Degree 1 (underfit)\",\n  explicit(p1, t, 0, 5),\n  color=\"#377eb8\", line_width=2, name=\"Degree 5\",\n  explicit(p5, t, 0, 5),\n  color=\"#4daf4a\", name=\"Degree 15 (overfit)\",\n  explicit(p15, t, 0, 5),\n  color=black, dash=\"dash\", name=\"True curve\",\n  explicit(0.5*t^2 - 2*t + 1, t, 0, 5),\n  title=\"Underfitting vs Overfitting\",\n  xlabel=\"x\", ylabel=\"y\",\n  yrange=[-3, 6],\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 109,
+      "execution_count": 123,
       "outputs": [
         {
           "data": {
@@ -234,7 +234,7 @@
       "cell_type": "code",
       "source": "/* Build the normal equations symbolically for a linear fit */\n/* Design matrix for degree 1: columns are [1, x_i] */\nV1 : vander(x, 1)$\ny1 : np_reshape(y, [n, 1])$\n\n/* Normal equations: (V^T V) c = V^T y */\nVtV : np_matmul(np_transpose(V1), V1)$\nVty : np_matmul(np_transpose(V1), y1)$\n\nprint(\"V^T V (2x2):\")$\nnp_to_matrix(VtV);\nprint(\"V^T y (2x1):\")$\nnp_to_matrix(Vty);",
       "metadata": {},
-      "execution_count": 110,
+      "execution_count": 124,
       "outputs": [
         {
           "name": "stdout",
@@ -249,7 +249,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 4.293964770081253\\cr 33.07365923630319\\cr \\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 110,
+          "execution_count": 124,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -259,7 +259,7 @@
       "cell_type": "code",
       "source": "/* Solve the normal equations numerically */\ncoeffs_normal : np_solve(VtV, Vty)$\n\n/* Compare with np_lstsq */\n[coeffs_lstsq, res1, rank1, sv1] : np_lstsq(V1, y1)$\n\nprint(\"Normal equations solution:\", np_to_list(coeffs_normal))$\nprint(\"np_lstsq solution:        \", np_to_list(coeffs_lstsq))$\n\ndiff_norm : np_norm(np_sub(coeffs_normal, coeffs_lstsq))$\nprint(\"Difference norm:\", diff_norm)$",
       "metadata": {},
-      "execution_count": 111,
+      "execution_count": 125,
       "outputs": [
         {
           "name": "stdout",
@@ -274,7 +274,7 @@
       "cell_type": "code",
       "source": "/* Derive the normal equations fully symbolically */\n/* For a linear model y = c0 + c1*x with m data points: */\n/*   V^T V = [[m, sum(x)], [sum(x), sum(x^2)]]          */\n/*   V^T y = [sum(y), sum(x*y)]                          */\n\nprint(\"Symbolic normal equations for linear regression:\")$\nprint(\"  [  m       sum(x_i)  ] [c0]   [ sum(y_i)     ]\")$\nprint(\"  [ sum(x_i) sum(x_i^2)] [c1] = [ sum(x_i*y_i) ]\")$\n\n/* Solve symbolically */\nsx  : np_sum(x)$\nsx2 : np_dot(x, x)$\nsy  : np_sum(y)$\nsxy : np_dot(x, y)$\n\n/* Cramer's rule */\ndet_sys : n * sx2 - sx^2$\nc0_sym  : (sy * sx2 - sx * sxy) / det_sys$\nc1_sym  : (n * sxy - sx * sy) / det_sys$\n\nprint(\"Symbolic solution:\")$\nprint(\"  c0 =\", c0_sym)$\nprint(\"  c1 =\", c1_sym)$\nprint(\"Matches np_lstsq:\",\n  is(abs(c0_sym - np_to_list(coeffs_lstsq)[1]) < 1e-10 and\n     abs(c1_sym - np_to_list(coeffs_lstsq)[2]) < 1e-10))$",
       "metadata": {},
-      "execution_count": 112,
+      "execution_count": 126,
       "outputs": [
         {
           "name": "stdout",

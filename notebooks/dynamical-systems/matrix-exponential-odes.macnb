@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 169,
+      "execution_count": 181,
       "outputs": []
     },
     {
@@ -36,7 +36,7 @@
       "cell_type": "code",
       "source": "/* Symbolic solution for the decoupled system */\nA_sym : matrix([-1, 0], [0, -2])$\nprint(\"A =\", A_sym)$\n\n/* Eigenvalues confirm decoupled exponential decay */\nevals : eigenvalues(A_sym);\nprint(\"Eigenvalues:\", evals[1])$\n\n/* Symbolic solution */\nprint(\"x(t) = x0 * exp(-t)\")$\nprint(\"y(t) = y0 * exp(-2t)\")$",
       "metadata": {},
-      "execution_count": 170,
+      "execution_count": 182,
       "outputs": [
         {
           "name": "stdout",
@@ -51,7 +51,7 @@
       "cell_type": "code",
       "source": "/* Numeric trajectory via matrix exponential */\nA_nd : ndarray(float(A_sym))$\nx0 : ndarray([1.0, 1.0])$\n\nts : makelist(i*0.05, i, 0, 100)$\ntrajectories : makelist(\n  block([M : np_expm(np_scale(t, A_nd))],\n    np_to_list(np_matmul(M, x0))),\n  t, ts)$\n\nxs : makelist(first(p), p, trajectories)$\nys : makelist(second(p), p, trajectories)$\n\nax_draw2d(\n  color=\"blue\", lines(ts, xs), name=\"x(t)\",\n  color=\"red\", lines(ts, ys), name=\"y(t)\",\n  title=\"Decoupled System: x(t) and y(t)\",\n  xlabel=\"t\", ylabel=\"value\",\n  showlegend=true\n)$",
       "metadata": {},
-      "execution_count": 171,
+      "execution_count": 183,
       "outputs": [
         {
           "data": {
@@ -68,7 +68,7 @@
       "cell_type": "code",
       "source": "/* Phase portrait: curve in the (x, y) plane */\nax_draw2d(\n  lines(xs, ys),\n  title=\"Decoupled System: Phase Portrait\",\n  xlabel=\"x\", ylabel=\"y\"\n)$",
       "metadata": {},
-      "execution_count": 172,
+      "execution_count": 184,
       "outputs": [
         {
           "data": {
@@ -90,7 +90,7 @@
       "cell_type": "code",
       "source": "/* Spiral system: damped rotation */\nA_spiral : matrix([-0.5, 1], [-1, -0.5])$\nA_spiral_nd : ndarray(float(A_spiral))$\nx0_spiral : ndarray([2.0, 0.0])$\n\nts_spiral : makelist(i*0.05, i, 0, 200)$\ntraj_spiral : makelist(\n  block([M : np_expm(np_scale(t, A_spiral_nd))],\n    np_to_list(np_matmul(M, x0_spiral))),\n  t, ts_spiral)$\n\nxs_sp : makelist(first(p), p, traj_spiral)$\nys_sp : makelist(second(p), p, traj_spiral)$\n\nax_draw2d(\n  lines(xs_sp, ys_sp),\n  title=\"Damped Spiral: Phase Portrait\",\n  xlabel=\"x\", ylabel=\"y\",\n  aspect_ratio=true\n)$",
       "metadata": {},
-      "execution_count": 173,
+      "execution_count": 185,
       "outputs": [
         {
           "data": {
@@ -107,7 +107,7 @@
       "cell_type": "code",
       "source": "/* Time series: oscillating decay */\nax_draw2d(\n  color=\"blue\", lines(ts_spiral, xs_sp), name=\"x(t)\",\n  color=\"red\", lines(ts_spiral, ys_sp), name=\"y(t)\",\n  title=\"Damped Spiral: Time Series\",\n  xlabel=\"t\", ylabel=\"value\",\n  showlegend=true\n)$",
       "metadata": {},
-      "execution_count": 174,
+      "execution_count": 186,
       "outputs": [
         {
           "data": {
@@ -129,7 +129,7 @@
       "cell_type": "code",
       "source": "/* 3D spiral-decay system */\nA_3d : matrix([-0.1, 1, 0], [-1, -0.1, 0], [0, 0, -0.5])$\nA_3d_nd : ndarray(float(A_3d))$\nx0_3d : ndarray([1.0, 0.0, 2.0])$\n\nts_3d : makelist(i*0.1, i, 0, 200)$\ntraj_3d : makelist(\n  block([M : np_expm(np_scale(t, A_3d_nd))],\n    np_to_list(np_matmul(M, x0_3d))),\n  t, ts_3d)$\n\nxs_3d : makelist(first(p), p, traj_3d)$\nys_3d : makelist(second(p), p, traj_3d)$\nzs_3d : makelist(third(p), p, traj_3d)$\n\nax_draw3d(\n  lines(xs_3d, ys_3d, zs_3d),\n  title=\"3D Spiral Decay\",\n  xlabel=\"x\", ylabel=\"y\", zlabel=\"z\"\n)$",
       "metadata": {},
-      "execution_count": 175,
+      "execution_count": 187,
       "outputs": [
         {
           "data": {
@@ -146,7 +146,7 @@
       "cell_type": "code",
       "source": "/* 3D system: time series of each component */\nax_draw2d(\n  color=\"blue\", lines(ts_3d, xs_3d), name=\"x(t)\",\n  color=\"red\", lines(ts_3d, ys_3d), name=\"y(t)\",\n  color=\"green\", lines(ts_3d, zs_3d), name=\"z(t)\",\n  title=\"3D System: Component Time Series\",\n  xlabel=\"t\", ylabel=\"value\",\n  showlegend=true\n)$",
       "metadata": {},
-      "execution_count": 176,
+      "execution_count": 188,
       "outputs": [
         {
           "data": {
@@ -168,7 +168,7 @@
       "cell_type": "code",
       "source": "/* Symbolic matrix exponential for the diagonal system */\nexpAt_sym : matrix([exp(-t), 0], [0, exp(-2*t)])$\nprint(\"Symbolic exp(At) =\")$\nexpAt_sym;\n\n/* Verify: x(t) = exp(At) * x0 at t=1 */\nx_sym_at_1 : float(subst(t=1, expAt_sym) . matrix([1], [1]));\nprint(\"Symbolic x(1) =\", x_sym_at_1)$\n\n/* Numeric matrix exponential at t=1 */\nM_num : np_expm(np_scale(1.0, A_nd))$\nx_num_at_1 : np_to_list(np_matmul(M_num, x0))$\nprint(\"Numeric  x(1) =\", x_num_at_1)$\n\nprint(\"Agreement confirms np_expm matches the exact solution.\")$",
       "metadata": {},
-      "execution_count": 177,
+      "execution_count": 189,
       "outputs": [
         {
           "name": "stdout",
@@ -183,7 +183,7 @@
       "cell_type": "code",
       "source": "/* Pointwise comparison across the full trajectory */\nsym_xs : makelist(float(exp(-t)), t, ts)$\nsym_ys : makelist(float(exp(-2*t)), t, ts)$\n\n/* Compute max absolute error between symbolic and numeric */\nerr_x : lmax(makelist(abs(xs[i] - sym_xs[i]), i, 1, length(ts)))$\nerr_y : lmax(makelist(abs(ys[i] - sym_ys[i]), i, 1, length(ts)))$\n\nprint(\"Max error in x(t):\", err_x)$\nprint(\"Max error in y(t):\", err_y)$",
       "metadata": {},
-      "execution_count": 178,
+      "execution_count": 190,
       "outputs": [
         {
           "name": "stdout",
@@ -203,7 +203,7 @@
       "cell_type": "code",
       "source": "/* Multiple trajectories for the spiral system from different starting points */\nic_list : [[2.0, 0.0], [0.0, 2.0], [-2.0, 0.0], [0.0, -2.0],\n           [1.5, 1.5], [-1.5, 1.5], [-1.5, -1.5], [1.5, -1.5]]$\n\n/* Build a list of line objects, one per initial condition */\nplot_cmds : []$\ncolors : [\"#e41a1c\", \"#377eb8\", \"#4daf4a\", \"#984ea3\",\n          \"#ff7f00\", \"#a65628\", \"#f781bf\", \"#999999\"]$\n\nfor k : 1 thru length(ic_list) do block(\n  [ic : ic_list[k], x0_k, traj_k, xk, yk],\n  x0_k : ndarray(ic),\n  traj_k : makelist(\n    block([M : np_expm(np_scale(t, A_spiral_nd))],\n      np_to_list(np_matmul(M, x0_k))),\n    t, ts_spiral),\n  xk : makelist(first(p), p, traj_k),\n  yk : makelist(second(p), p, traj_k),\n  plot_cmds : append(plot_cmds, [color=colors[k], lines(xk, yk)])\n)$\n\napply(ax_draw2d, append(plot_cmds,\n  [title=\"Damped Spiral: Multiple Initial Conditions\",\n   xlabel=\"x\", ylabel=\"y\",\n   aspect_ratio=true]))$",
       "metadata": {},
-      "execution_count": 179,
+      "execution_count": 191,
       "outputs": [
         {
           "data": {
@@ -220,7 +220,7 @@
       "cell_type": "code",
       "source": "/* Same idea for the decoupled system: several initial conditions */\nic_list_2 : [[1.0, 1.0], [-1.0, 1.0], [1.0, -1.0], [-1.0, -1.0],\n             [2.0, 0.5], [0.5, 2.0]]$\n\nplot_cmds_2 : []$\ncolors_2 : [\"#e41a1c\", \"#377eb8\", \"#4daf4a\", \"#984ea3\",\n            \"#ff7f00\", \"#a65628\"]$\n\nfor k : 1 thru length(ic_list_2) do block(\n  [ic : ic_list_2[k], x0_k, traj_k, xk, yk],\n  x0_k : ndarray(ic),\n  traj_k : makelist(\n    block([M : np_expm(np_scale(t, A_nd))],\n      np_to_list(np_matmul(M, x0_k))),\n    t, ts),\n  xk : makelist(first(p), p, traj_k),\n  yk : makelist(second(p), p, traj_k),\n  plot_cmds_2 : append(plot_cmds_2, [color=colors_2[k], lines(xk, yk)])\n)$\n\napply(ax_draw2d, append(plot_cmds_2,\n  [title=\"Stable Node: Multiple Initial Conditions\",\n   xlabel=\"x\", ylabel=\"y\",\n   aspect_ratio=true]))$",
       "metadata": {},
-      "execution_count": 180,
+      "execution_count": 192,
       "outputs": [
         {
           "data": {

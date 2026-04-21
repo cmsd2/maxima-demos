@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 78,
+      "execution_count": 89,
       "outputs": []
     },
     {
@@ -31,7 +31,7 @@
       "cell_type": "code",
       "source": "/* Generate N random points in [0,1)^2 */\nN : 10000$\npts : np_rand([N, 2])$\nx : np_col(pts, 0)$\ny : np_col(pts, 1)$\n\n/* Distance from origin for each point */\nd : np_sqrt(np_add(np_pow(x, 2), np_pow(y, 2)))$\n\n/* Count points inside the quarter unit circle */\ninside_mask : np_less_equal(d, 1.0)$\ncount_inside : np_sum(inside_mask)$\n\npi_estimate : 4.0 * count_inside / N$\nprint(\"Monte Carlo pi estimate:\", pi_estimate)$\nprint(\"True pi:\", float(%pi))$\nprint(\"Error:\", abs(pi_estimate - float(%pi)))$",
       "metadata": {},
-      "execution_count": 79,
+      "execution_count": 90,
       "outputs": [
         {
           "name": "stdout",
@@ -46,7 +46,7 @@
       "cell_type": "code",
       "source": "/* Scatter plot: blue = inside circle, red = outside */\nx_in  : np_to_list(np_extract(inside_mask, x))$\ny_in  : np_to_list(np_extract(inside_mask, y))$\noutside_mask : np_logical_not(inside_mask)$\nx_out : np_to_list(np_extract(outside_mask, x))$\ny_out : np_to_list(np_extract(outside_mask, y))$\n\nax_draw2d(\n  color=blue, name=\"Inside\", marker_size=2,\n  points(x_in, y_in),\n  color=red, name=\"Outside\", marker_size=2,\n  points(x_out, y_out),\n  title=sconcat(\"Pi Estimate: \", string(pi_estimate), \" (N=\", string(N), \")\"),\n  xlabel=\"x\", ylabel=\"y\",\n  aspect_ratio=true,\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 80,
+      "execution_count": 91,
       "outputs": [
         {
           "data": {
@@ -68,7 +68,7 @@
       "cell_type": "code",
       "source": "/* Run the pi estimation for increasing sample sizes */\nsample_sizes : [100, 500, 1000, 5000, 10000, 50000]$\n\npi_estimates : makelist(\n  block([pts, xx, yy, dd, cc],\n    pts : np_rand([sample_sizes[i], 2]),\n    xx : np_col(pts, 0),\n    yy : np_col(pts, 1),\n    dd : np_sqrt(np_add(np_pow(xx, 2), np_pow(yy, 2))),\n    cc : np_sum(np_less_equal(dd, 1.0)),\n    4.0 * cc / sample_sizes[i]\n  ),\n  i, 1, length(sample_sizes)\n)$\n\nfor i: 1 thru length(sample_sizes) do\n  print(sconcat(\"N = \", string(sample_sizes[i]),\n                \"  estimate = \", string(pi_estimates[i]),\n                \"  error = \", string(abs(pi_estimates[i] - float(%pi)))))$",
       "metadata": {},
-      "execution_count": 81,
+      "execution_count": 92,
       "outputs": [
         {
           "name": "stdout",
@@ -83,7 +83,7 @@
       "cell_type": "code",
       "source": "/* Plot convergence: estimate vs N, with true pi as reference */\nax_draw2d(\n  color=blue, name=\"MC estimate\",\n  points(sample_sizes, pi_estimates),\n  color=red, dash=\"dash\", name=\"true pi\",\n  lines([[first(sample_sizes), float(%pi)],\n         [last(sample_sizes), float(%pi)]]),\n  title=\"Convergence of Pi Estimate\",\n  xlabel=\"N (sample size)\", ylabel=\"Estimate\",\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 82,
+      "execution_count": 93,
       "outputs": [
         {
           "data": {
@@ -105,7 +105,7 @@
       "cell_type": "code",
       "source": "/* Generate 2000 samples, each of size 30 */\nn_samples : 2000$\nsample_size : 30$\n\n/* Each row is one sample of 30 uniform values */\nsamples : np_rand([n_samples, sample_size])$\n\n/* Compute mean of each row (sample) */\nsample_means : np_mean(samples, 1)$\n\nprint(\"Mean of sample means:\", np_mean(sample_means))$\nprint(\"Std dev of sample means:\", np_std(sample_means))$\nprint(\"Theoretical std dev: 1/sqrt(12*30) =\", float(1/sqrt(12*30)))$",
       "metadata": {},
-      "execution_count": 83,
+      "execution_count": 94,
       "outputs": [
         {
           "name": "stdout",
@@ -120,7 +120,7 @@
       "cell_type": "code",
       "source": "/* Histogram of sample means -- should look Gaussian */\nax_draw2d(\n  color=\"steelblue\", nbins=40,\n  ax_histogram(sample_means),\n  title=\"Central Limit Theorem: Distribution of Sample Means\",\n  xlabel=\"Sample Mean\", ylabel=\"Count\",\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 84,
+      "execution_count": 95,
       "outputs": [
         {
           "data": {
@@ -147,7 +147,7 @@
       "cell_type": "code",
       "source": "/* Monte Carlo estimate of integral of sin(x) from 0 to pi */\nN_int : 50000$\n\n/* Generate uniform random values in [0, pi] */\nu : np_rand([N_int])$\nx_vals : np_mul(u, float(%pi))$\n\n/* Evaluate sin at each point, take mean, multiply by interval length */\nsin_vals : np_sin(x_vals)$\nmc_integral : float(%pi) * np_mean(sin_vals)$\n\n/* Symbolic exact answer */\nexact : integrate(sin(t), t, 0, %pi)$\n\nprint(\"Monte Carlo estimate:\", mc_integral)$\nprint(\"Exact value:\", exact)$\nprint(\"Error:\", abs(mc_integral - exact))$",
       "metadata": {},
-      "execution_count": 85,
+      "execution_count": 96,
       "outputs": [
         {
           "name": "stdout",
@@ -167,7 +167,7 @@
       "cell_type": "code",
       "source": "/* Generate a dataset of 50 observations from standard normal */\nn_obs : 50$\ndataset : np_randn([n_obs])$\n\nprint(\"Dataset mean:\", np_mean(dataset))$\nprint(\"Dataset std:\", np_std(dataset))$",
       "metadata": {},
-      "execution_count": 86,
+      "execution_count": 97,
       "outputs": [
         {
           "name": "stdout",
@@ -182,7 +182,7 @@
       "cell_type": "code",
       "source": "/* Bootstrap: resample with replacement 2000 times */\nn_boot : 2000$\n\nboot_means : makelist(\n  block([idx, resample],\n    /* Generate random indices in [0, n_obs-1] */\n    idx : np_map(lambda([z], floor(z * n_obs)), np_rand([n_obs])),\n    /* Build resample by picking elements at those indices */\n    resample : ndarray(makelist(np_ref(dataset, round(np_ref(idx, k))),\n                               k, 0, n_obs - 1)),\n    np_mean(resample)\n  ),\n  i, 1, n_boot\n)$\n\n/* Convert to ndarray and sort for percentile extraction */\nboot_arr : ndarray(boot_means)$\nboot_sorted : np_sort(boot_arr)$\n\n/* 2.5th and 97.5th percentiles for 95% CI */\nlo_idx : round(0.025 * n_boot)$\nhi_idx : round(0.975 * n_boot) - 1$\nci_lo : np_ref(boot_sorted, lo_idx)$\nci_hi : np_ref(boot_sorted, hi_idx)$\n\nprint(\"95% Bootstrap CI for the mean:\", [ci_lo, ci_hi])$\nprint(\"Bootstrap mean of means:\", np_mean(boot_arr))$",
       "metadata": {},
-      "execution_count": 87,
+      "execution_count": 98,
       "outputs": [
         {
           "name": "stdout",
@@ -197,7 +197,7 @@
       "cell_type": "code",
       "source": "/* Histogram of bootstrap means with CI boundary lines */\nax_draw2d(\n  color=\"steelblue\", nbins=40, name=\"Bootstrap means\",\n  ax_histogram(boot_arr),\n  color=red, dash=\"dash\", line_width=2, name=\"95% CI\",\n  lines([[ci_lo, 0], [ci_lo, n_boot/10]]),\n  color=red, dash=\"dash\", line_width=2,\n  lines([[ci_hi, 0], [ci_hi, n_boot/10]]),\n  title=\"Bootstrap Distribution of the Mean\",\n  xlabel=\"Sample Mean\", ylabel=\"Count\",\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 88,
+      "execution_count": 99,
       "outputs": [
         {
           "data": {

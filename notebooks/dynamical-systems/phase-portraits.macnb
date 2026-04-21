@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 106,
+      "execution_count": 121,
       "outputs": []
     },
     {
@@ -36,7 +36,7 @@
       "cell_type": "code",
       "source": "/* Stable node: both eigenvalues negative */\nA_node : matrix([-2, 0], [0, -1])$\nevals_node : eigenvalues(A_node);\n\nprint(\"Eigenvalues:\", evals_node[1])$\nprint(\"Both negative real => stable node\")$",
       "metadata": {},
-      "execution_count": 107,
+      "execution_count": 122,
       "outputs": [
         {
           "name": "stdout",
@@ -51,7 +51,7 @@
       "cell_type": "code",
       "source": "/* Phase portrait: trajectories converge to origin */\nax_draw2d(\n  ax_vector_field(-2*x, -y, x, -3, 3, y, -3, 3),\n  ax_streamline(-2*x, -y, x, -3, 3, y, -3, 3),\n  title=\"Stable Node\",\n  xlabel=\"x\", ylabel=\"y\",\n  aspect_ratio=true\n)$",
       "metadata": {},
-      "execution_count": 108,
+      "execution_count": 123,
       "outputs": [
         {
           "data": {
@@ -73,7 +73,7 @@
       "cell_type": "code",
       "source": "/* Saddle point: eigenvalues of opposite sign */\nA_saddle : matrix([1, 0], [0, -2])$\nevals_saddle : eigenvalues(A_saddle);\n\nprint(\"Eigenvalues:\", evals_saddle[1])$\nprint(\"One positive, one negative => saddle point\")$",
       "metadata": {},
-      "execution_count": 109,
+      "execution_count": 124,
       "outputs": [
         {
           "name": "stdout",
@@ -88,7 +88,7 @@
       "cell_type": "code",
       "source": "/* Saddle point phase portrait: hyperbolic trajectories */\nax_draw2d(\n  ax_vector_field(x, -2*y, x, -3, 3, y, -3, 3),\n  ax_streamline(x, -2*y, x, -3, 3, y, -3, 3),\n  title=\"Saddle Point\",\n  xlabel=\"x\", ylabel=\"y\",\n  aspect_ratio=true\n)$",
       "metadata": {},
-      "execution_count": 110,
+      "execution_count": 125,
       "outputs": [
         {
           "data": {
@@ -110,7 +110,7 @@
       "cell_type": "code",
       "source": "/* Stable spiral: complex eigenvalues with negative real part */\nA_spiral : matrix([-1, 2], [-2, -1])$\nevals_spiral : eigenvalues(A_spiral);\n\nprint(\"Eigenvalues:\", evals_spiral[1])$\nprint(\"Complex with Re < 0 => stable spiral\")$",
       "metadata": {},
-      "execution_count": 111,
+      "execution_count": 126,
       "outputs": [
         {
           "name": "stdout",
@@ -125,7 +125,7 @@
       "cell_type": "code",
       "source": "/* Stable spiral: trajectories wind inward */\nax_draw2d(\n  ax_vector_field(-x + 2*y, -2*x - y, x, -3, 3, y, -3, 3),\n  ax_streamline(-x + 2*y, -2*x - y, x, -3, 3, y, -3, 3),\n  title=\"Stable Spiral\",\n  xlabel=\"x\", ylabel=\"y\",\n  aspect_ratio=true\n)$",
       "metadata": {},
-      "execution_count": 112,
+      "execution_count": 127,
       "outputs": [
         {
           "data": {
@@ -147,7 +147,7 @@
       "cell_type": "code",
       "source": "/* Unstable spiral: complex eigenvalues with positive real part */\nA_uspiral : matrix([1, 2], [-2, 1])$\nevals_uspiral : eigenvalues(A_uspiral);\n\nprint(\"Eigenvalues:\", evals_uspiral[1])$\nprint(\"Complex with Re > 0 => unstable spiral\")$",
       "metadata": {},
-      "execution_count": 113,
+      "execution_count": 128,
       "outputs": [
         {
           "name": "stdout",
@@ -162,7 +162,7 @@
       "cell_type": "code",
       "source": "/* Unstable spiral: trajectories wind outward */\nax_draw2d(\n  ax_vector_field(x + 2*y, -2*x + y, x, -3, 3, y, -3, 3),\n  ax_streamline(x + 2*y, -2*x + y, x, -3, 3, y, -3, 3),\n  title=\"Unstable Spiral\",\n  xlabel=\"x\", ylabel=\"y\",\n  aspect_ratio=true\n)$",
       "metadata": {},
-      "execution_count": 114,
+      "execution_count": 129,
       "outputs": [
         {
           "data": {
@@ -184,7 +184,7 @@
       "cell_type": "code",
       "source": "/* Centre: pure imaginary eigenvalues */\nA_centre : matrix([0, 1], [-1, 0])$\nevals_centre : eigenvalues(A_centre);\n\nprint(\"Eigenvalues:\", evals_centre[1])$\nprint(\"Pure imaginary => centre (closed orbits)\")$",
       "metadata": {},
-      "execution_count": 115,
+      "execution_count": 130,
       "outputs": [
         {
           "name": "stdout",
@@ -199,7 +199,7 @@
       "cell_type": "code",
       "source": "/* Centre: closed circular orbits */\nax_draw2d(\n  ax_vector_field(y, -x, x, -3, 3, y, -3, 3),\n  ax_streamline(y, -x, x, -3, 3, y, -3, 3),\n  title=\"Centre (Simple Harmonic Oscillator)\",\n  xlabel=\"x\", ylabel=\"y\",\n  aspect_ratio=true\n)$",
       "metadata": {},
-      "execution_count": 116,
+      "execution_count": 131,
       "outputs": [
         {
           "data": {
@@ -221,7 +221,7 @@
       "cell_type": "code",
       "source": "/* Lotka-Volterra system */\nf1 : x*(1 - y)$\nf2 : y*(x - 1)$\n\n/* Compute the Jacobian symbolically */\nJ_lv : matrix(\n  [diff(f1, x), diff(f1, y)],\n  [diff(f2, x), diff(f2, y)]\n);\n\nprint(\"Jacobian:\")$\nJ_lv;",
       "metadata": {},
-      "execution_count": 117,
+      "execution_count": 132,
       "outputs": [
         {
           "name": "stdout",
@@ -236,7 +236,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 1-y&-x\\cr y&x-1\\cr \\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 117,
+          "execution_count": 132,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -246,7 +246,7 @@
       "cell_type": "code",
       "source": "/* Find fixed points */\nfps_lv : solve([f1 = 0, f2 = 0], [x, y]);\n\nprint(\"Fixed points:\")$\nfor fp in fps_lv do print(fp)$",
       "metadata": {},
-      "execution_count": 118,
+      "execution_count": 133,
       "outputs": [
         {
           "name": "stdout",
@@ -261,7 +261,7 @@
       "cell_type": "code",
       "source": "/* Classify each fixed point via eigenvalues of the Jacobian */\nfor fp in fps_lv do block(\n  [J_fp, evals],\n  J_fp : subst(fp, J_lv),\n  evals : eigenvalues(J_fp),\n  print(\"--- Fixed point:\", fp, \"---\"),\n  print(\"  J =\", J_fp),\n  print(\"  Eigenvalues =\", evals[1]),\n  if every(lambda([e], is(float(realpart(e)) < 0)), evals[1]) then\n    print(\"  Classification: STABLE\")\n  elseif every(lambda([e], is(float(realpart(e)) > 0)), evals[1]) then\n    print(\"  Classification: UNSTABLE\")\n  elseif every(lambda([e], is(float(realpart(e)) = 0)), evals[1]) then\n    print(\"  Classification: CENTRE\")\n  else\n    print(\"  Classification: SADDLE\")\n)$",
       "metadata": {},
-      "execution_count": 119,
+      "execution_count": 134,
       "outputs": [
         {
           "name": "stdout",
@@ -276,7 +276,7 @@
       "cell_type": "code",
       "source": "/* Phase portrait of the Lotka-Volterra system */\nax_draw2d(\n  color=\"#cccccc\",\n  ax_vector_field(f1, f2, x, 0, 4, y, 0, 4),\n  color=\"#e41a1c\",\n  initial_points=[[0.5, 0.5], [1.0, 2.0], [2.0, 0.5],\n                  [0.5, 1.5], [3.0, 1.0], [1.5, 3.0]],\n  ax_streamline(f1, f2, x, 0, 4, y, 0, 4),\n  title=\"Lotka-Volterra Phase Portrait\",\n  xlabel=\"x (prey)\", ylabel=\"y (predator)\",\n  aspect_ratio=true\n)$",
       "metadata": {},
-      "execution_count": 120,
+      "execution_count": 135,
       "outputs": [
         {
           "data": {
