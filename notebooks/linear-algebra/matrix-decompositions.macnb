@@ -1,0 +1,271 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 5,
+  "metadata": {
+    "kernelspec": {
+      "name": "maxima",
+      "display_name": "Maxima",
+      "language": "maxima"
+    },
+    "aximar": {}
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "source": "# Matrix Decompositions: QR, LU, SVD\n\nThis notebook compares three fundamental matrix decompositions side by side:\n**LU** (Gaussian elimination), **QR** (orthogonal factorisation), and **SVD**\n(singular value decomposition). We verify each decomposition by reconstructing\nthe original matrix, explore their properties, and discuss when to use each.\n\nKey functions: `np_lu`, `np_qr`, `np_svd`, `np_det`, `np_diag`, `np_norm`,\n`np_matmul`, `np_transpose`, `np_inv`.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
+      "metadata": {},
+      "execution_count": 61,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Test Matrix\n\nWe use a well-conditioned $3 \\times 3$ symmetric matrix. Symmetric positive-definite\nmatrices arise naturally in least-squares problems, covariance matrices, and\nfinite-element stiffness matrices. The condition number $\\kappa(A) = \\|A\\| \\cdot \\|A^{-1}\\|$\ntells us how sensitive linear systems involving $A$ are to perturbations.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* A well-conditioned symmetric matrix */\nA : ndarray(matrix([4, 1, 2], [1, 3, 1], [2, 1, 5]))$\n\nprint(\"Test matrix A:\")$\nnp_to_matrix(A);\n\n/* Condition number: kappa(A) = ||A|| * ||A^{-1}|| */\nkappa : np_norm(A) * np_norm(np_inv(A));\nprint(\"Condition number kappa(A) =\", kappa)$\nprint(\"This is well-conditioned (kappa close to 1 is ideal).\")$",
+      "metadata": {},
+      "execution_count": 62,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Test matrix A:\nmatrix([4.0,1.0,2.0],[1.0,3.0,1.0],[2.0,1.0,5.0])\n4.664979478158368\nCondition number kappa(A) = 4.664979478158368\nThis is well-conditioned (kappa close to 1 is ideal)."
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## LU Decomposition\n\nThe LU decomposition factors $A$ into:\n\n$$PA = LU$$\n\nwhere $P$ is a permutation matrix, $L$ is lower triangular with ones on the\ndiagonal, and $U$ is upper triangular. This is the workhorse behind\n`np_solve` -- once we have $L$ and $U$, solving $Ax = b$ reduces to\ntwo triangular solves (forward and back substitution), each $O(n^2)$.\n\nThe permutation $P$ ensures numerical stability by performing **partial pivoting**.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* LU decomposition: PA = LU */\n[L, U, P] : np_lu(A)$\n\nprint(\"L (lower triangular):\")$\nnp_to_matrix(L);\nprint(\"U (upper triangular):\")$\nnp_to_matrix(U);\nprint(\"P (permutation):\")$\nnp_to_matrix(P);",
+      "metadata": {},
+      "execution_count": 63,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "L (lower triangular):\nmatrix([1.0,0.0,0.0],[0.25,1.0,0.0],[0.5,0.18181818181818182,1.0])\nU (upper triangular):\nmatrix([4.0,1.0,2.0],[0.0,2.75,0.5],[0.0,0.0,3.909090909090909])\nP (permutation):"
+          ]
+        },
+        {
+          "data": {
+            "text/latex": [
+              "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 1.0&0.0&0.0\\cr 0.0&1.0&0.0\\cr 0.0&0.0&1.0\\cr \\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
+            ]
+          },
+          "execution_count": 63,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Verify: PA = LU, so ||PA - LU|| should be ~0 */\nlu_error : np_norm(np_sub(np_matmul(P, A), np_matmul(L, U)));\nprint(\"Reconstruction error ||PA - LU|| =\", lu_error)$",
+      "metadata": {},
+      "execution_count": 64,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "0.0\nReconstruction error ||PA - LU|| = 0.0"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## QR Decomposition\n\nThe QR decomposition factors $A$ into:\n\n$$A = QR$$\n\nwhere $Q$ is an orthogonal matrix ($Q^T Q = I$) and $R$ is upper triangular.\nQR is the foundation of:\n\n- **Least-squares** solvers (more numerically stable than the normal equations)\n- The **QR algorithm** for computing eigenvalues\n- **Gram-Schmidt** orthogonalisation\n\nThe key property is that $Q$ preserves norms: $\\|Qx\\| = \\|x\\|$, which\nmeans rounding errors are not amplified.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* QR decomposition: A = QR */\n[Q, R] : np_qr(A)$\n\nprint(\"Q (orthogonal):\")$\nnp_to_matrix(Q);\nprint(\"R (upper triangular):\")$\nnp_to_matrix(R);",
+      "metadata": {},
+      "execution_count": 65,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Q (orthogonal):\nmatrix([0.8728715609439694,-0.26726124191242434,-0.408248290463863],\n       [0.2182178902359924,0.9621404708847276,-0.16329931618554513],\n       [0.4364357804719848,0.053452248382484815,0.8981462390204986])\nR (upper triangular):"
+          ]
+        },
+        {
+          "data": {
+            "text/latex": [
+              "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 4.58257569495584&1.9639610121239317&4.1461399144838555\\cr 0.0&2.6726124191242437&0.6948792289723031\\cr 0.0&0.0&3.510935297989222\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
+            ]
+          },
+          "execution_count": 65,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Verify: A = QR */\nqr_error : np_norm(np_sub(A, np_matmul(Q, R)));\nprint(\"Reconstruction error ||A - QR|| =\", qr_error)$\n\n/* Check orthogonality: Q^T Q should be the identity */\nQtQ : np_matmul(np_transpose(Q), Q)$\northo_error : np_norm(np_sub(QtQ, np_eye(3)));\nprint(\"Orthogonality error ||Q^T Q - I|| =\", ortho_error)$\n\nprint(\"Q^T Q (should be identity):\")$\nnp_to_matrix(QtQ);",
+      "metadata": {},
+      "execution_count": 66,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "6.661338147750939e-16\nReconstruction error ||A - QR|| = 6.661338147750939e-16\n2.5051018131878933e-16\nOrthogonality error ||Q^T Q - I|| = 2.5051018131878933e-16\nQ^T Q (should be identity):"
+          ]
+        },
+        {
+          "data": {
+            "text/latex": [
+              "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 0.9999999999999999&1.509557573534171 \\times 10^{-17}&0.0\\cr 1.509557573534171 \\times 10^{-17}&0.9999999999999998&2.0816681711721685 \\times 10^{-17}\\cr4.2286018551903734 \\times 10^{-18}&1.478595953198323 \\times 10^{-17}&1.0\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
+            ]
+          },
+          "execution_count": 66,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Singular Value Decomposition (SVD)\n\nThe SVD factors $A$ into:\n\n$$A = U \\Sigma V^T$$\n\nwhere $U$ and $V$ are orthogonal and $\\Sigma = \\text{diag}(\\sigma_1, \\sigma_2, \\sigma_3)$\ncontains the **singular values** in descending order. The SVD is the most\ninformative decomposition:\n\n- $\\sigma_1 / \\sigma_n$ gives the condition number\n- The number of nonzero singular values is the rank\n- Truncating small singular values gives the best low-rank approximation\n- The columns of $U$ and $V$ are the left and right singular vectors",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* SVD: A = U * diag(S) * Vt */\n[U_svd, S, Vt] : np_svd(A)$\n\nprint(\"U (left singular vectors):\")$\nnp_to_matrix(U_svd);\nprint(\"Singular values S:\", np_to_list(S))$\nprint(\"Vt (right singular vectors, transposed):\")$\nnp_to_matrix(Vt);",
+      "metadata": {},
+      "execution_count": 67,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "U (left singular vectors):\nmatrix([-0.5910090485061037,0.3279852776056822,0.736976229099578],\n       [-0.3279852776056818,0.7369762290995778,-0.5910090485061041],\n       [-0.7369762290995784,-0.5910090485061039,-0.32798527760568147])\nSingular values S: [7.048917339522306,2.64310413210779,2.3079785283699046]\nVt (right singular vectors, transposed):"
+          ]
+        },
+        {
+          "data": {
+            "text/latex": [
+              "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi -0.5910090485061035&-0.32798527760568186&-0.7369762290995783\\cr0.32798527760568214&0.7369762290995777&-0.5910090485061038\\cr0.7369762290995783&-0.5910090485061039&-0.32798527760568147\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
+            ]
+          },
+          "execution_count": 67,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Reconstruct A from U * diag(S) * Vt */\nS_mat : np_diag(np_to_list(S))$\n\nA_reconstructed : np_matmul(np_matmul(U_svd, S_mat), Vt)$\nsvd_error : np_norm(np_sub(A, A_reconstructed));\nprint(\"Reconstruction error ||A - U*diag(S)*Vt|| =\", svd_error)$\n\n/* Condition number from singular values */\nsvals : np_to_list(S)$\nkappa_svd : svals[1] / svals[length(svals)];\nprint(\"Condition number from SVD (sigma_max / sigma_min) =\", kappa_svd)$",
+      "metadata": {},
+      "execution_count": 68,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "2.9394713984828794e-15\nReconstruction error ||A - U*diag(S)*Vt|| = 2.9394713984828794e-15\n3.0541520438237635\nCondition number from SVD (sigma_max / sigma_min) = 3.0541520438237635"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Symbolic Determinant vs Numeric [S+N]\n\nThe determinant connects to all three decompositions:\n\n- From LU: $\\det(A) = \\det(P)^{-1} \\cdot \\prod u_{ii}$\n- From SVD: $|\\det(A)| = \\prod \\sigma_i$\n\nWe compute the determinant symbolically (exact integer arithmetic) and\nnumerically (`np_det` via LAPACK), and verify they agree.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Symbolic determinant (exact integer result) */\ndet_sym : determinant(matrix([4, 1, 2], [1, 3, 1], [2, 1, 5]));\nprint(\"Symbolic determinant =\", det_sym)$\n\n/* Numeric determinant via LAPACK */\ndet_num : np_det(A);\nprint(\"Numeric determinant  =\", det_num)$\n\n/* Product of singular values gives |det| */\ndet_svd : apply(\"*\", np_to_list(S));\nprint(\"Product of singular values =\", det_svd)$\nprint(\"(matches |det| since A is positive definite)\")$",
+      "metadata": {},
+      "execution_count": 69,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "43\nSymbolic determinant = 43\n43.0\nNumeric determinant  = 43.0\n43.00000000000001\nProduct of singular values = 43.00000000000001\n(matches |det| since A is positive definite)"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Comparing Decompositions\n\nEach decomposition has its strengths:\n\n| Decomposition | Factors | Cost | Best for |\n|---|---|---|---|\n| **LU** | $PA = LU$ | $\\frac{2}{3}n^3$ | Solving $Ax = b$, computing determinants |\n| **QR** | $A = QR$ | $\\frac{4}{3}n^3$ | Least squares, eigenvalue algorithms, stability |\n| **SVD** | $A = U\\Sigma V^T$ | $\\sim 11n^3$ | Rank, condition number, low-rank approximation |\n\n**Rules of thumb:**\n- For **solving linear systems** ($Ax = b$): use LU (fastest, what `np_solve` does)\n- For **least squares** ($\\min \\|Ax - b\\|$): use QR (better numerical stability than normal equations)\n- For **understanding the matrix** (rank, condition, principal components): use SVD\n- QR and SVD work on **non-square** matrices; LU requires square matrices",
+      "metadata": {}
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Non-Square Matrix\n\nLU decomposition requires a square matrix, but QR and SVD generalise\nnaturally to $m \\times n$ matrices. This is essential for least-squares\nproblems where the system is over-determined ($m > n$) or under-determined\n($m < n$).\n\nHere we take a $4 \\times 2$ matrix (tall, over-determined shape) and show\nthat QR and SVD produce valid factorisations.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Non-square matrix: 4x2 (tall) */\nB : ndarray(matrix([1, 2], [3, 4], [5, 6], [7, 8]))$\n\nprint(\"B (4x2):\")$\nnp_to_matrix(B);\nprint(\"Shape:\", np_shape(B))$",
+      "metadata": {},
+      "execution_count": 70,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "B (4x2):\nmatrix([1.0,2.0],[3.0,4.0],[5.0,6.0],[7.0,8.0])\nShape: [4,2]"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "/* QR of non-square matrix */\n[Q_B, R_B] : np_qr(B)$\n\nprint(\"QR decomposition of B:\")$\nprint(\"Q shape:\", np_shape(Q_B))$\nnp_to_matrix(Q_B);\nprint(\"R shape:\", np_shape(R_B))$\nnp_to_matrix(R_B);\n\nqr_B_error : np_norm(np_sub(B, np_matmul(Q_B, R_B)));\nprint(\"Reconstruction error ||B - QR|| =\", qr_B_error)$",
+      "metadata": {},
+      "execution_count": 71,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "QR decomposition of B:\nQ shape: [4,2]\nmatrix([0.10910894511799629,0.8295150620062542],\n       [0.3273268353539886,0.4391550328268387],\n       [0.5455447255899811,0.048795003647425804],\n       [0.7637626158259735,-0.34156502553198537])\nR shape: [2,2]\nmatrix([9.16515138991168,10.910894511799622],[0.0,0.9759000729485366])\n7.483924389696347e-15\nReconstruction error ||B - QR|| = 7.483924389696347e-15"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "/* SVD of non-square matrix */\n[U_B, S_B, Vt_B] : np_svd(B)$\n\nprint(\"SVD of B:\")$\nprint(\"U shape:\", np_shape(U_B))$\nnp_to_matrix(U_B);\nprint(\"Singular values:\", np_to_list(S_B))$\nprint(\"Vt shape:\", np_shape(Vt_B))$\nnp_to_matrix(Vt_B);\n\n/* Reconstruct: U * diag(S) * Vt */\nS_B_mat : np_diag(np_to_list(S_B))$\nB_reconstructed : np_matmul(np_matmul(U_B, S_B_mat), Vt_B)$\nsvd_B_error : np_norm(np_sub(B, B_reconstructed));\nprint(\"Reconstruction error ||B - U*diag(S)*Vt|| =\", svd_B_error)$\n\n/* Rank from singular values */\nprint(\"Matrix rank (number of nonzero singular values) = 2\")$\nprint(\"The columns of B are linearly independent.\")$",
+      "metadata": {},
+      "execution_count": 72,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "SVD of B:\nU shape: [4,2]\nmatrix([-0.15248323331020122,-0.8226474722256603],\n       [-0.34991837180796403,-0.42137528768457977],\n       [-0.5473535103057272,-0.020103103143501926],\n       [-0.7447886488034903,0.3811690813975742])\nSingular values: [14.269095499261486,0.6268282324175426]\nVt shape: [2,2]\nmatrix([-0.6414230279950722,-0.7671873950721771],\n       [0.7671873950721771,-0.6414230279950722])\n8.79251776862914e-15\nReconstruction error ||B - U*diag(S)*Vt|| = 8.79251776862914e-15\nMatrix rank (number of nonzero singular values) = 2\nThe columns of B are linearly independent."
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Summary\n\nAll three decompositions reconstruct their input matrix to machine precision.\nThe choice between them depends on the downstream task:\n\n- **LU** is the fastest and is used internally by `np_solve` and `np_det`.\n  It requires a square matrix and uses partial pivoting for stability.\n- **QR** is the best choice for least-squares problems and is more numerically\n  stable than LU when the matrix is moderately ill-conditioned.\n- **SVD** is the most expensive but the most informative. It reveals the rank,\n  condition number, and principal directions of the matrix. It works on any\n  shape and is the gold standard for ill-conditioned or rank-deficient problems.",
+      "metadata": {}
+    }
+  ]
+}

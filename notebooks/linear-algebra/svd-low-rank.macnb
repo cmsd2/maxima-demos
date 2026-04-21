@@ -1,0 +1,251 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 5,
+  "metadata": {
+    "kernelspec": {
+      "name": "maxima",
+      "display_name": "Maxima",
+      "language": "maxima"
+    },
+    "aximar": {}
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "source": "# SVD and Low-Rank Approximation\n\nThe **singular value decomposition** (SVD) factors any $m \\times n$ matrix as\n$A = U \\Sigma V^T$, where $U$ and $V$ are orthogonal and $\\Sigma$ is diagonal\nwith non-negative entries (the **singular values**). Truncating to the $k$\nlargest singular values gives the **best rank-$k$ approximation** to $A$ in\nboth the Frobenius and spectral norms (Eckart-Young theorem).\n\nThis notebook demonstrates:\n1. Computing the SVD with `np_svd`\n2. Inspecting the singular value spectrum\n3. Building rank-$k$ approximations and measuring reconstruction error\n4. Visualising approximations with heatmaps\n5. Data compression interpretation\n\nKey functions: `np_svd`, `np_matmul`, `np_reshape`, `np_diag`, `np_scale`,\n`np_sub`, `np_norm`, `np_col`, `np_row`, `ax_bar`, `ax_heatmap`.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
+      "metadata": {},
+      "execution_count": 56,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Building a Data Matrix\n\nWe construct a $6 \\times 4$ matrix that is *approximately* rank-1: a clean\nouter product $u v^T$ plus a small amount of Gaussian noise. This models\nreal-world data where a low-dimensional signal is corrupted by noise.\n\nSince `np_outer` does not exist yet, we form the outer product via\n`np_matmul` with reshaped column and row vectors:\n$u v^T = (6 \\times 1)(1 \\times 4)$.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Column vector u (6x1) and row vector v (1x4) */\nu : np_reshape(ndarray([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]), [6, 1])$\nv : np_reshape(ndarray([1.0, 0.5, 0.3, 0.1]), [1, 4])$\n\n/* Data = outer product + small noise */\nA : np_add(np_matmul(u, v), np_scale(0.1, np_randn([6, 4])))$\n\nprint(\"Data matrix A (6x4):\")$\nnp_to_matrix(A);",
+      "metadata": {},
+      "execution_count": 57,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Data matrix A (6x4):"
+          ]
+        },
+        {
+          "data": {
+            "text/latex": [
+              "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 1.048122653963567&0.5309751589901769&0.17068447484433122&0.18353285826699453\\cr1.9460857171574635&1.0156456538427945&0.5865290167676315&0.1953629754579393\\cr 2.9375804820271663&1.479359377201386&0.9115809332355824&0.36162505333378653\\cr 4.012362799919125&2.040149729369332&1.087710897894501&0.13268329811650725\\cr 4.983732000739373&2.2777725191487868&1.3694042236366784&0.5762068685933308\\cr 6.072569473023715&2.9927630357805857&1.8472923456020598&0.48033107064815744\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
+            ]
+          },
+          "execution_count": 57,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Computing the SVD\n\nThe SVD decomposes $A = U \\Sigma V^T$ where:\n- $U$ is $6 \\times 6$ (left singular vectors)\n- $\\Sigma$ is returned as a 1D vector of singular values $\\sigma_1 \\ge \\sigma_2 \\ge \\cdots \\ge 0$\n- $V^T$ is $4 \\times 4$ (right singular vectors, transposed)\n\nSince our matrix is approximately rank-1, we expect one large singular value\nand the rest near zero.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* SVD decomposition */\n[U, S, Vt] : np_svd(A)$\n\nprint(\"U shape:\", np_shape(U))$\nprint(\"S (singular values):\", np_to_list(S))$\nprint(\"Vt shape:\", np_shape(Vt))$",
+      "metadata": {},
+      "execution_count": 58,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "U shape: [6,4]\nS (singular values):\n                    [11.019792611542938,0.32342622799894927,\n                     0.19282611598483843,0.13168198012160148]\nVt shape: [4,4]"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Singular Value Spectrum\n\nThe singular values reveal the **effective rank** of the matrix. Rapid decay\nmeans the matrix is well-approximated by a low-rank truncation. Here we\nexpect $\\sigma_1 \\gg \\sigma_2 \\approx \\sigma_3 \\approx \\sigma_4 \\approx 0$\nsince the true signal is rank-1.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Bar chart of singular values */\nax_draw2d(\n  ax_bar([\"s1\", \"s2\", \"s3\", \"s4\"], np_to_list(S)),\n  title=\"Singular Value Spectrum\",\n  ylabel=\"Singular value\"\n)$",
+      "metadata": {},
+      "execution_count": 59,
+      "outputs": [
+        {
+          "data": {
+            "application/x-maxima-plotly": [
+              "{\"data\":[{\"x\":[\"s1\",\"s2\",\"s3\",\"s4\"],\"y\":[11.019792611542938,0.32342622799894927,0.19282611598483843,0.13168198012160148],\"type\":\"bar\",\"name\":\"bar\"}],\"layout\":{\"title\":{\"text\":\"Singular Value Spectrum\"},\"width\":700,\"height\":450,\"plot_bgcolor\":\"white\",\"paper_bgcolor\":\"white\",\"xaxis\":{\"gridcolor\":\"#ddd\",\"linecolor\":\"black\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"yaxis\":{\"title\":{\"text\":\"Singular value\"},\"gridcolor\":\"#ddd\",\"linecolor\":\"black\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1}}}"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "The first singular value dominates -- the remaining values are small (noise level).\nThis confirms that a rank-1 approximation should capture most of the structure in $A$.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Rank-1 Approximation\n\nThe best rank-1 approximation is $A_1 = \\sigma_1 \\, u_1 \\, v_1^T$,\nwhere $u_1$ and $v_1^T$ are the first left and right singular vectors.\n\nWe extract these from the SVD factors, form the outer product, and measure\nthe relative reconstruction error $\\|A - A_1\\| / \\|A\\|$.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Extract first singular triplet */\nu1 : np_reshape(np_col(U, 0), [6, 1])$\nv1 : np_reshape(np_row(Vt, 0), [1, 4])$\ns1 : np_ref(S, 0)$\n\n/* Rank-1 reconstruction: A1 = s1 * u1 * v1^T */\nA1 : np_scale(s1, np_matmul(u1, v1))$\n\nprint(\"Rank-1 approximation A1:\")$\nnp_to_matrix(A1);\n\n/* Relative error */\nerr1 : np_norm(np_sub(A, A1)) / np_norm(A)$\nprint(\"Relative error ||A - A1|| / ||A|| =\", err1)$",
+      "metadata": {},
+      "execution_count": 60,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Rank-1 approximation A1:\nmatrix([1.0323508868061055,0.5041958462191255,0.29861370897403416,\n        0.08985057383990286],\n       [1.9768638014995312,0.965491995014111,0.5718197557117578,\n        0.17205617705971463],\n       [2.9743745417964234,1.4526720597038016,0.8603557425631305,\n        0.2588744416368203],\n       [4.011911816055098,1.9594009158170318,1.1604696453309429,\n        0.34917641227864865],\n       [4.919965492091362,2.402890525263633,1.4231296377949423,\n        0.4282087886848071],\n       [6.099055040190595,2.978752918631902,1.7641883879450349,\n        0.530830749744105])\nRelative error ||A - A1|| / ||A|| = 0.03617542022096205"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Reconstruction Error vs Rank\n\nWe now compute truncated SVD approximations for ranks $k = 1, 2, 3, 4$\nand track how the relative Frobenius-norm error decreases.\n\nThe rank-$k$ approximation is:\n$$A_k = \\sum_{i=1}^{k} \\sigma_i \\, u_i \\, v_i^T = U_k \\, \\Sigma_k \\, V_k^T$$\n\nBy the Eckart-Young theorem:\n$$\\|A - A_k\\|_F = \\sqrt{\\sigma_{k+1}^2 + \\cdots + \\sigma_r^2}$$",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Compute truncated SVD reconstruction for each rank */\ns_list : np_to_list(S)$\nranks : [1, 2, 3, 4]$\nerrors : []$\nnorm_A : np_norm(A)$\n\nfor k in ranks do block(\n  [Ak : np_zeros([6, 4])],\n  /* Accumulate rank-k approximation */\n  for i : 1 thru k do block(\n    [ui, vi, si],\n    ui : np_reshape(np_col(U, i-1), [6, 1]),\n    vi : np_reshape(np_row(Vt, i-1), [1, 4]),\n    si : s_list[i],\n    Ak : np_add(Ak, np_scale(si, np_matmul(ui, vi)))\n  ),\n  errors : append(errors, [np_norm(np_sub(A, Ak)) / norm_A])\n)$\n\nprint(\"Relative reconstruction error by rank:\")$\nfor i : 1 thru length(ranks) do\n  print(sconcat(\"  rank \", ranks[i], \": \", errors[i]))$",
+      "metadata": {},
+      "execution_count": 61,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Relative reconstruction error by rank:\n  rank 1: 0.03617542022096205\n  rank 2: 0.0211752393642924\n  rank 3: 0.011941766330324058\n  rank 4: 3.125000824323487e-16"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Plot error vs rank */\nerror_data : makelist([ranks[i], errors[i]], i, 1, length(ranks))$\n\nax_draw2d(\n  color=blue, marker_size=8,\n  points(error_data),\n  color=blue,\n  lines(error_data),\n  title=\"Reconstruction Error vs Rank\",\n  xlabel=\"Rank k\",\n  ylabel=\"Relative error ||A - Ak|| / ||A||\",\n  grid=true\n)$",
+      "metadata": {},
+      "execution_count": 62,
+      "outputs": [
+        {
+          "data": {
+            "application/x-maxima-plotly": [
+              "{\"data\":[{\"x\":[1.0,2.0,3.0,4.0],\"y\":[0.03617542022096205,0.0211752393642924,0.011941766330324058,3.125000824323487e-16],\"type\":\"scatter\",\"mode\":\"markers\",\"marker\":{\"color\":\"blue\",\"size\":8},\"name\":\"points\"},{\"x\":[1.0,2.0,3.0,4.0],\"y\":[0.03617542022096205,0.0211752393642924,0.011941766330324058,3.125000824323487e-16],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"blue\",\"width\":2},\"name\":\"lines\"}],\"layout\":{\"title\":{\"text\":\"Reconstruction Error vs Rank\"},\"width\":700,\"height\":450,\"plot_bgcolor\":\"white\",\"paper_bgcolor\":\"white\",\"xaxis\":{\"title\":{\"text\":\"Rank k\"},\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"black\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"yaxis\":{\"title\":{\"text\":\"Relative error ||A - Ak|| / ||A||\"},\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"black\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1}}}"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "The error drops sharply from rank 0 to rank 1 (capturing the dominant signal),\nthen decreases gradually as additional components mop up the noise. At full\nrank ($k = 4$) the reconstruction is exact (error $\\approx 0$ to machine precision).",
+      "metadata": {}
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Visualising with Heatmaps\n\nHeatmaps provide an intuitive view of matrix structure. We compare the\noriginal matrix with its rank-1 and rank-2 approximations to see how\nsuccessive SVD components refine the reconstruction.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Original matrix A */\nax_draw2d(\n  ax_heatmap(np_to_matrix(A)),\n  title=\"Original Matrix A\"\n)$",
+      "metadata": {},
+      "execution_count": 63,
+      "outputs": [
+        {
+          "data": {
+            "application/x-maxima-plotly": [
+              "{\"data\":[{\"z\":[[1.048122653963567,0.5309751589901769,0.17068447484433122,0.18353285826699453],[1.9460857171574635,1.0156456538427945,0.5865290167676315,0.1953629754579393],[2.9375804820271663,1.479359377201386,0.9115809332355824,0.36162505333378653],[4.012362799919125,2.040149729369332,1.087710897894501,0.13268329811650725],[4.983732000739373,2.2777725191487868,1.3694042236366784,0.5762068685933308],[6.072569473023715,2.9927630357805857,1.8472923456020598,0.48033107064815744]],\"type\":\"heatmap\",\"name\":\"heatmap\"}],\"layout\":{\"title\":{\"text\":\"Original Matrix A\"},\"width\":700,\"height\":450,\"plot_bgcolor\":\"white\",\"paper_bgcolor\":\"white\",\"xaxis\":{\"gridcolor\":\"#ddd\",\"linecolor\":\"black\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"yaxis\":{\"gridcolor\":\"#ddd\",\"linecolor\":\"black\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1}}}"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Rank-1 approximation */\nax_draw2d(\n  ax_heatmap(np_to_matrix(A1)),\n  title=\"Rank-1 Approximation\"\n)$",
+      "metadata": {},
+      "execution_count": 64,
+      "outputs": [
+        {
+          "data": {
+            "application/x-maxima-plotly": [
+              "{\"data\":[{\"z\":[[1.0323508868061055,0.5041958462191255,0.29861370897403416,0.08985057383990286],[1.9768638014995312,0.965491995014111,0.5718197557117578,0.17205617705971463],[2.9743745417964234,1.4526720597038016,0.8603557425631305,0.2588744416368203],[4.011911816055098,1.9594009158170318,1.1604696453309429,0.34917641227864865],[4.919965492091362,2.402890525263633,1.4231296377949423,0.4282087886848071],[6.099055040190595,2.978752918631902,1.7641883879450349,0.530830749744105]],\"type\":\"heatmap\",\"name\":\"heatmap\"}],\"layout\":{\"title\":{\"text\":\"Rank-1 Approximation\"},\"width\":700,\"height\":450,\"plot_bgcolor\":\"white\",\"paper_bgcolor\":\"white\",\"xaxis\":{\"gridcolor\":\"#ddd\",\"linecolor\":\"black\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"yaxis\":{\"gridcolor\":\"#ddd\",\"linecolor\":\"black\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1}}}"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Rank-2 approximation */\nu2 : np_reshape(np_col(U, 1), [6, 1])$\nv2 : np_reshape(np_row(Vt, 1), [1, 4])$\ns2 : np_ref(S, 1)$\nA2 : np_add(A1, np_scale(s2, np_matmul(u2, v2)))$\n\nax_draw2d(\n  ax_heatmap(np_to_matrix(A2)),\n  title=\"Rank-2 Approximation\"\n)$",
+      "metadata": {},
+      "execution_count": 65,
+      "outputs": [
+        {
+          "data": {
+            "application/x-maxima-plotly": [
+              "{\"data\":[{\"z\":[[1.0424094694929709,0.4725005849785516,0.29377763661421424,0.16821122874576216],[1.9766645318263523,0.9661199069720229,0.5719155627045133,0.170503781202437],[2.9834899859604835,1.4239486905077587,0.855973122372827,0.32988764465858345],[3.9853905086429466,2.042971314653377,1.1732208415695216,0.1425641009348697],[4.942746212575294,2.331106963954386,1.4121768807218222,0.6056803303443765],[6.092040508494804,3.000856173285134,1.7675609090950961,0.4761845520986033]],\"type\":\"heatmap\",\"name\":\"heatmap\"}],\"layout\":{\"title\":{\"text\":\"Rank-2 Approximation\"},\"width\":700,\"height\":450,\"plot_bgcolor\":\"white\",\"paper_bgcolor\":\"white\",\"xaxis\":{\"gridcolor\":\"#ddd\",\"linecolor\":\"black\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"yaxis\":{\"gridcolor\":\"#ddd\",\"linecolor\":\"black\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1}}}"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "The rank-1 heatmap already captures the overall gradient pattern of the\noriginal. The rank-2 approximation adds finer detail. The difference between\nrank-2 and the original is barely visible -- it consists only of noise.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Application: Data Compression\n\nLow-rank approximation is a form of **lossy compression**. For an\n$m \\times n$ matrix:\n\n| Representation | Storage (values) |\n|---|---|\n| Full matrix | $m \\cdot n$ |\n| Rank-$k$ SVD | $k \\cdot (m + n + 1)$ |\n\nThe rank-$k$ form stores $k$ singular values, $k$ columns of $U$, and $k$\nrows of $V^T$. When $k \\ll \\min(m, n)$, this is much smaller than the\noriginal.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Compression ratio for our 6x4 example */\nm : 6$ n : 4$\nfull_storage : m * n$\n\nprint(\"Full storage:\", full_storage, \"values\")$\nprint(\"\")$\nfor k in [1, 2, 3] do block(\n  [rank_storage, ratio],\n  rank_storage : k * (m + n + 1),\n  ratio : float(full_storage) / rank_storage,\n  print(sconcat(\"  Rank-\", k, \" storage: \", rank_storage,\n                \" values  (compression ratio: \",\n                ratio, \"x, error: \", errors[k], \")\"))\n)$",
+      "metadata": {},
+      "execution_count": 66,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Full storage: 24 values\n  Rank-1 storage: 11 values  (compression ratio: 2.1818181818181817x, error: 0.03617542022096205)\n  Rank-2 storage: 22 values  (compression ratio: 1.0909090909090908x, error: 0.0211752393642924)\n  Rank-3 storage: 33 values  (compression ratio: 0.7272727272727273x, error: 0.011941766330324058)"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "For this small example the savings are modest, but the principle scales\ndramatically. For a $1000 \\times 1000$ matrix, a rank-50 approximation\nstores $50 \\times 2001 = 100{,}050$ values instead of $1{,}000{,}000$ --\na 10$\\times$ compression -- while often retaining $> 99\\%$ of the signal.\n\nThis idea underpins **image compression** (keeping dominant SVD modes of\npixel blocks), **recommender systems** (low-rank user-item matrices),\nand **dimensionality reduction** (PCA is SVD of the centred data matrix).\n\n**Summary:**\n\n1. `np_svd` computes the full SVD via LAPACK\n2. The singular value spectrum reveals effective rank\n3. Truncating to rank $k$ gives the optimal low-rank approximation (Eckart-Young)\n4. Reconstruction error is fully determined by the discarded singular values\n5. Low-rank structure enables significant data compression",
+      "metadata": {}
+    }
+  ]
+}

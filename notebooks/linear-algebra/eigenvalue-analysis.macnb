@@ -1,0 +1,328 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 5,
+  "metadata": {
+    "kernelspec": {
+      "name": "maxima",
+      "display_name": "Maxima",
+      "language": "maxima"
+    },
+    "aximar": {}
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "source": "# Eigenvalue Analysis: Vibration Modes\n\nThis notebook applies eigenvalue analysis to a **mechanical vibration** problem.\nWe derive the mass and stiffness matrices symbolically, then compute natural\nfrequencies and mode shapes numerically with `np_eig` (LAPACK). The workflow\ndemonstrates the symbolic-numeric bridge: exact physics setup, numeric eigensolve,\nand visual interpretation.\n\nKey functions: `eigenvalues`, `np_eig`, `np_inv`, `np_matmul`, `np_transpose`.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
+      "metadata": {},
+      "execution_count": 85,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Mass-Spring System [S+N]\n\nConsider three masses connected in a line by four springs, anchored to walls\nat both ends:\n\n```\nwall ---[k1]--- m1 ---[k2]--- m2 ---[k3]--- m3 ---[k4]--- wall\n```\n\nThe equations of motion for free vibration ($F_{\\text{ext}} = 0$) are:\n\n$$M \\ddot{x} = -K x$$\n\nwhere $M$ is the diagonal mass matrix and $K$ is the tridiagonal stiffness\nmatrix. We derive $K$ symbolically from the spring forces.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Symbolic mass and stiffness matrices */\nM_sym : matrix(\n  [m1, 0, 0],\n  [0, m2, 0],\n  [0, 0, m3]\n);\n\n/* Stiffness: F_i = sum of spring forces on mass i */\n/* Mass 1: -k1*x1 + k2*(x2 - x1) = -(k1+k2)*x1 + k2*x2           */\n/* Mass 2: -k2*(x2-x1) + k3*(x3-x2) = k2*x1 - (k2+k3)*x2 + k3*x3 */\n/* Mass 3: -k3*(x3-x2) - k4*x3 = k3*x2 - (k3+k4)*x3              */\nK_sym : matrix(\n  [k1+k2,  -k2,      0],\n  [-k2,    k2+k3,   -k3],\n  [0,      -k3,     k3+k4]\n);\n\nprint(\"Mass matrix M:\")$\nM_sym;\nprint(\"Stiffness matrix K:\")$\nK_sym;",
+      "metadata": {},
+      "execution_count": 86,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "matrix([m1,0,0],[0,m2,0],[0,0,m3])\nmatrix([k2+k1,-k2,0],[-k2,k3+k2,-k3],[0,-k3,k4+k3])\nMass matrix M:\nmatrix([m1,0,0],[0,m2,0],[0,0,m3])\nStiffness matrix K:"
+          ]
+        },
+        {
+          "data": {
+            "text/latex": [
+              "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi k_{2}+k_{1}&-k_{2}&0\\cr -k_{2}&k_{3}+k_{2}&-k_{3}\\cr 0&-k_{3}&k_{4}+k_{3}\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
+            ]
+          },
+          "execution_count": 86,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Assign numeric values */\nparams : [m1=1, m2=2, m3=1, k1=10, k2=10, k3=10, k4=10]$\n\nM_num : float(subst(params, M_sym));\nK_num : float(subst(params, K_sym));\n\nprint(\"M (numeric):\")$\nM_num;\nprint(\"K (numeric):\")$\nK_num;",
+      "metadata": {},
+      "execution_count": 87,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "matrix([1.0,0.0,0.0],[0.0,2.0,0.0],[0.0,0.0,1.0])\nmatrix([20.0,-10.0,0.0],[-10.0,20.0,-10.0],[0.0,-10.0,20.0])\nM (numeric):\nmatrix([1.0,0.0,0.0],[0.0,2.0,0.0],[0.0,0.0,1.0])\nK (numeric):"
+          ]
+        },
+        {
+          "data": {
+            "text/latex": [
+              "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 20.0&-10.0&0.0\\cr-10.0&20.0&-10.0\\cr 0.0&-10.0&20.0\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
+            ]
+          },
+          "execution_count": 87,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Eigenvalue Problem [S+N]\n\nFor harmonic motion $x(t) = \\phi\\, e^{i\\omega t}$, the equation $M\\ddot{x} = -Kx$\nbecomes the generalised eigenvalue problem:\n\n$$K \\phi = \\omega^2 M \\phi$$\n\nWe convert to the standard form $M^{-1}K\\,\\phi = \\omega^2\\,\\phi$ and solve\nwith `np_eig`. The eigenvalues are $\\lambda_i = \\omega_i^2$ and the\neigenvectors $\\phi_i$ are the **mode shapes**.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Convert to ndarrays */\nM_nd : ndarray(M_num)$\nK_nd : ndarray(K_num)$\n\n/* Standard eigenvalue problem: M^{-1} K */\nMinvK : np_matmul(np_inv(M_nd), K_nd)$\n\nprint(\"M^{-1} K:\")$\nnp_to_matrix(MinvK);",
+      "metadata": {},
+      "execution_count": 88,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "M^{-1} K:"
+          ]
+        },
+        {
+          "data": {
+            "text/latex": [
+              "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 20.0&-10.0&0.0\\cr-5.0&10.0&-5.0\\cr 0.0&-10.0&20.0\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
+            ]
+          },
+          "execution_count": 88,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Eigendecomposition */\n[eigenvals, eigenvecs] : np_eig(MinvK)$\n\nlambdas : np_to_list(eigenvals)$\nprint(\"Eigenvalues (omega^2):\")$\nfor i : 1 thru length(lambdas) do\n  print(sconcat(\"  lambda_\", i, \" = \", lambdas[i]))$\n\n/* Natural frequencies */\nprint(\"Natural frequencies (omega = sqrt(lambda)):\")$\nfor i : 1 thru length(lambdas) do\n  print(sconcat(\"  omega_\", i, \" = \", sqrt(abs(lambdas[i])),\n                \" rad/s  (f = \", sqrt(abs(lambdas[i]))/(2*float(%pi)), \" Hz)\"))$",
+      "metadata": {},
+      "execution_count": 89,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Eigenvalues (omega^2):\n  lambda_1 = 3.819660112501051\n  lambda_2 = 20.000000000000004\n  lambda_3 = 26.180339887498956\nNatural frequencies (omega = sqrt(lambda)):\n  omega_1 = 1.9543950758485478 rad/s  (f = 0.3110516370757561 Hz)\n  omega_2 = 4.47213595499958 rad/s  (f = 0.7117625434171772 Hz)\n  omega_3 = 5.116672736016928 rad/s  (f = 0.8143437581206265 Hz)"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Mode Shapes\n\nEach eigenvector describes a **mode shape** -- the relative displacement pattern\nof the masses at that natural frequency. We extract and plot each mode.\n\n- **Mode 1** (lowest frequency): all masses move in the same direction\n- **Mode 2**: the centre mass stays still while outer masses move opposite\n- **Mode 3** (highest frequency): alternating motion, maximum relative displacement",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Extract eigenvectors (columns of the eigenvector matrix) */\nV_mat : np_to_matrix(eigenvecs)$\n\nprint(\"Eigenvector matrix (columns = mode shapes):\")$\nV_mat;",
+      "metadata": {},
+      "execution_count": 90,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Eigenvector matrix (columns = mode shapes):"
+          ]
+        },
+        {
+          "data": {
+            "text/latex": [
+              "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi -0.4653411271949863&0.7071067811865469&0.6479361632942993\\cr -0.752937760164676&3.6721064886523107 \\times 10^{-16}&-0.4004465714560786\\cr -0.46534112719498616&-0.7071067811865481&0.6479361632942977\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
+            ]
+          },
+          "execution_count": 90,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Plot mode shapes as bar charts */\npositions : [1, 2, 3]$\nmode_labels : [\"Mode 1 (lowest freq)\", \"Mode 2 (middle freq)\", \"Mode 3 (highest freq)\"]$\n\n/* Extract each mode shape from the eigenvector matrix columns */\nmodes : makelist(\n  makelist(V_mat[row][col], row, 1, 3),\n  col, 1, 3\n)$\n\n/* Sort modes by eigenvalue magnitude (ascending frequency) */\nindexed : makelist([abs(lambdas[i]), i], i, 1, 3)$\nindexed : sort(indexed, lambda([a, b], a[1] < b[1]))$\nsorted_indices : makelist(indexed[i][2], i, 1, 3)$\n\nfor k : 1 thru 3 do block(\n  [idx : sorted_indices[k], mode_data],\n  mode_data : makelist([positions[j], modes[idx][j]], j, 1, 3),\n  print(sconcat(mode_labels[k],\n                \"  (omega = \", sqrt(abs(lambdas[idx])), \" rad/s)\")),\n  print(\"  Displacements:\", modes[idx])\n)$",
+      "metadata": {},
+      "execution_count": 91,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Mode 1 (lowest freq)  (omega = 1.9543950758485478 rad/s)\n  Displacements: [-0.4653411271949863,-0.752937760164676,-0.46534112719498616]\nMode 2 (middle freq)  (omega = 4.47213595499958 rad/s)\n  Displacements:\n                [0.7071067811865469,3.6721064886523107e-16,\n                 -0.7071067811865481]\nMode 3 (highest freq)  (omega = 5.116672736016928 rad/s)\n  Displacements: [0.6479361632942993,-0.4004465714560786,0.6479361632942977]"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Visualise all three mode shapes */\ncolors : [\"#377eb8\", \"#e41a1c\", \"#4daf4a\"]$\n\n/* Build displacement data for plotting: include wall anchors at positions 0 and 4 */\nmode_plots : []$\nfor k : 1 thru 3 do block(\n  [idx : sorted_indices[k],\n   disp, pts],\n  disp : modes[idx],\n  /* Normalize so max displacement = 1 */\n  disp : disp / lmax(map(abs, disp)),\n  pts : [[0, 0], [1, disp[1]], [2, disp[2]], [3, disp[3]], [4, 0]]\n)$\n\n/* Plot mode shapes with walls anchored at zero */\nax_draw2d(\n  color=colors[1], name=sconcat(\"Mode 1 (w=\", float(sqrt(abs(lambdas[sorted_indices[1]]))), \")\"),\n  lines(\n    [0, 1, 2, 3, 4],\n    block([d : modes[sorted_indices[1]]],\n          d : d / lmax(map(abs, d)),\n          append([0], d, [0]))\n  ),\n  color=colors[2], name=sconcat(\"Mode 2 (w=\", float(sqrt(abs(lambdas[sorted_indices[2]]))), \")\"),\n  lines(\n    [0, 1, 2, 3, 4],\n    block([d : modes[sorted_indices[2]]],\n          d : d / lmax(map(abs, d)),\n          append([0], d, [0]))\n  ),\n  color=colors[3], name=sconcat(\"Mode 3 (w=\", float(sqrt(abs(lambdas[sorted_indices[3]]))), \")\"),\n  lines(\n    [0, 1, 2, 3, 4],\n    block([d : modes[sorted_indices[3]]],\n          d : d / lmax(map(abs, d)),\n          append([0], d, [0]))\n  ),\n  title=\"Vibration Mode Shapes (normalised)\",\n  xlabel=\"Mass position\", ylabel=\"Displacement\",\n  grid=true\n)$",
+      "metadata": {},
+      "execution_count": 92,
+      "outputs": [
+        {
+          "data": {
+            "application/x-maxima-plotly": [
+              "{\"data\":[{\"x\":[0.0,1.0,2.0,3.0,4.0],\"y\":[0.0,-0.6180339887498948,-1.0,-0.6180339887498946,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"#377eb8\",\"width\":2},\"name\":\"Mode 1 (w=1.9543950758485478)\"},{\"x\":[0.0,1.0,2.0,3.0,4.0],\"y\":[0.0,0.9999999999999982,5.193142798730337e-16,-1.0,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"#e41a1c\",\"width\":2},\"name\":\"Mode 2 (w=4.47213595499958)\"},{\"x\":[0.0,1.0,2.0,3.0,4.0],\"y\":[0.0,0.9999999999999999,-0.6180339887498942,0.9999999999999976,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"#4daf4a\",\"width\":2},\"name\":\"Mode 3 (w=5.116672736016928)\"}],\"layout\":{\"title\":{\"text\":\"Vibration Mode Shapes (normalised)\"},\"width\":700,\"height\":450,\"plot_bgcolor\":\"white\",\"paper_bgcolor\":\"white\",\"xaxis\":{\"title\":{\"text\":\"Mass position\"},\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"black\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"yaxis\":{\"title\":{\"text\":\"Displacement\"},\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"black\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1}}}"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Symbolic Eigenvalues: 2-Mass System [S+N]\n\nFor a simpler 2-mass, 3-spring system we can compute eigenvalues\n**symbolically** to obtain closed-form natural frequencies.\n\n```\nwall ---[k]--- m ---[k]--- m ---[k]--- wall\n```\n\nWith equal masses $m$ and equal springs $k$, the system is symmetric\nand the eigenvalues have a clean closed form.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* 2-mass system: symbolic */\nM2 : matrix(\n  [m, 0],\n  [0, m]\n);\n\nK2 : matrix(\n  [2*k, -k],\n  [-k,  2*k]\n);\n\nprint(\"M:\")$\nM2;\nprint(\"K:\")$\nK2;",
+      "metadata": {},
+      "execution_count": 93,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "matrix([m,0],[0,m])\nmatrix([2*k,-k],[-k,2*k])\nM:\nmatrix([m,0],[0,m])\nK:"
+          ]
+        },
+        {
+          "data": {
+            "text/latex": [
+              "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 2\\,k&-k\\cr -k&2\\,k\\cr \\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
+            ]
+          },
+          "execution_count": 93,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Compute M^{-1} K symbolically */\nMinvK2 : invert(M2) . K2;\nMinvK2 : ratsimp(MinvK2);\n\nprint(\"M^{-1} K =\")$\nMinvK2;",
+      "metadata": {},
+      "execution_count": 94,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "matrix([(2*k)/m,-(k/m)],[-(k/m),(2*k)/m])\nmatrix([(2*k)/m,-(k/m)],[-(k/m),(2*k)/m])\nM^{-1} K ="
+          ]
+        },
+        {
+          "data": {
+            "text/latex": [
+              "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi {{2\\,k}\\over{m}}&-\\left({{k}\\over{m}}\\right)\\cr -\\left({{k}\\over{m}}\\right)&{{2\\,k}\\over{m}}\\cr \\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
+            ]
+          },
+          "execution_count": 94,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Symbolic eigenvalues */\nevals2 : eigenvalues(MinvK2);\n\nprint(\"Eigenvalues (omega^2):\")$\nprint(evals2[1])$\n\nprint(\"Natural frequencies:\")$\nfor ev in evals2[1] do\n  print(sconcat(\"  omega = sqrt(\", ev, \") = \", sqrt(ev)))$",
+      "metadata": {},
+      "execution_count": 95,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "[[k/m,(3*k)/m],[1,1]]\nEigenvalues (omega^2):\n[k/m,(3*k)/m]\nNatural frequencies:\n  omega = sqrt(k/m) = sqrt(k/m)\n  omega = sqrt((3*k)/m) = sqrt(3)*sqrt(k/m)"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Verify numerically: k=10, m=1 */\nM2_num : float(subst([m=1, k=10], M2))$\nK2_num : float(subst([m=1, k=10], K2))$\n\nM2_nd : ndarray(M2_num)$\nK2_nd : ndarray(K2_num)$\n\n[evals2_nd, evecs2_nd] : np_eig(np_matmul(np_inv(M2_nd), K2_nd))$\n\nprint(\"Numeric eigenvalues:\", np_to_list(evals2_nd))$\nprint(\"Expected: k/m = 10, 3k/m = 30\")$\n\n/* Symbolic evaluation for comparison */\nprint(\"Symbolic at k=10, m=1:\",\n      float(subst([m=1, k=10], evals2[1])))$",
+      "metadata": {},
+      "execution_count": 96,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Numeric eigenvalues: [30.0,10.000000000000002]\nExpected: k/m = 10, 3k/m = 30\nSymbolic at k=10, m=1: [10.0,30.0]"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "The symbolic eigenvalues are $\\omega_1^2 = k/m$ and $\\omega_2^2 = 3k/m$.\nFor $k=10$, $m=1$: $\\omega_1 = \\sqrt{10} \\approx 3.16$ and\n$\\omega_2 = \\sqrt{30} \\approx 5.48$ rad/s. The numeric result confirms this\nexactly.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Verifying Orthogonality\n\nFor a symmetric positive-definite system, the eigenvectors should be\n**$M$-orthogonal**:\n\n$$\\phi_i^T M \\phi_j = 0 \\quad \\text{for } i \\neq j$$\n\nThis property is fundamental to modal analysis: it means the modes are\nindependent and can be excited separately. We verify this numerically\nfor the 3-mass system.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* M-orthogonality check: V^T M V should be diagonal */\nVtMV : np_matmul(np_transpose(eigenvecs), np_matmul(M_nd, eigenvecs))$\n\nprint(\"V^T M V (should be diagonal):\")$\nnp_to_matrix(VtMV);",
+      "metadata": {},
+      "execution_count": 97,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "V^T M V (should be diagonal):"
+          ]
+        },
+        {
+          "data": {
+            "text/latex": [
+              "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 1.5669152706817988&-1.2260077964673164 \\times 10^{-16}&3.3306690738754696 \\times 10^{-16}\\cr -1.2260077964673164 \\times 10^{-16}&1.0&-7.343864078089007 \\times 10^{-18}\\cr2.9559925847019794 \\times 10^{-16}&9.196870446109325 \\times 10^{-18}&1.160357456590928\\cr \\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
+            ]
+          },
+          "execution_count": 97,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Check individual inner products */\nV_cols : makelist(np_reshape(np_col(eigenvecs, j), [3, 1]), j, 0, 2)$\n\nprint(\"M-orthogonality check (phi_i^T M phi_j):\")$\nfor i : 1 thru 3 do\n  for j : i thru 3 do block(\n    [val],\n    val : np_to_list(\n      np_matmul(np_transpose(V_cols[i]),\n                np_matmul(M_nd, V_cols[j]))\n    ),\n    if i = j then\n      print(sconcat(\"  <phi_\", i, \", M phi_\", j, \"> = \", val[1], \"  (modal mass)\"))\n    else\n      print(sconcat(\"  <phi_\", i, \", M phi_\", j, \"> = \", val[1],\n                    if abs(val[1]) < 1e-10 then \"  (orthogonal)\" else \"  (NOT orthogonal!)\"))\n  )$",
+      "metadata": {},
+      "execution_count": 98,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "M-orthogonality check (phi_i^T M phi_j):\n  <phi_1, M phi_1> = 1.5669152706817988  (modal mass)\n  <phi_1, M phi_2> = -1.2046279426456211e-16  (orthogonal)\n  <phi_1, M phi_3> = 3.3306690738754696e-16  (orthogonal)\n  <phi_2, M phi_2> = 1.0  (modal mass)\n  <phi_2, M phi_3> = -7.343864078089007e-18  (orthogonal)\n  <phi_3, M phi_3> = 1.160357456590928  (modal mass)"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "The off-diagonal entries are zero (to machine precision), confirming\n$M$-orthogonality. The diagonal entries are the **modal masses** --\nthe effective mass participating in each mode.\n\n**Summary:** This notebook showed the full eigenvalue analysis pipeline:\n\n1. **Derive** mass and stiffness matrices symbolically from physics\n2. **Assign** numeric parameters and convert to ndarrays\n3. **Solve** the eigenvalue problem with `np_eig` (LAPACK)\n4. **Interpret** eigenvalues as natural frequencies, eigenvectors as mode shapes\n5. **Verify** with symbolic eigenvalues for simple cases\n6. **Validate** orthogonality numerically\n\nThe symbolic-numeric bridge lets us keep the physics exact while leveraging\nLAPACK's robust eigensolvers for the heavy numerical work.",
+      "metadata": {}
+    }
+  ]
+}
