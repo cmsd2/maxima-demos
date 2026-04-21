@@ -4,6 +4,10 @@
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>matrix-decompositions</title>
+<style>
+  .jp-Notebook { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+  .jp-Cell { margin-bottom: 1.5rem; }
+</style>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7764,7 +7768,7 @@ a.anchor-link {
 <!-- End of mermaid configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b6c66155">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7ca05678">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7779,12 +7783,12 @@ the original matrix, explore their properties, and discuss when to use each.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=23c424bc">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=0df41efd">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [61]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [85]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">load</span><span class="p">(</span><span class="s2">"numerics"</span><span class="p">)</span><span class="err">$</span>
@@ -7795,7 +7799,7 @@ the original matrix, explore their properties, and discuss when to use each.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9f924b1f">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=759a3db9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7808,12 +7812,12 @@ tells us how sensitive linear systems involving $A$ are to perturbations.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ceead449">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d1c8eee5">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [62]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [86]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">A</span> <span class="n">well</span><span class="o">-</span><span class="n">conditioned</span> <span class="n">symmetric</span> <span class="n">matrix</span> <span class="o">*/</span>
@@ -7848,7 +7852,7 @@ This is well-conditioned (kappa close to 1 is ideal).</pre>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5f88cb8c">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=730002ce">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7864,12 +7868,12 @@ two triangular solves (forward and back substitution), each $O(n^2)$.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=70b7bb8f">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=7917f2c9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [63]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [87]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">LU</span> <span class="n">decomposition</span><span class="p">:</span> <span class="n">PA</span> <span class="o">=</span> <span class="n">LU</span> <span class="o">*/</span>
@@ -7901,19 +7905,19 @@ P (permutation):</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[63]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[87]:</div>
 <div class="jp-RenderedLatex jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/latex" tabindex="0">
 <script type="math/tex">\begin{pmatrix} 1.0&0.0&0.0\\ 0.0&1.0&0.0\\ 0.0&0.0&1.0\end{pmatrix} </script>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=086ec8a1">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=fd98b5d4">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [64]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [88]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Verify</span><span class="p">:</span> <span class="n">PA</span> <span class="o">=</span> <span class="n">LU</span><span class="p">,</span> <span class="n">so</span> <span class="o">||</span><span class="n">PA</span> <span class="o">-</span> <span class="n">LU</span><span class="o">||</span> <span class="n">should</span> <span class="n">be</span> <span class="o">~</span><span class="mi">0</span> <span class="o">*/</span>
@@ -7938,7 +7942,7 @@ Reconstruction error ||PA - LU|| = 0.0</pre>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=11934c44">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a76f6211">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7958,12 +7962,12 @@ means rounding errors are not amplified.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2a909141">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=97cd76d8">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [65]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [89]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">QR</span> <span class="n">decomposition</span><span class="p">:</span> <span class="n">A</span> <span class="o">=</span> <span class="n">QR</span> <span class="o">*/</span>
@@ -7993,19 +7997,19 @@ R (upper triangular):</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[65]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[89]:</div>
 <div class="jp-RenderedLatex jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/latex" tabindex="0">
 <script type="math/tex">\begin{pmatrix} 4.58257569495584&1.9639610121239317&4.1461399144838555\\ 0.0&2.6726124191242437&0.6948792289723031\\ 0.0&0.0&3.510935297989222\end{pmatrix} </script>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=495222ea">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=7be877c4">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [66]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [90]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Verify</span><span class="p">:</span> <span class="n">A</span> <span class="o">=</span> <span class="n">QR</span> <span class="o">*/</span>
@@ -8039,7 +8043,7 @@ Q^T Q (should be identity):</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[66]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[90]:</div>
 <div class="jp-RenderedLatex jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/latex" tabindex="0">
 <script type="math/tex">\begin{pmatrix} 0.9999999999999999&1.509557573534171 \times 10^{-17}&0.0\\ 1.509557573534171 \times 10^{-17}&0.9999999999999998&2.0816681711721685 \times 10^{-17}\\4.2286018551903734 \times 10^{-18}&1.478595953198323 \times 10^{-17}&1.0\end{pmatrix} </script>
 </div>
@@ -8047,7 +8051,7 @@ Q^T Q (should be identity):</pre>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ebdb5a06">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=eef95f32">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8067,12 +8071,12 @@ informative decomposition:</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=78493590">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=3ff7da2c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [67]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [91]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">SVD</span><span class="p">:</span> <span class="n">A</span> <span class="o">=</span> <span class="n">U</span> <span class="o">*</span> <span class="n">diag</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> <span class="o">*</span> <span class="n">Vt</span> <span class="o">*/</span>
@@ -8104,19 +8108,19 @@ Vt (right singular vectors, transposed):</pre>
 </div>
 </div>
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[67]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[91]:</div>
 <div class="jp-RenderedLatex jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/latex" tabindex="0">
 <script type="math/tex">\begin{pmatrix} -0.5910090485061035&-0.32798527760568186&-0.7369762290995783\\0.32798527760568214&0.7369762290995777&-0.5910090485061038\\0.7369762290995783&-0.5910090485061039&-0.32798527760568147\end{pmatrix} </script>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=db8408e8">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0ea7aefc">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [68]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [92]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Reconstruct</span> <span class="n">A</span> <span class="kn">from</span><span class="w"> </span><span class="nn">U</span> <span class="o">*</span> <span class="n">diag</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> <span class="o">*</span> <span class="n">Vt</span> <span class="o">*/</span>
@@ -8151,7 +8155,7 @@ Condition number from SVD (sigma_max / sigma_min) = 3.0541520438237635</pre>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=41d32d8a">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3e314bda">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8167,12 +8171,12 @@ numerically (<code>np_det</code> via LAPACK), and verify they agree.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=34e030ef">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0e23e163">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [69]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [93]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Symbolic</span> <span class="n">determinant</span> <span class="p">(</span><span class="n">exact</span> <span class="n">integer</span> <span class="n">result</span><span class="p">)</span> <span class="o">*/</span>
@@ -8211,7 +8215,7 @@ Product of singular values = 43.00000000000001
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f2f87d31">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2b1a1606">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8259,7 +8263,7 @@ Product of singular values = 43.00000000000001
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=bb73a9ae">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5e13d093">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8274,12 +8278,12 @@ that QR and SVD produce valid factorisations.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=a6a4c1a2">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d9f3673d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [70]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [94]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Non</span><span class="o">-</span><span class="n">square</span> <span class="n">matrix</span><span class="p">:</span> <span class="mi">4</span><span class="n">x2</span> <span class="p">(</span><span class="n">tall</span><span class="p">)</span> <span class="o">*/</span>
@@ -8307,12 +8311,12 @@ Shape: [4,2]</pre>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=60e21b0a">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0ca35924">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [71]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [95]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">QR</span> <span class="n">of</span> <span class="n">non</span><span class="o">-</span><span class="n">square</span> <span class="n">matrix</span> <span class="o">*/</span>
@@ -8352,12 +8356,12 @@ Reconstruction error ||B - QR|| = 7.483924389696347e-15</pre>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e0742fe2">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0de24ee9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [72]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [96]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">SVD</span> <span class="n">of</span> <span class="n">non</span><span class="o">-</span><span class="n">square</span> <span class="n">matrix</span> <span class="o">*/</span>
@@ -8410,7 +8414,7 @@ The columns of B are linearly independent.</pre>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5a6e1712">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=922756f8">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8447,7 +8451,8 @@ document.addEventListener("DOMContentLoaded", function() {
     renderMathInElement(document.body, {delimiters: [
         {left: "$$", right: "$$", display: true},
         {left: "\\(", right: "\\)", display: false},
-        {left: "\\[", right: "\\]", display: true}
+        {left: "\\[", right: "\\]", display: true},
+        {left: "$", right: "$", display: false}
     ]});
 });
 </script>

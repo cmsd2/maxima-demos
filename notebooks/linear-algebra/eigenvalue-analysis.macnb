@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 85,
+      "execution_count": 113,
       "outputs": []
     },
     {
@@ -31,7 +31,7 @@
       "cell_type": "code",
       "source": "/* Symbolic mass and stiffness matrices */\nM_sym : matrix(\n  [m1, 0, 0],\n  [0, m2, 0],\n  [0, 0, m3]\n);\n\n/* Stiffness: F_i = sum of spring forces on mass i */\n/* Mass 1: -k1*x1 + k2*(x2 - x1) = -(k1+k2)*x1 + k2*x2           */\n/* Mass 2: -k2*(x2-x1) + k3*(x3-x2) = k2*x1 - (k2+k3)*x2 + k3*x3 */\n/* Mass 3: -k3*(x3-x2) - k4*x3 = k3*x2 - (k3+k4)*x3              */\nK_sym : matrix(\n  [k1+k2,  -k2,      0],\n  [-k2,    k2+k3,   -k3],\n  [0,      -k3,     k3+k4]\n);\n\nprint(\"Mass matrix M:\")$\nM_sym;\nprint(\"Stiffness matrix K:\")$\nK_sym;",
       "metadata": {},
-      "execution_count": 86,
+      "execution_count": 114,
       "outputs": [
         {
           "name": "stdout",
@@ -46,7 +46,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi k_{2}+k_{1}&-k_{2}&0\\cr -k_{2}&k_{3}+k_{2}&-k_{3}\\cr 0&-k_{3}&k_{4}+k_{3}\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 86,
+          "execution_count": 114,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -56,7 +56,7 @@
       "cell_type": "code",
       "source": "/* Assign numeric values */\nparams : [m1=1, m2=2, m3=1, k1=10, k2=10, k3=10, k4=10]$\n\nM_num : float(subst(params, M_sym));\nK_num : float(subst(params, K_sym));\n\nprint(\"M (numeric):\")$\nM_num;\nprint(\"K (numeric):\")$\nK_num;",
       "metadata": {},
-      "execution_count": 87,
+      "execution_count": 115,
       "outputs": [
         {
           "name": "stdout",
@@ -71,7 +71,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 20.0&-10.0&0.0\\cr-10.0&20.0&-10.0\\cr 0.0&-10.0&20.0\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 87,
+          "execution_count": 115,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -86,7 +86,7 @@
       "cell_type": "code",
       "source": "/* Convert to ndarrays */\nM_nd : ndarray(M_num)$\nK_nd : ndarray(K_num)$\n\n/* Standard eigenvalue problem: M^{-1} K */\nMinvK : np_matmul(np_inv(M_nd), K_nd)$\n\nprint(\"M^{-1} K:\")$\nnp_to_matrix(MinvK);",
       "metadata": {},
-      "execution_count": 88,
+      "execution_count": 116,
       "outputs": [
         {
           "name": "stdout",
@@ -101,7 +101,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 20.0&-10.0&0.0\\cr-5.0&10.0&-5.0\\cr 0.0&-10.0&20.0\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 88,
+          "execution_count": 116,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -111,7 +111,7 @@
       "cell_type": "code",
       "source": "/* Eigendecomposition */\n[eigenvals, eigenvecs] : np_eig(MinvK)$\n\nlambdas : np_to_list(eigenvals)$\nprint(\"Eigenvalues (omega^2):\")$\nfor i : 1 thru length(lambdas) do\n  print(sconcat(\"  lambda_\", i, \" = \", lambdas[i]))$\n\n/* Natural frequencies */\nprint(\"Natural frequencies (omega = sqrt(lambda)):\")$\nfor i : 1 thru length(lambdas) do\n  print(sconcat(\"  omega_\", i, \" = \", sqrt(abs(lambdas[i])),\n                \" rad/s  (f = \", sqrt(abs(lambdas[i]))/(2*float(%pi)), \" Hz)\"))$",
       "metadata": {},
-      "execution_count": 89,
+      "execution_count": 117,
       "outputs": [
         {
           "name": "stdout",
@@ -131,7 +131,7 @@
       "cell_type": "code",
       "source": "/* Extract eigenvectors (columns of the eigenvector matrix) */\nV_mat : np_to_matrix(eigenvecs)$\n\nprint(\"Eigenvector matrix (columns = mode shapes):\")$\nV_mat;",
       "metadata": {},
-      "execution_count": 90,
+      "execution_count": 118,
       "outputs": [
         {
           "name": "stdout",
@@ -146,7 +146,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi -0.4653411271949863&0.7071067811865469&0.6479361632942993\\cr -0.752937760164676&3.6721064886523107 \\times 10^{-16}&-0.4004465714560786\\cr -0.46534112719498616&-0.7071067811865481&0.6479361632942977\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 90,
+          "execution_count": 118,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -156,7 +156,7 @@
       "cell_type": "code",
       "source": "/* Plot mode shapes as bar charts */\npositions : [1, 2, 3]$\nmode_labels : [\"Mode 1 (lowest freq)\", \"Mode 2 (middle freq)\", \"Mode 3 (highest freq)\"]$\n\n/* Extract each mode shape from the eigenvector matrix columns */\nmodes : makelist(\n  makelist(V_mat[row][col], row, 1, 3),\n  col, 1, 3\n)$\n\n/* Sort modes by eigenvalue magnitude (ascending frequency) */\nindexed : makelist([abs(lambdas[i]), i], i, 1, 3)$\nindexed : sort(indexed, lambda([a, b], a[1] < b[1]))$\nsorted_indices : makelist(indexed[i][2], i, 1, 3)$\n\nfor k : 1 thru 3 do block(\n  [idx : sorted_indices[k], mode_data],\n  mode_data : makelist([positions[j], modes[idx][j]], j, 1, 3),\n  print(sconcat(mode_labels[k],\n                \"  (omega = \", sqrt(abs(lambdas[idx])), \" rad/s)\")),\n  print(\"  Displacements:\", modes[idx])\n)$",
       "metadata": {},
-      "execution_count": 91,
+      "execution_count": 119,
       "outputs": [
         {
           "name": "stdout",
@@ -171,7 +171,7 @@
       "cell_type": "code",
       "source": "/* Visualise all three mode shapes */\ncolors : [\"#377eb8\", \"#e41a1c\", \"#4daf4a\"]$\n\n/* Build displacement data for plotting: include wall anchors at positions 0 and 4 */\nmode_plots : []$\nfor k : 1 thru 3 do block(\n  [idx : sorted_indices[k],\n   disp, pts],\n  disp : modes[idx],\n  /* Normalize so max displacement = 1 */\n  disp : disp / lmax(map(abs, disp)),\n  pts : [[0, 0], [1, disp[1]], [2, disp[2]], [3, disp[3]], [4, 0]]\n)$\n\n/* Plot mode shapes with walls anchored at zero */\nax_draw2d(\n  color=colors[1], name=sconcat(\"Mode 1 (w=\", float(sqrt(abs(lambdas[sorted_indices[1]]))), \")\"),\n  lines(\n    [0, 1, 2, 3, 4],\n    block([d : modes[sorted_indices[1]]],\n          d : d / lmax(map(abs, d)),\n          append([0], d, [0]))\n  ),\n  color=colors[2], name=sconcat(\"Mode 2 (w=\", float(sqrt(abs(lambdas[sorted_indices[2]]))), \")\"),\n  lines(\n    [0, 1, 2, 3, 4],\n    block([d : modes[sorted_indices[2]]],\n          d : d / lmax(map(abs, d)),\n          append([0], d, [0]))\n  ),\n  color=colors[3], name=sconcat(\"Mode 3 (w=\", float(sqrt(abs(lambdas[sorted_indices[3]]))), \")\"),\n  lines(\n    [0, 1, 2, 3, 4],\n    block([d : modes[sorted_indices[3]]],\n          d : d / lmax(map(abs, d)),\n          append([0], d, [0]))\n  ),\n  title=\"Vibration Mode Shapes (normalised)\",\n  xlabel=\"Mass position\", ylabel=\"Displacement\",\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 92,
+      "execution_count": 120,
       "outputs": [
         {
           "data": {
@@ -193,7 +193,7 @@
       "cell_type": "code",
       "source": "/* 2-mass system: symbolic */\nM2 : matrix(\n  [m, 0],\n  [0, m]\n);\n\nK2 : matrix(\n  [2*k, -k],\n  [-k,  2*k]\n);\n\nprint(\"M:\")$\nM2;\nprint(\"K:\")$\nK2;",
       "metadata": {},
-      "execution_count": 93,
+      "execution_count": 121,
       "outputs": [
         {
           "name": "stdout",
@@ -208,7 +208,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 2\\,k&-k\\cr -k&2\\,k\\cr \\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 93,
+          "execution_count": 121,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -218,7 +218,7 @@
       "cell_type": "code",
       "source": "/* Compute M^{-1} K symbolically */\nMinvK2 : invert(M2) . K2;\nMinvK2 : ratsimp(MinvK2);\n\nprint(\"M^{-1} K =\")$\nMinvK2;",
       "metadata": {},
-      "execution_count": 94,
+      "execution_count": 122,
       "outputs": [
         {
           "name": "stdout",
@@ -233,7 +233,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi {{2\\,k}\\over{m}}&-\\left({{k}\\over{m}}\\right)\\cr -\\left({{k}\\over{m}}\\right)&{{2\\,k}\\over{m}}\\cr \\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 94,
+          "execution_count": 122,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -243,7 +243,7 @@
       "cell_type": "code",
       "source": "/* Symbolic eigenvalues */\nevals2 : eigenvalues(MinvK2);\n\nprint(\"Eigenvalues (omega^2):\")$\nprint(evals2[1])$\n\nprint(\"Natural frequencies:\")$\nfor ev in evals2[1] do\n  print(sconcat(\"  omega = sqrt(\", ev, \") = \", sqrt(ev)))$",
       "metadata": {},
-      "execution_count": 95,
+      "execution_count": 123,
       "outputs": [
         {
           "name": "stdout",
@@ -258,7 +258,7 @@
       "cell_type": "code",
       "source": "/* Verify numerically: k=10, m=1 */\nM2_num : float(subst([m=1, k=10], M2))$\nK2_num : float(subst([m=1, k=10], K2))$\n\nM2_nd : ndarray(M2_num)$\nK2_nd : ndarray(K2_num)$\n\n[evals2_nd, evecs2_nd] : np_eig(np_matmul(np_inv(M2_nd), K2_nd))$\n\nprint(\"Numeric eigenvalues:\", np_to_list(evals2_nd))$\nprint(\"Expected: k/m = 10, 3k/m = 30\")$\n\n/* Symbolic evaluation for comparison */\nprint(\"Symbolic at k=10, m=1:\",\n      float(subst([m=1, k=10], evals2[1])))$",
       "metadata": {},
-      "execution_count": 96,
+      "execution_count": 124,
       "outputs": [
         {
           "name": "stdout",
@@ -283,7 +283,7 @@
       "cell_type": "code",
       "source": "/* M-orthogonality check: V^T M V should be diagonal */\nVtMV : np_matmul(np_transpose(eigenvecs), np_matmul(M_nd, eigenvecs))$\n\nprint(\"V^T M V (should be diagonal):\")$\nnp_to_matrix(VtMV);",
       "metadata": {},
-      "execution_count": 97,
+      "execution_count": 125,
       "outputs": [
         {
           "name": "stdout",
@@ -298,7 +298,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 1.5669152706817988&-1.2260077964673164 \\times 10^{-16}&3.3306690738754696 \\times 10^{-16}\\cr -1.2260077964673164 \\times 10^{-16}&1.0&-7.343864078089007 \\times 10^{-18}\\cr2.9559925847019794 \\times 10^{-16}&9.196870446109325 \\times 10^{-18}&1.160357456590928\\cr \\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 97,
+          "execution_count": 125,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -308,7 +308,7 @@
       "cell_type": "code",
       "source": "/* Check individual inner products */\nV_cols : makelist(np_reshape(np_col(eigenvecs, j), [3, 1]), j, 0, 2)$\n\nprint(\"M-orthogonality check (phi_i^T M phi_j):\")$\nfor i : 1 thru 3 do\n  for j : i thru 3 do block(\n    [val],\n    val : np_to_list(\n      np_matmul(np_transpose(V_cols[i]),\n                np_matmul(M_nd, V_cols[j]))\n    ),\n    if i = j then\n      print(sconcat(\"  <phi_\", i, \", M phi_\", j, \"> = \", val[1], \"  (modal mass)\"))\n    else\n      print(sconcat(\"  <phi_\", i, \", M phi_\", j, \"> = \", val[1],\n                    if abs(val[1]) < 1e-10 then \"  (orthogonal)\" else \"  (NOT orthogonal!)\"))\n  )$",
       "metadata": {},
-      "execution_count": 98,
+      "execution_count": 126,
       "outputs": [
         {
           "name": "stdout",

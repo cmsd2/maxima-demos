@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 61,
+      "execution_count": 85,
       "outputs": []
     },
     {
@@ -31,7 +31,7 @@
       "cell_type": "code",
       "source": "/* A well-conditioned symmetric matrix */\nA : ndarray(matrix([4, 1, 2], [1, 3, 1], [2, 1, 5]))$\n\nprint(\"Test matrix A:\")$\nnp_to_matrix(A);\n\n/* Condition number: kappa(A) = ||A|| * ||A^{-1}|| */\nkappa : np_norm(A) * np_norm(np_inv(A));\nprint(\"Condition number kappa(A) =\", kappa)$\nprint(\"This is well-conditioned (kappa close to 1 is ideal).\")$",
       "metadata": {},
-      "execution_count": 62,
+      "execution_count": 86,
       "outputs": [
         {
           "name": "stdout",
@@ -51,7 +51,7 @@
       "cell_type": "code",
       "source": "/* LU decomposition: PA = LU */\n[L, U, P] : np_lu(A)$\n\nprint(\"L (lower triangular):\")$\nnp_to_matrix(L);\nprint(\"U (upper triangular):\")$\nnp_to_matrix(U);\nprint(\"P (permutation):\")$\nnp_to_matrix(P);",
       "metadata": {},
-      "execution_count": 63,
+      "execution_count": 87,
       "outputs": [
         {
           "name": "stdout",
@@ -66,7 +66,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 1.0&0.0&0.0\\cr 0.0&1.0&0.0\\cr 0.0&0.0&1.0\\cr \\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 63,
+          "execution_count": 87,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -76,7 +76,7 @@
       "cell_type": "code",
       "source": "/* Verify: PA = LU, so ||PA - LU|| should be ~0 */\nlu_error : np_norm(np_sub(np_matmul(P, A), np_matmul(L, U)));\nprint(\"Reconstruction error ||PA - LU|| =\", lu_error)$",
       "metadata": {},
-      "execution_count": 64,
+      "execution_count": 88,
       "outputs": [
         {
           "name": "stdout",
@@ -96,7 +96,7 @@
       "cell_type": "code",
       "source": "/* QR decomposition: A = QR */\n[Q, R] : np_qr(A)$\n\nprint(\"Q (orthogonal):\")$\nnp_to_matrix(Q);\nprint(\"R (upper triangular):\")$\nnp_to_matrix(R);",
       "metadata": {},
-      "execution_count": 65,
+      "execution_count": 89,
       "outputs": [
         {
           "name": "stdout",
@@ -111,7 +111,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 4.58257569495584&1.9639610121239317&4.1461399144838555\\cr 0.0&2.6726124191242437&0.6948792289723031\\cr 0.0&0.0&3.510935297989222\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 65,
+          "execution_count": 89,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -121,7 +121,7 @@
       "cell_type": "code",
       "source": "/* Verify: A = QR */\nqr_error : np_norm(np_sub(A, np_matmul(Q, R)));\nprint(\"Reconstruction error ||A - QR|| =\", qr_error)$\n\n/* Check orthogonality: Q^T Q should be the identity */\nQtQ : np_matmul(np_transpose(Q), Q)$\northo_error : np_norm(np_sub(QtQ, np_eye(3)));\nprint(\"Orthogonality error ||Q^T Q - I|| =\", ortho_error)$\n\nprint(\"Q^T Q (should be identity):\")$\nnp_to_matrix(QtQ);",
       "metadata": {},
-      "execution_count": 66,
+      "execution_count": 90,
       "outputs": [
         {
           "name": "stdout",
@@ -136,7 +136,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 0.9999999999999999&1.509557573534171 \\times 10^{-17}&0.0\\cr 1.509557573534171 \\times 10^{-17}&0.9999999999999998&2.0816681711721685 \\times 10^{-17}\\cr4.2286018551903734 \\times 10^{-18}&1.478595953198323 \\times 10^{-17}&1.0\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 66,
+          "execution_count": 90,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -151,7 +151,7 @@
       "cell_type": "code",
       "source": "/* SVD: A = U * diag(S) * Vt */\n[U_svd, S, Vt] : np_svd(A)$\n\nprint(\"U (left singular vectors):\")$\nnp_to_matrix(U_svd);\nprint(\"Singular values S:\", np_to_list(S))$\nprint(\"Vt (right singular vectors, transposed):\")$\nnp_to_matrix(Vt);",
       "metadata": {},
-      "execution_count": 67,
+      "execution_count": 91,
       "outputs": [
         {
           "name": "stdout",
@@ -166,7 +166,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi -0.5910090485061035&-0.32798527760568186&-0.7369762290995783\\cr0.32798527760568214&0.7369762290995777&-0.5910090485061038\\cr0.7369762290995783&-0.5910090485061039&-0.32798527760568147\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 67,
+          "execution_count": 91,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -176,7 +176,7 @@
       "cell_type": "code",
       "source": "/* Reconstruct A from U * diag(S) * Vt */\nS_mat : np_diag(np_to_list(S))$\n\nA_reconstructed : np_matmul(np_matmul(U_svd, S_mat), Vt)$\nsvd_error : np_norm(np_sub(A, A_reconstructed));\nprint(\"Reconstruction error ||A - U*diag(S)*Vt|| =\", svd_error)$\n\n/* Condition number from singular values */\nsvals : np_to_list(S)$\nkappa_svd : svals[1] / svals[length(svals)];\nprint(\"Condition number from SVD (sigma_max / sigma_min) =\", kappa_svd)$",
       "metadata": {},
-      "execution_count": 68,
+      "execution_count": 92,
       "outputs": [
         {
           "name": "stdout",
@@ -196,7 +196,7 @@
       "cell_type": "code",
       "source": "/* Symbolic determinant (exact integer result) */\ndet_sym : determinant(matrix([4, 1, 2], [1, 3, 1], [2, 1, 5]));\nprint(\"Symbolic determinant =\", det_sym)$\n\n/* Numeric determinant via LAPACK */\ndet_num : np_det(A);\nprint(\"Numeric determinant  =\", det_num)$\n\n/* Product of singular values gives |det| */\ndet_svd : apply(\"*\", np_to_list(S));\nprint(\"Product of singular values =\", det_svd)$\nprint(\"(matches |det| since A is positive definite)\")$",
       "metadata": {},
-      "execution_count": 69,
+      "execution_count": 93,
       "outputs": [
         {
           "name": "stdout",
@@ -221,7 +221,7 @@
       "cell_type": "code",
       "source": "/* Non-square matrix: 4x2 (tall) */\nB : ndarray(matrix([1, 2], [3, 4], [5, 6], [7, 8]))$\n\nprint(\"B (4x2):\")$\nnp_to_matrix(B);\nprint(\"Shape:\", np_shape(B))$",
       "metadata": {},
-      "execution_count": 70,
+      "execution_count": 94,
       "outputs": [
         {
           "name": "stdout",
@@ -236,7 +236,7 @@
       "cell_type": "code",
       "source": "/* QR of non-square matrix */\n[Q_B, R_B] : np_qr(B)$\n\nprint(\"QR decomposition of B:\")$\nprint(\"Q shape:\", np_shape(Q_B))$\nnp_to_matrix(Q_B);\nprint(\"R shape:\", np_shape(R_B))$\nnp_to_matrix(R_B);\n\nqr_B_error : np_norm(np_sub(B, np_matmul(Q_B, R_B)));\nprint(\"Reconstruction error ||B - QR|| =\", qr_B_error)$",
       "metadata": {},
-      "execution_count": 71,
+      "execution_count": 95,
       "outputs": [
         {
           "name": "stdout",
@@ -251,7 +251,7 @@
       "cell_type": "code",
       "source": "/* SVD of non-square matrix */\n[U_B, S_B, Vt_B] : np_svd(B)$\n\nprint(\"SVD of B:\")$\nprint(\"U shape:\", np_shape(U_B))$\nnp_to_matrix(U_B);\nprint(\"Singular values:\", np_to_list(S_B))$\nprint(\"Vt shape:\", np_shape(Vt_B))$\nnp_to_matrix(Vt_B);\n\n/* Reconstruct: U * diag(S) * Vt */\nS_B_mat : np_diag(np_to_list(S_B))$\nB_reconstructed : np_matmul(np_matmul(U_B, S_B_mat), Vt_B)$\nsvd_B_error : np_norm(np_sub(B, B_reconstructed));\nprint(\"Reconstruction error ||B - U*diag(S)*Vt|| =\", svd_B_error)$\n\n/* Rank from singular values */\nprint(\"Matrix rank (number of nonzero singular values) = 2\")$\nprint(\"The columns of B are linearly independent.\")$",
       "metadata": {},
-      "execution_count": 72,
+      "execution_count": 96,
       "outputs": [
         {
           "name": "stdout",

@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 76,
+      "execution_count": 106,
       "outputs": []
     },
     {
@@ -31,7 +31,7 @@
       "cell_type": "code",
       "source": "/* Define resistor and voltage values */\nR1 : 10$ R2 : 20$ R3 : 30$ R4 : 15$ R5 : 25$\nV1 : 5$ V2 : 10$\n\n/* Mesh equations: LHS - RHS = 0 */\neq1 : (R1 + R2)*I1 - R2*I2 = V1;\neq2 : -R2*I1 + (R2 + R3 + R4)*I2 - R4*I3 = 0;\neq3 : -R4*I2 + (R4 + R5)*I3 = -V2;\n\nprint(\"Mesh equations:\")$\nprint(eq1)$\nprint(eq2)$\nprint(eq3)$",
       "metadata": {},
-      "execution_count": 77,
+      "execution_count": 107,
       "outputs": [
         {
           "name": "stdout",
@@ -46,7 +46,7 @@
       "cell_type": "code",
       "source": "/* Extract the coefficient matrix and RHS symbolically */\nA : coefmatrix([eq1, eq2, eq3], [I1, I2, I3]);\nb_rhs : makelist(rhs(eq), eq, [eq1, eq2, eq3])$\nb_vec : transpose(matrix(b_rhs));\n\nprint(\"Coefficient matrix A:\")$\nA;\nprint(\"RHS vector b:\")$\nb_vec;",
       "metadata": {},
-      "execution_count": 78,
+      "execution_count": 108,
       "outputs": [
         {
           "name": "stdout",
@@ -61,7 +61,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 5\\cr 0\\cr -10\\cr\\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 78,
+          "execution_count": 108,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -71,7 +71,7 @@
       "cell_type": "code",
       "source": "/* Convert to ndarrays and solve */\nA_nd : ndarray(A)$\nb_nd : ndarray(b_vec)$\n\nx : np_solve(A_nd, b_nd)$\n\ncurrents : np_to_list(x)$\nprint(\"Mesh currents (A):\")$\nprint(\"  I1 =\", currents[1])$\nprint(\"  I2 =\", currents[2])$\nprint(\"  I3 =\", currents[3])$",
       "metadata": {},
-      "execution_count": 79,
+      "execution_count": 109,
       "outputs": [
         {
           "name": "stdout",
@@ -86,7 +86,7 @@
       "cell_type": "code",
       "source": "/* Verify: solve symbolically with Maxima and compare */\nsym_sol : solve([eq1, eq2, eq3], [I1, I2, I3]);\nprint(\"Symbolic solution:\")$\nfor s in sym_sol[1] do print(\"  \", s, \" =\", float(rhs(s)))$",
       "metadata": {},
-      "execution_count": 80,
+      "execution_count": 110,
       "outputs": [
         {
           "name": "stdout",
@@ -106,7 +106,7 @@
       "cell_type": "code",
       "source": "/* Compute residual r = A*x - b */\nr : np_sub(np_matmul(A_nd, x), b_nd)$\n\nprint(\"Residual vector:\", np_to_list(r))$\nprint(\"Residual norm ||r||_2 =\", np_norm(r))$\nprint(\"Machine epsilon =\", 1.1e-16)$\nprint(\"||A|| * ||x|| =\", np_norm(A_nd) * np_norm(x))$",
       "metadata": {},
-      "execution_count": 81,
+      "execution_count": 111,
       "outputs": [
         {
           "name": "stdout",
@@ -131,7 +131,7 @@
       "cell_type": "code",
       "source": "/* Condition number of the circuit matrix */\nA_inv : np_inv(A_nd)$\nkappa : np_norm(A_nd) * np_norm(A_inv);\n\nprint(\"Condition number kappa(A) =\", kappa)$\nprint(\"This is a well-conditioned system.\")$",
       "metadata": {},
-      "execution_count": 82,
+      "execution_count": 112,
       "outputs": [
         {
           "name": "stdout",
@@ -151,7 +151,7 @@
       "cell_type": "code",
       "source": "/* Build a Hilbert matrix of size n */\nhilbert(n) := makelist(\n  makelist(1.0/(i + j - 1), j, 1, n),\n  i, 1, n\n)$\n\n/* Example: 5x5 Hilbert matrix */\nH5 : apply(matrix, hilbert(5));\nH5_nd : ndarray(H5)$\n\n/* True solution: x = [1, 1, 1, 1, 1] */\nx_true : ndarray([1, 1, 1, 1, 1], [5, 1])$\nb5 : np_matmul(H5_nd, x_true)$\n\n/* Solve and check error */\nx_computed : np_solve(H5_nd, b5)$\nerror5 : np_sub(x_computed, x_true)$\n\nkappa5 : np_norm(H5_nd) * np_norm(np_inv(H5_nd))$\n\nprint(\"Hilbert 5x5:\")$\nprint(\"  Condition number =\", kappa5)$\nprint(\"  Solution error ||x - x_true|| =\", np_norm(error5))$\nprint(\"  Computed x =\", np_to_list(x_computed))$",
       "metadata": {},
-      "execution_count": 83,
+      "execution_count": 113,
       "outputs": [
         {
           "name": "stdout",
@@ -166,7 +166,7 @@
       "cell_type": "code",
       "source": "/* Condition number vs matrix size */\nsizes : [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]$\nkappas : []$\n\nfor n in sizes do block(\n  [Hn, Hn_nd, kn],\n  Hn : apply(matrix, hilbert(n)),\n  Hn_nd : ndarray(Hn),\n  kn : np_norm(Hn_nd) * np_norm(np_inv(Hn_nd)),\n  kappas : append(kappas, [kn])\n)$\n\n/* Display results */\nfor i : 1 thru length(sizes) do\n  print(sconcat(\"  n=\", sizes[i], \": kappa = \", kappas[i]))$",
       "metadata": {},
-      "execution_count": 84,
+      "execution_count": 114,
       "outputs": [
         {
           "name": "stdout",
@@ -181,7 +181,7 @@
       "cell_type": "code",
       "source": "/* Plot: condition number grows exponentially with n */\ncond_data : makelist([sizes[i], float(log(kappas[i])/log(10))], i, 1, length(sizes))$\n\nax_draw2d(\n  color=blue, marker_size=6,\n  points(cond_data),\n  color=blue,\n  lines(cond_data),\n  title=\"Hilbert Matrix: Condition Number vs Size\",\n  xlabel=\"Matrix size n\",\n  ylabel=\"log10(kappa)\",\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 85,
+      "execution_count": 115,
       "outputs": [
         {
           "data": {
@@ -208,7 +208,7 @@
       "cell_type": "code",
       "source": "/* Truss geometry */\n/* Angles of members from node C */\ntheta_AC : atan2(-3, -2)$  /* C to A */\ntheta_BC : atan2(-3, 2)$   /* C to B */\n\n/* Equilibrium at node C: sum Fx = 0, sum Fy = 0 */\n/* F_AC along CA direction, F_BC along CB direction */\n/* External load: P = 100 N downward */\nP : 100$\n\neq_x : F_AC * cos(theta_AC) + F_BC * cos(theta_BC) = 0;\neq_y : F_AC * sin(theta_AC) + F_BC * sin(theta_BC) = P;\n\nprint(\"Equilibrium equations at node C:\")$\nprint(eq_x)$\nprint(eq_y)$\n\n/* Solve symbolically */\ntruss_sol : solve([eq_x, eq_y], [F_AC, F_BC]);\nprint(\"Member forces (symbolic):\")$\nprint(truss_sol)$\n\n/* Numeric values */\nprint(\"F_AC =\", float(rhs(truss_sol[1][1])), \"N\")$\nprint(\"F_BC =\", float(rhs(truss_sol[1][2])), \"N\")$",
       "metadata": {},
-      "execution_count": 86,
+      "execution_count": 116,
       "outputs": [
         {
           "name": "stdout",
@@ -223,7 +223,7 @@
       "cell_type": "code",
       "source": "/* Verify numerically with np_solve */\nA_truss : float(coefmatrix([eq_x, eq_y], [F_AC, F_BC]))$\nb_truss : float(transpose(matrix(makelist(rhs(eq), eq, [eq_x, eq_y]))))$\n\nA_truss_nd : ndarray(A_truss)$\nb_truss_nd : ndarray(b_truss)$\n\nforces : np_solve(A_truss_nd, b_truss_nd)$\nprint(\"Numeric solution:\", np_to_list(forces))$",
       "metadata": {},
-      "execution_count": 87,
+      "execution_count": 117,
       "outputs": [
         {
           "name": "stdout",
@@ -243,7 +243,7 @@
       "cell_type": "code",
       "source": "/* 5 data points: (x, y) */\ndata_x : [1.0, 2.0, 3.0, 4.0, 5.0]$\ndata_y : [2.1, 3.9, 6.2, 7.8, 10.1]$\n\n/* Design matrix: [1, x_i] for each data point */\nA_ls : apply(matrix,\n  makelist([1.0, data_x[i]], i, 1, length(data_x))\n)$\nb_ls : transpose(matrix(data_y))$\n\nprint(\"Design matrix A (5x2):\")$\nA_ls;\nprint(\"Observations b:\")$\nb_ls;",
       "metadata": {},
-      "execution_count": 88,
+      "execution_count": 118,
       "outputs": [
         {
           "name": "stdout",
@@ -258,7 +258,7 @@
               "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi 2.1\\cr 3.9\\cr 6.2\\cr 7.8\\cr 10.1\\cr \\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
             ]
           },
-          "execution_count": 88,
+          "execution_count": 118,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -268,7 +268,7 @@
       "cell_type": "code",
       "source": "/* Least-squares solve */\nA_ls_nd : ndarray(A_ls)$\nb_ls_nd : ndarray(b_ls)$\n\n[x_ls, residuals, rank_ls, S_ls] : np_lstsq(A_ls_nd, b_ls_nd)$\n\ncoeffs : np_to_list(x_ls)$\nprint(\"Least-squares coefficients:\")$\nprint(\"  intercept c0 =\", coeffs[1])$\nprint(\"  slope     c1 =\", coeffs[2])$\nprint(\"  rank =\", rank_ls)$",
       "metadata": {},
-      "execution_count": 89,
+      "execution_count": 119,
       "outputs": [
         {
           "name": "stdout",
@@ -283,7 +283,7 @@
       "cell_type": "code",
       "source": "/* Plot data and fitted line */\nc0 : coeffs[1]$\nc1 : coeffs[2]$\nfitted_line : c0 + c1*x$\n\nax_draw2d(\n  color=red, marker_size=8,\n  name=\"Data\",\n  points(data_x, data_y),\n  color=blue, name=\"Least-squares fit\",\n  explicit(fitted_line, x, 0, 6),\n  title=\"Over-Determined System: Line Fit via np_lstsq\",\n  xlabel=\"x\", ylabel=\"y\",\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 90,
+      "execution_count": 120,
       "outputs": [
         {
           "data": {
