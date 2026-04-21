@@ -12,6 +12,7 @@ Many notebooks highlight the **symbolic-numeric bridge** — Maxima's unique abi
 
 ```
 mxpm install numerics
+mxpm install numerics-image  # for image processing notebook
 mxpm install dataframes
 mxpm install ax-plots
 brew install duckdb          # for DuckDB notebooks only
@@ -61,12 +62,13 @@ brew install duckdb          # for DuckDB notebooks only
 | [eda-pipeline.macnb](notebooks/data-science/eda-pipeline.macnb) | Data Science | Full pandas-style workflow: read CSV, describe, group, summarize, bar charts, histograms | dataframes, dataframes-duckdb, ax-plots |
 | [sql-analytics.macnb](notebooks/data-science/sql-analytics.macnb) | Data Science | SQL queries on tabular data — CTEs, window functions, joins — from inside a CAS | dataframes, dataframes-duckdb |
 
-### Signal Processing
+### Signal & Image Processing
 
 | Notebook | Domain | Description | Packages |
 |----------|--------|-------------|----------|
 | [signal-processing.macnb](notebooks/signal-image/signal-processing.macnb) | Electrical Engineering | [S+N] Generate signals, FFT, frequency-domain filtering, IFFT, convolution. Symbolic Fourier coefficients vs numeric FFT | numerics, ax-plots |
 | [spectral-analysis.macnb](notebooks/signal-image/spectral-analysis.macnb) | Physics | [S+N] Chirp, AM, square wave — PSD, windowing, spectrogram. Symbolic Fourier series and Gibbs phenomenon | numerics, ax-plots |
+| [image-processing.macnb](notebooks/signal-image/image-processing.macnb) | Computer Vision | Load images, greyscale conversion, 2D convolution — box blur, Sobel edge detection, sharpening, emboss | numerics, numerics-image |
 
 ### Engineering Applications
 
@@ -87,6 +89,9 @@ brew install duckdb          # for DuckDB notebooks only
 | `np_matmul` | pca, monte-carlo |
 | `np_fft` / `np_ifft` | signal-processing, spectral-analysis |
 | `np_convolve` | signal-processing |
+| `np_convolve2d` | image-processing |
+| `np_imshow` | image-processing |
+| `np_mandrill` | image-processing |
 | `np_rand` / `np_randn` | monte-carlo, least-squares |
 | `np_corrcoef` / `np_cov` | correlation-heatmap, pca |
 | `np_trapz` | symbolic-integration |
