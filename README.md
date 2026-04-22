@@ -68,7 +68,7 @@ brew install duckdb          # for DuckDB notebooks only
 |----------|--------|-------------|----------|
 | [signal-processing.macnb](notebooks/signal-image/signal-processing.macnb) | Electrical Engineering | [S+N] Generate signals, FFT, frequency-domain filtering, IFFT, convolution. Symbolic Fourier coefficients vs numeric FFT | numerics, ax-plots |
 | [spectral-analysis.macnb](notebooks/signal-image/spectral-analysis.macnb) | Physics | [S+N] Chirp, AM, square wave — PSD, windowing, spectrogram. Symbolic Fourier series and Gibbs phenomenon | numerics, ax-plots |
-| [image-processing.macnb](notebooks/signal-image/image-processing.macnb) | Computer Vision | Load images, greyscale conversion, 2D convolution — box blur, Sobel edge detection, sharpening, emboss | numerics, numerics-image |
+| [image-processing.macnb](notebooks/signal-image/image-processing.macnb) | Computer Vision | Load images, greyscale conversion, 2D convolution — box blur, Sobel edge detection, sharpening, emboss. 2D FFT frequency-domain filtering | numerics, numerics-image |
 
 ### Engineering Applications
 
@@ -88,6 +88,7 @@ brew install duckdb          # for DuckDB notebooks only
 | `np_expm` | matrix-exponential-odes, control-systems |
 | `np_matmul` | pca, monte-carlo |
 | `np_fft` / `np_ifft` | signal-processing, spectral-analysis |
+| `np_fft2d` / `np_ifft2d` | image-processing |
 | `np_convolve` | signal-processing |
 | `np_convolve2d` | image-processing |
 | `np_imshow` | image-processing |
