@@ -70,6 +70,12 @@ brew install duckdb          # for DuckDB notebooks only
 | [spectral-analysis.macnb](notebooks/signal-image/spectral-analysis.macnb) | Physics | [S+N] Chirp, AM, square wave — PSD, windowing, spectrogram. Symbolic Fourier series and Gibbs phenomenon | numerics, ax-plots |
 | [image-processing.macnb](notebooks/signal-image/image-processing.macnb) | Computer Vision | Load images, greyscale conversion, 2D convolution — box blur, Sobel edge detection, sharpening, emboss. 2D FFT frequency-domain filtering | numerics, numerics-image |
 
+### Machine Learning
+
+| Notebook | Domain | Description | Packages |
+|----------|--------|-------------|----------|
+| [ml-fundamentals.macnb](notebooks/machine-learning/ml-fundamentals.macnb) | Machine Learning | [S+N] Linear regression, logistic regression, K-means — symbolic gradient derivation with `diff()` then numeric gradient descent | numerics, ax-plots |
+
 ### Engineering Applications
 
 | Notebook | Domain | Description | Packages |
@@ -84,16 +90,16 @@ brew install duckdb          # for DuckDB notebooks only
 | `np_solve` | linear-systems, beam-deflection |
 | `np_eig` | eigenvalue-analysis, pca, phase-portraits, control-systems |
 | `np_svd` | svd-low-rank, pca |
-| `np_lstsq` | least-squares |
+| `np_lstsq` | least-squares, ml-fundamentals |
 | `np_expm` | matrix-exponential-odes, control-systems |
-| `np_matmul` | pca, monte-carlo |
+| `np_matmul` | pca, monte-carlo, ml-fundamentals |
 | `np_fft` / `np_ifft` | signal-processing, spectral-analysis |
 | `np_fft2d` / `np_ifft2d` | image-processing |
 | `np_convolve` | signal-processing |
 | `np_convolve2d` | image-processing |
 | `np_imshow` | image-processing |
 | `np_mandrill` | image-processing |
-| `np_rand` / `np_randn` | monte-carlo, least-squares |
+| `np_rand` / `np_randn` | monte-carlo, least-squares, ml-fundamentals |
 | `np_corrcoef` / `np_cov` | correlation-heatmap, pca |
 | `np_trapz` | symbolic-integration |
 | `df_read_csv` | eda-pipeline |
@@ -105,7 +111,10 @@ brew install duckdb          # for DuckDB notebooks only
 | `ax_vector_field` / `ax_streamline` | phase-portraits, vector-fields |
 | `ax_bar` / `ax_histogram` | eda-pipeline, monte-carlo |
 | `ax_contour` | surface-gallery |
-| Symbolic `diff()` | symbolic-jacobian, phase-portraits, surface-gallery, vector-fields, eigenvalue-analysis |
+| `np_argmin` / `np_argmax` | ml-fundamentals |
+| `np_where` | ml-fundamentals |
+| `np_clip` | ml-fundamentals, image-processing |
+| Symbolic `diff()` | symbolic-jacobian, phase-portraits, surface-gallery, vector-fields, eigenvalue-analysis, ml-fundamentals |
 | Symbolic `integrate()` | symbolic-integration, signal-processing |
 | Symbolic `taylor()` | taylor-convergence |
 | Symbolic `solve()` | control-systems |
