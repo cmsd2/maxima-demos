@@ -12,7 +12,7 @@ Many notebooks highlight the **symbolic-numeric bridge** — Maxima's unique abi
 
 ```
 mxpm install numerics
-mxpm install numerics-optimize  # for ML notebook (L-BFGS optimization)
+mxpm install numerics-optimize  # for ML and optimization notebooks (L-BFGS)
 mxpm install numerics-image     # for image processing notebook
 mxpm install dataframes
 mxpm install ax-plots
@@ -77,6 +77,15 @@ brew install duckdb          # for DuckDB notebooks only
 |----------|--------|-------------|----------|
 | [ml-fundamentals.macnb](notebooks/machine-learning/ml-fundamentals.macnb) | Machine Learning | [S+N] Linear regression, logistic regression, K-means — symbolic gradient derivation with `diff()` then numeric gradient descent | numerics, ax-plots |
 
+### Optimization & Inverse Problems
+
+| Notebook | Domain | Description | Packages |
+|----------|--------|-------------|----------|
+| [curve-fitting.macnb](notebooks/optimisation/curve-fitting.macnb) | Statistics | [S+N] Nonlinear curve fitting — symbolic gradient derivation with `diff()`, optimize with `np_minimize`. Exponential decay, Gaussian peak, confidence intervals | numerics, numerics-optimize, ax-plots |
+| [mle.macnb](notebooks/optimisation/mle.macnb) | Statistics | [S+N] Maximum likelihood estimation — Normal, Gamma, logistic regression. Symbolic log-likelihood → score function → `np_minimize` | numerics, numerics-optimize, ax-plots |
+| [inverse-problems.macnb](notebooks/optimisation/inverse-problems.macnb) | Physics/Engineering | [S+N] Recover physical parameters from noisy data — `ode2()` solutions as forward model, `np_minimize` for parameter recovery, Tikhonov regularization | numerics, numerics-optimize, ax-plots |
+| [control-tuning.macnb](notebooks/optimisation/control-tuning.macnb) | Control Engineering | [S+N] PID gain tuning — symbolic state-space, numeric step response simulation, ISE/ITAE minimization with `np_minimize` | numerics, numerics-optimize, ax-plots |
+
 ### Engineering Applications
 
 | Notebook | Domain | Description | Packages |
@@ -92,7 +101,7 @@ brew install duckdb          # for DuckDB notebooks only
 | `np_eig` | eigenvalue-analysis, pca, phase-portraits, control-systems |
 | `np_svd` | svd-low-rank, pca |
 | `np_lstsq` | least-squares, ml-fundamentals |
-| `np_expm` | matrix-exponential-odes, control-systems |
+| `np_expm` | matrix-exponential-odes, control-systems, control-tuning, inverse-problems |
 | `np_matmul` | pca, monte-carlo, ml-fundamentals |
 | `np_fft` / `np_ifft` | signal-processing, spectral-analysis |
 | `np_fft2d` / `np_ifft2d` | image-processing |
@@ -115,12 +124,14 @@ brew install duckdb          # for DuckDB notebooks only
 | `np_argmin` / `np_argmax` | ml-fundamentals |
 | `np_where` | ml-fundamentals |
 | `np_clip` | ml-fundamentals, image-processing |
-| `np_minimize` | ml-fundamentals |
-| Symbolic `diff()` | symbolic-jacobian, phase-portraits, surface-gallery, vector-fields, eigenvalue-analysis, ml-fundamentals |
+| `np_minimize` | ml-fundamentals, curve-fitting, mle, inverse-problems, control-tuning |
+| `np_inv` | curve-fitting, mle |
+| `np_eval` | inverse-problems |
+| Symbolic `diff()` | symbolic-jacobian, phase-portraits, surface-gallery, vector-fields, eigenvalue-analysis, ml-fundamentals, curve-fitting, mle |
 | Symbolic `integrate()` | symbolic-integration, signal-processing |
 | Symbolic `taylor()` | taylor-convergence |
 | Symbolic `solve()` | control-systems |
-| Symbolic `ode2()` | beam-deflection |
+| Symbolic `ode2()` | beam-deflection, inverse-problems |
 
 ## License
 
