@@ -114,6 +114,7 @@ brew install duckdb          # for DuckDB notebooks only
 | `np_argmin` / `np_argmax` | ml-fundamentals |
 | `np_where` | ml-fundamentals |
 | `np_clip` | ml-fundamentals, image-processing |
+| `np_minimize` | ml-fundamentals |
 | Symbolic `diff()` | symbolic-jacobian, phase-portraits, surface-gallery, vector-fields, eigenvalue-analysis, ml-fundamentals |
 | Symbolic `integrate()` | symbolic-integration, signal-processing |
 | Symbolic `taylor()` | taylor-convergence |
