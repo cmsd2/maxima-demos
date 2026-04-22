@@ -12,7 +12,8 @@ Many notebooks highlight the **symbolic-numeric bridge** — Maxima's unique abi
 
 ```
 mxpm install numerics
-mxpm install numerics-image  # for image processing notebook
+mxpm install numerics-optimize  # for ML notebook (L-BFGS optimization)
+mxpm install numerics-image     # for image processing notebook
 mxpm install dataframes
 mxpm install ax-plots
 brew install duckdb          # for DuckDB notebooks only
