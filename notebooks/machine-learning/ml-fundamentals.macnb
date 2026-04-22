@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 21,
+      "execution_count": 41,
       "outputs": []
     },
     {
@@ -29,24 +29,24 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Define the loss for a single data point */\nL_i(a, b, xi, yi) := (1/2) * (yi - a - b * xi)^2$\n\n/* Symbolic gradients */\ngrad_a_symbolic : diff(L_i(a, b, xi, yi), a);\ngrad_b_symbolic : diff(L_i(a, b, xi, yi), b);",
+      "source": "/* Define the loss for a single data point */\nL_i(a, b, x_i, y_i) := (1/2) * (y_i - a - b * x_i)^2$\n\n/* Symbolic gradients */\ngrad_a_symbolic : diff(L_i(a, b, x[i], y[i]), a);\ngrad_b_symbolic : diff(L_i(a, b, x[i], y[i]), b);",
       "metadata": {},
-      "execution_count": 22,
+      "execution_count": 42,
       "outputs": [
         {
           "name": "stdout",
           "output_type": "stream",
           "text": [
-            "-yi+b*xi+a"
+            "-y[i]+b*x[i]+a"
           ]
         },
         {
           "data": {
             "text/latex": [
-              "-\\left(\\xi\\,\\left({\\it yi}-b\\,\\xi-a\\right)\\right)"
+              "-\\left(x_{i}\\,\\left(y_{i}-b\\,x_{i}-a\\right)\\right)"
             ]
           },
-          "execution_count": 22,
+          "execution_count": 42,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -61,7 +61,7 @@
       "cell_type": "code",
       "source": "/* Generate synthetic data: y = 2x + 1 + noise */\nn : 80$\nx_data : np_scale(6.0, np_rand([n]))$\nnoise : np_scale(1.5, np_randn([n]))$\ny_data : np_add(np_add(np_scale(2.0, x_data), 1.0), noise)$\n\nprint(\"Generated\", n, \"data points\")$\nprint(\"True parameters: a = 1, b = 2\")$",
       "metadata": {},
-      "execution_count": 23,
+      "execution_count": 43,
       "outputs": [
         {
           "name": "stdout",
@@ -76,7 +76,7 @@
       "cell_type": "code",
       "source": "/* Build design matrix X = [1, x] of shape [n, 2] */\nones_col : np_reshape(np_ones([n]), [n, 1])$\nx_col : np_reshape(x_data, [n, 1])$\nX : np_hstack(ones_col, x_col)$\ny_col : np_reshape(y_data, [n, 1])$\n\nprint(\"Design matrix X shape:\", np_shape(X))$",
       "metadata": {},
-      "execution_count": 24,
+      "execution_count": 44,
       "outputs": [
         {
           "name": "stdout",
@@ -91,7 +91,7 @@
       "cell_type": "code",
       "source": "/* Gradient descent using the symbolic gradient (now in matrix form) */\nw : ndarray([0.0, 0.0], [2, 1])$   /* initial weights [a, b]^T */\nlr : 0.01$\nmax_iter : 300$\nlosses : []$\n\nfor iter : 1 thru max_iter do block(\n  pred : np_matmul(X, w),\n  residual : np_sub(pred, y_col),\n  loss : np_mean(np_pow(residual, 2)) / 2.0,\n  losses : append(losses, [loss]),\n  grad : np_scale(1.0 / n, np_matmul(np_transpose(X), residual)),\n  w : np_sub(w, np_scale(lr, grad))\n)$\n\na_gd : np_ref(w, 0, 0)$\nb_gd : np_ref(w, 1, 0)$\nprint(\"Gradient descent: a =\", a_gd, \", b =\", b_gd)$\nprint(\"Final loss:\", last(losses))$",
       "metadata": {},
-      "execution_count": 25,
+      "execution_count": 45,
       "outputs": [
         {
           "name": "stdout",
@@ -106,7 +106,7 @@
       "cell_type": "code",
       "source": "/* Compare with closed-form least-squares solution */\n[w_ls, residuals, rank_X, sv] : np_lstsq(X, y_col)$\na_ls : np_ref(w_ls, 0, 0)$\nb_ls : np_ref(w_ls, 1, 0)$\nprint(\"Least squares:     a =\", a_ls, \", b =\", b_ls)$\nprint(\"Difference: |a_gd - a_ls| =\", abs(a_gd - a_ls),\n      \", |b_gd - b_ls| =\", abs(b_gd - b_ls))$",
       "metadata": {},
-      "execution_count": 26,
+      "execution_count": 46,
       "outputs": [
         {
           "name": "stdout",
@@ -121,7 +121,7 @@
       "cell_type": "code",
       "source": "/* Plot data and fitted line */\nx_list : np_to_list(x_data)$\ny_list : np_to_list(y_data)$\n\nax_draw2d(\n  color = \"steelblue\", marker_size = 5,\n  points(x_list, y_list),\n  color = \"red\", line_width = 2, name = \"GD fit\",\n  explicit(a_gd + b_gd * t, t, 0, 6),\n  color = \"green\", line_width = 2, dash = \"dash\", name = \"lstsq\",\n  explicit(a_ls + b_ls * t, t, 0, 6),\n  title = \"Linear Regression: Gradient Descent vs Least Squares\",\n  xlabel = \"x\", ylabel = \"y\", grid = true, showlegend = true\n)$",
       "metadata": {},
-      "execution_count": 27,
+      "execution_count": 47,
       "outputs": [
         {
           "data": {
@@ -138,7 +138,7 @@
       "cell_type": "code",
       "source": "/* Loss convergence */\niter_list : makelist(i, i, 1, max_iter)$\n\nax_draw2d(\n  color = \"darkorange\", line_width = 2,\n  lines(iter_list, losses),\n  title = \"Training Loss (MSE/2)\",\n  xlabel = \"Iteration\", ylabel = \"Loss\", grid = true\n)$",
       "metadata": {},
-      "execution_count": 28,
+      "execution_count": 48,
       "outputs": [
         {
           "data": {
@@ -160,7 +160,7 @@
       "cell_type": "code",
       "source": "/* Symbolic sigmoid and its derivative */\nsigma(z) := 1 / (1 + exp(-z))$\n\nsigma_deriv : diff(sigma(z), z);\nsigma_deriv_simplified : ratsimp(sigma_deriv);",
       "metadata": {},
-      "execution_count": 29,
+      "execution_count": 49,
       "outputs": [
         {
           "name": "stdout",
@@ -175,7 +175,7 @@
               "{{e^{z}}\\over{e^{2\\,z}+2\\,e^{z}+1}}"
             ]
           },
-          "execution_count": 29,
+          "execution_count": 49,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -185,7 +185,7 @@
       "cell_type": "code",
       "source": "/* Verify: sigma'(z) = sigma(z) * (1 - sigma(z)) */\nis(ratsimp(sigma_deriv - sigma(z) * (1 - sigma(z))) = 0);",
       "metadata": {},
-      "execution_count": 30,
+      "execution_count": 50,
       "outputs": [
         {
           "data": {
@@ -193,7 +193,7 @@
               "\\mathbf{true}"
             ]
           },
-          "execution_count": 30,
+          "execution_count": 50,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -208,7 +208,7 @@
       "cell_type": "code",
       "source": "/* Symbolic verification: gradient of cross-entropy */\nell(z, yi) := -(yi * log(sigma(z)) + (1 - yi) * log(1 - sigma(z)))$\n\n/* d(ell)/dz simplifies to sigma(z) - y */\ndell_dz : diff(ell(z, yi), z)$\nratsimp(dell_dz);",
       "metadata": {},
-      "execution_count": 31,
+      "execution_count": 51,
       "outputs": [
         {
           "data": {
@@ -216,7 +216,7 @@
               "-\\left({{\\left(e^{z}+1\\right)\\,{\\it yi}-e^{z}}\\over{e^{z}+1}}\\right)"
             ]
           },
-          "execution_count": 31,
+          "execution_count": 51,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -231,7 +231,7 @@
       "cell_type": "code",
       "source": "/* Generate 2D binary classification data */\nn_class : 60$\nn_total : 2 * n_class$\n\n/* Class 0: centred at (-1, -1) */\nx0_1 : np_add(np_randn([n_class]), -1.0)$\nx0_2 : np_add(np_randn([n_class]), -1.0)$\n\n/* Class 1: centred at (1.5, 1.5) */\nx1_1 : np_add(np_randn([n_class]), 1.5)$\nx1_2 : np_add(np_randn([n_class]), 1.5)$\n\n/* Stack features into design matrix [n_total, 3] with bias column */\nX0 : np_hstack(np_ones([n_class, 1]),\n               np_reshape(x0_1, [n_class, 1]),\n               np_reshape(x0_2, [n_class, 1]))$\nX1 : np_hstack(np_ones([n_class, 1]),\n               np_reshape(x1_1, [n_class, 1]),\n               np_reshape(x1_2, [n_class, 1]))$\nX_lr : np_vstack(X0, X1)$\n\n/* Labels */\ny_lr : np_reshape(\n  ndarray(append(makelist(0.0, i, 1, n_class), makelist(1.0, i, 1, n_class))),\n  [n_total, 1]\n)$\n\nprint(\"Data shape:\", np_shape(X_lr), \"Labels:\", np_shape(y_lr))$",
       "metadata": {},
-      "execution_count": 32,
+      "execution_count": 52,
       "outputs": [
         {
           "name": "stdout",
@@ -246,7 +246,7 @@
       "cell_type": "code",
       "source": "/* Numeric sigmoid function on ndarrays */\nnp_sigmoid(z) := np_div(1.0, np_add(1.0, np_exp(np_neg(z))))$\n\n/* Logistic regression via gradient descent */\nw_lr : np_zeros([3, 1])$\nlr_rate : 0.1$\nlr_iters : 200$\nlr_losses : []$\n\nfor iter : 1 thru lr_iters do block(\n  z : np_matmul(X_lr, w_lr),\n  p : np_sigmoid(z),\n  /* Cross-entropy loss (with clipping for stability) */\n  p_safe : np_clip(p, 1.0e-10, 1.0 - 1.0e-10),\n  loss : -np_mean(np_add(\n    np_mul(y_lr, np_log(p_safe)),\n    np_mul(np_sub(1.0, y_lr), np_log(np_sub(1.0, p_safe)))\n  )),\n  lr_losses : append(lr_losses, [loss]),\n  /* Gradient: X^T (p - y) / N */\n  grad : np_scale(1.0 / n_total, np_matmul(np_transpose(X_lr), np_sub(p, y_lr))),\n  w_lr : np_sub(w_lr, np_scale(lr_rate, grad))\n)$\n\nw0 : np_ref(w_lr, 0, 0)$\nw1 : np_ref(w_lr, 1, 0)$\nw2 : np_ref(w_lr, 2, 0)$\nprint(\"Learned weights: w0 =\", w0, \", w1 =\", w1, \", w2 =\", w2)$\nprint(\"Final loss:\", last(lr_losses))$",
       "metadata": {},
-      "execution_count": 33,
+      "execution_count": 53,
       "outputs": [
         {
           "name": "stdout",
@@ -261,7 +261,7 @@
       "cell_type": "code",
       "source": "/* Compute accuracy */\npred_probs : np_sigmoid(np_matmul(X_lr, w_lr))$\npred_labels : np_where(np_greater(pred_probs, 0.5), 1.0, 0.0)$\ncorrect : np_sum(np_equal(pred_labels, y_lr))$\naccuracy : correct / n_total * 100$\nprint(\"Accuracy:\", accuracy, \"%\")$",
       "metadata": {},
-      "execution_count": 34,
+      "execution_count": 54,
       "outputs": [
         {
           "name": "stdout",
@@ -276,7 +276,7 @@
       "cell_type": "code",
       "source": "/* Plot data with decision boundary */\nx0_1_list : np_to_list(x0_1)$\nx0_2_list : np_to_list(x0_2)$\nx1_1_list : np_to_list(x1_1)$\nx1_2_list : np_to_list(x1_2)$\n\nax_draw2d(\n  color = \"steelblue\", marker_size = 6, name = \"Class 0\",\n  points(x0_1_list, x0_2_list),\n  color = \"darkorange\", marker_size = 6, name = \"Class 1\",\n  points(x1_1_list, x1_2_list),\n  color = \"red\", line_width = 2, name = \"Decision boundary\",\n  implicit(w0 + w1 * u + w2 * v = 0, u, -4, 5, v, -4, 5),\n  title = \"Logistic Regression: Decision Boundary\",\n  xlabel = \"x1\", ylabel = \"x2\", grid = true, showlegend = true\n)$",
       "metadata": {},
-      "execution_count": 35,
+      "execution_count": 55,
       "outputs": [
         {
           "data": {
@@ -293,7 +293,7 @@
       "cell_type": "code",
       "source": "/* Loss convergence */\nlr_iter_list : makelist(i, i, 1, lr_iters)$\n\nax_draw2d(\n  color = \"darkred\", line_width = 2,\n  lines(lr_iter_list, lr_losses),\n  title = \"Logistic Regression: Cross-Entropy Loss\",\n  xlabel = \"Iteration\", ylabel = \"Loss\", grid = true\n)$",
       "metadata": {},
-      "execution_count": 36,
+      "execution_count": 56,
       "outputs": [
         {
           "data": {
@@ -315,7 +315,7 @@
       "cell_type": "code",
       "source": "/* Generate 3 clusters */\npts_per_cluster : 50$\nn_pts : 3 * pts_per_cluster$\nK : 3$\n\n/* True cluster centres */\nc1 : [0.0, 0.0]$\nc2 : [5.0, 0.0]$\nc3 : [2.5, 4.5]$\n\n/* Generate points around each centre */\nclust1_x : np_add(np_randn([pts_per_cluster]), c1[1])$\nclust1_y : np_add(np_randn([pts_per_cluster]), c1[2])$\nclust2_x : np_add(np_randn([pts_per_cluster]), c2[1])$\nclust2_y : np_add(np_randn([pts_per_cluster]), c2[2])$\nclust3_x : np_add(np_randn([pts_per_cluster]), c3[1])$\nclust3_y : np_add(np_randn([pts_per_cluster]), c3[2])$\n\n/* Stack into [n_pts, 2] data matrix */\nall_x : ndarray(append(np_to_list(clust1_x), np_to_list(clust2_x), np_to_list(clust3_x)))$\nall_y : ndarray(append(np_to_list(clust1_y), np_to_list(clust2_y), np_to_list(clust3_y)))$\nX_km : np_hstack(np_reshape(all_x, [n_pts, 1]), np_reshape(all_y, [n_pts, 1]))$\n\nprint(\"K-Means data shape:\", np_shape(X_km))$",
       "metadata": {},
-      "execution_count": 37,
+      "execution_count": 57,
       "outputs": [
         {
           "name": "stdout",
@@ -330,7 +330,7 @@
       "cell_type": "code",
       "source": "/* Initialise centroids by picking 3 random data points */\nidx1 : 0$\nidx2 : pts_per_cluster$\nidx3 : 2 * pts_per_cluster$\n\ncentroids : ndarray(\n  [np_ref(X_km, idx1, 0), np_ref(X_km, idx1, 1),\n   np_ref(X_km, idx2, 0), np_ref(X_km, idx2, 1),\n   np_ref(X_km, idx3, 0), np_ref(X_km, idx3, 1)],\n  [3, 2]\n)$\n\nprint(\"Initial centroids:\")$\nfor k : 0 thru K - 1 do\n  print(\"  Centroid\", k, \":\", np_ref(centroids, k, 0), np_ref(centroids, k, 1))$",
       "metadata": {},
-      "execution_count": 38,
+      "execution_count": 58,
       "outputs": [
         {
           "name": "stdout",
@@ -345,7 +345,7 @@
       "cell_type": "code",
       "source": "/* K-Means iteration */\nkm_iters : 15$\nassignments : np_zeros([n_pts])$\n\nfor iter : 1 thru km_iters do block(\n  /* Assignment step: compute distance from each point to each centroid */\n  dist_cols : [],\n  for k : 0 thru K - 1 do block(\n    /* centroid k as a row [1, 2] — broadcasts against [n_pts, 2] */\n    ck : np_slice(centroids, k, all),\n    diff_sq : np_pow(np_sub(X_km, ck), 2),\n    dist_k : np_sum(diff_sq, 1),  /* squared distance per point */\n    dist_cols : append(dist_cols, [np_reshape(dist_k, [n_pts, 1])])\n  ),\n  /* Stack into [n_pts, K] distance matrix */\n  dist_matrix : apply(np_hstack, dist_cols),\n  /* Assign each point to nearest centroid */\n  assignments : np_argmin(dist_matrix, 1),\n\n  /* Update step: recompute centroids */\n  new_cents : [],\n  for k : 0 thru K - 1 do block(\n    mask : np_equal(assignments, float(k)),\n    count : np_sum(mask),\n    /* Broadcast mask [n,1] against X [n,2] to zero out non-members */\n    masked : np_mul(X_km, np_reshape(mask, [n_pts, 1])),\n    cent_k : np_scale(1.0 / count, np_sum(masked, 0)),\n    new_cents : append(new_cents, np_to_list(cent_k))\n  ),\n  centroids : ndarray(new_cents, [K, 2])\n)$\n\nprint(\"Final centroids after\", km_iters, \"iterations:\")$\nfor k : 0 thru K - 1 do\n  print(\"  Centroid\", k, \":\",\n        np_ref(centroids, k, 0), np_ref(centroids, k, 1))$\nprint(\"True centres: (0,0), (5,0), (2.5,4.5)\")$",
       "metadata": {},
-      "execution_count": 39,
+      "execution_count": 59,
       "outputs": [
         {
           "name": "stdout",
@@ -360,7 +360,7 @@
       "cell_type": "code",
       "source": "/* Plot clusters with assigned colours */\nassign_list : np_to_list(assignments)$\nall_x_list : np_to_list(all_x)$\nall_y_list : np_to_list(all_y)$\n\n/* Separate points by cluster assignment */\nc0x : []$  c0y : []$\nc1x : []$  c1y : []$\nc2x : []$  c2y : []$\nfor i : 1 thru n_pts do block(\n  if assign_list[i] = 0.0 then (c0x : append(c0x, [all_x_list[i]]),\n                                 c0y : append(c0y, [all_y_list[i]]))\n  elseif assign_list[i] = 1.0 then (c1x : append(c1x, [all_x_list[i]]),\n                                     c1y : append(c1y, [all_y_list[i]]))\n  else (c2x : append(c2x, [all_x_list[i]]),\n        c2y : append(c2y, [all_y_list[i]]))\n)$\n\n/* Centroid positions */\ncent_x : makelist(np_ref(centroids, k, 0), k, 0, K - 1)$\ncent_y : makelist(np_ref(centroids, k, 1), k, 0, K - 1)$\n\nax_draw2d(\n  color = \"steelblue\", marker_size = 5, name = \"Cluster 0\",\n  points(c0x, c0y),\n  color = \"darkorange\", marker_size = 5, name = \"Cluster 1\",\n  points(c1x, c1y),\n  color = \"seagreen\", marker_size = 5, name = \"Cluster 2\",\n  points(c2x, c2y),\n  color = \"red\", marker_size = 12, marker_symbol = \"x\", name = \"Centroids\",\n  points(cent_x, cent_y),\n  title = \"K-Means Clustering (K=3)\",\n  xlabel = \"x1\", ylabel = \"x2\", grid = true, showlegend = true,\n  aspect_ratio = true\n)$",
       "metadata": {},
-      "execution_count": 40,
+      "execution_count": 60,
       "outputs": [
         {
           "data": {
