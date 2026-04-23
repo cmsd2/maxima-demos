@@ -12,11 +12,18 @@ Many notebooks highlight the **symbolic-numeric bridge** — Maxima's unique abi
 
 ```
 mxpm install numerics
-mxpm install numerics-optimize  # for ML and optimization notebooks (L-BFGS)
-mxpm install numerics-image     # for image processing notebook
 mxpm install dataframes
 mxpm install ax-plots
 brew install duckdb          # for DuckDB notebooks only
+```
+
+The `numerics` package has sub-modules that are loaded separately as needed:
+
+```maxima
+load("numerics")$            /* core ndarray + linear algebra */
+load("numerics-optimize")$   /* optimization, root finding, least squares */
+load("numerics-integrate")$  /* ODE integration */
+load("numerics-image")$      /* image I/O */
 ```
 
 ## Notebooks
@@ -42,6 +49,7 @@ brew install duckdb          # for DuckDB notebooks only
 |----------|--------|-------------|----------|
 | [phase-portraits.macnb](notebooks/dynamical-systems/phase-portraits.macnb) | Mathematics | [S+N] Classify fixed points via symbolic Jacobian + numeric eigenvalues, visualize with streamlines | numerics, ax-plots |
 | [matrix-exponential-odes.macnb](notebooks/dynamical-systems/matrix-exponential-odes.macnb) | Physics | [S+N] Solve dx/dt = Ax via `np_expm`, derive general solution symbolically, plot 2D/3D trajectories | numerics, ax-plots |
+| [ode-integration.macnb](notebooks/dynamical-systems/ode-integration.macnb) | Physics | Numeric ODE integration with `np_odeint` — exponential decay, harmonic oscillator, Lotka-Volterra, Van der Pol (BDF), Lorenz attractor | numerics, numerics-integrate, ax-plots |
 
 ### Linear Algebra
 
@@ -85,6 +93,8 @@ brew install duckdb          # for DuckDB notebooks only
 | [mle.macnb](notebooks/optimisation/mle.macnb) | Statistics | [S+N] Maximum likelihood estimation — Normal, Gamma, logistic regression. Symbolic log-likelihood → score function → `np_minimize` | numerics, numerics-optimize, ax-plots |
 | [inverse-problems.macnb](notebooks/optimisation/inverse-problems.macnb) | Physics/Engineering | [S+N] Recover physical parameters from noisy data — `ode2()` solutions as forward model, `np_minimize` for parameter recovery, Tikhonov regularization | numerics, numerics-optimize, ax-plots |
 | [control-tuning.macnb](notebooks/optimisation/control-tuning.macnb) | Control Engineering | [S+N] PID gain tuning — symbolic state-space, numeric step response simulation, ISE/ITAE minimization with `np_minimize` | numerics, numerics-optimize, ax-plots |
+| [symbolic-optimisation.macnb](notebooks/optimisation/symbolic-optimisation.macnb) | Mathematics | [S+N] Expression-mode `np_minimize`, `np_compile_gradient`, constrained optimization with `np_minimize_cobyla` | numerics, numerics-optimize, ax-plots |
+| [nonlinear-equations.macnb](notebooks/optimisation/nonlinear-equations.macnb) | Mathematics | Root finding with `np_fsolve` and nonlinear least-squares fitting with `np_lsq_nonlinear` — expression and function modes | numerics, numerics-optimize, ax-plots |
 
 ### Engineering Applications
 
@@ -124,7 +134,12 @@ brew install duckdb          # for DuckDB notebooks only
 | `np_argmin` / `np_argmax` | ml-fundamentals |
 | `np_where` | ml-fundamentals |
 | `np_clip` | ml-fundamentals, image-processing |
-| `np_minimize` | ml-fundamentals, curve-fitting, mle, inverse-problems, control-tuning |
+| `np_minimize` | ml-fundamentals, curve-fitting, mle, inverse-problems, control-tuning, symbolic-optimisation |
+| `np_compile_gradient` | symbolic-optimisation |
+| `np_minimize_cobyla` | symbolic-optimisation |
+| `np_fsolve` | nonlinear-equations |
+| `np_lsq_nonlinear` | nonlinear-equations |
+| `np_odeint` | ode-integration |
 | `np_inv` | curve-fitting, mle |
 | `np_eval` | inverse-problems |
 | Symbolic `diff()` | symbolic-jacobian, phase-portraits, surface-gallery, vector-fields, eigenvalue-analysis, ml-fundamentals, curve-fitting, mle |
