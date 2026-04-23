@@ -1,0 +1,157 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 5,
+  "metadata": {
+    "kernelspec": {
+      "name": "maxima",
+      "display_name": "Maxima",
+      "language": "maxima"
+    },
+    "aximar": {}
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "source": "# REINFORCE: Policy Gradient with Symbolic Differentiation\n\nThe **REINFORCE** algorithm (Williams, 1992) learns a stochastic policy by gradient ascent on expected return:\n\n$$\\nabla_w J(w) = \\mathbb{E}\\bigg[\\sum_t G_t \\,\\nabla_w \\log \\pi(a_t \\mid s_t; w)\\bigg]$$\n\nwhere $G_t$ is the discounted return from step $t$.\n\nMaxima's unique advantage: we define the policy **symbolically** and use `diff()` to compute the exact score function $\\nabla_w \\log \\pi$ — no backpropagation framework needed.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
+      "metadata": {},
+      "execution_count": 25,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## 1. Inverted Pendulum Stabilization\n\nSimple pendulum with torque input $u$, Euler-discretized:\n$$\\omega_{k+1} = \\omega_k + \\Delta t\\left(-\\frac{g}{l}\\sin\\theta_k - b\\omega_k + \\frac{u}{ml^2}\\right), \\qquad \\theta_{k+1} = \\theta_k + \\Delta t\\,\\omega_{k+1}$$\n\n**Goal**: stabilize near upright ($\\theta = 0$) from a random initial tilt.\n\n**Reward**: $r_k = -(\\theta_k^2 + 0.1\\,\\omega_k^2 + 0.01\\,u_k^2)$ — dense quadratic cost encouraging the pendulum to stay upright with minimal effort.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Pendulum parameters */\ngv : 9.81$  lp : 1.0$  mp : 1.0$  bp : 0.1$\ndt_sim : 0.05$\nhorizon : 80$  /* Steps per episode (4 seconds) */\nu_max : 5.0$  /* Torque clamp */\n\nprint(\"Pendulum: g =\", gv, \" l =\", lp, \" b =\", bp)$\nprint(\"Episode: \", horizon, \"steps x\", dt_sim, \"s =\", horizon * dt_sim, \"s\")$",
+      "metadata": {},
+      "execution_count": 26,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Pendulum: g = 9.81  l = 1.0  b = 0.1\nEpisode:  80 steps x 0.05 s = 4.0 s"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## 2. Symbolic Policy and Score Function\n\nGaussian policy with linear mean:\n$$\\pi(u \\mid \\theta, \\omega;\\, w, \\sigma) = \\mathcal{N}\\!\\left(\\mu(\\theta,\\omega;w),\\, \\sigma^2\\right), \\qquad \\mu = w_1 \\sin\\theta + w_2 \\cos\\theta + w_3\\,\\omega$$\n\nThe **score function** $\\nabla_w \\log\\pi$ is computed symbolically using `diff()`:\n$$\\frac{\\partial \\log \\pi}{\\partial w_i} = \\frac{u - \\mu}{\\sigma^2} \\cdot \\frac{\\partial \\mu}{\\partial w_i}$$",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Symbolic policy mean */\nmu_expr : w1 * sin(th) + w2 * cos(th) + w3 * om$\n\n/* Symbolic log-probability (up to constant) */\nlog_pi : -(u_sym - mu_expr)^2 / (2 * sig^2) - log(sig)$\n\n/* Exact score functions via Maxima's symbolic diff() */\nscore_exprs : [diff(log_pi, w1), diff(log_pi, w2), diff(log_pi, w3)]$\n\nprint(\"Policy mean: μ =\", mu_expr)$\nprint(\"Score ∂log π/∂w₁ =\", score_exprs[1])$\nprint(\"Score ∂log π/∂w₂ =\", score_exprs[2])$\nprint(\"Score ∂log π/∂w₃ =\", score_exprs[3])$",
+      "metadata": {},
+      "execution_count": 27,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Policy mean: μ = om*w3+cos(th)*w2+sin(th)*w1\nScore ∂log π/∂w₁ = (sin(th)*(-(om*w3)-cos(th)*w2-sin(th)*w1+u_sym))/sig^2\nScore ∂log π/∂w₂ = (cos(th)*(-(om*w3)-cos(th)*w2-sin(th)*w1+u_sym))/sig^2\nScore ∂log π/∂w₃ = (om*(-(om*w3)-cos(th)*w2-sin(th)*w1+u_sym))/sig^2"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## 3. REINFORCE Training\n\nFor each batch of episodes:\n1. Roll out trajectories with the stochastic policy\n2. Compute discounted returns $G_t$ using `np_discount`\n3. Evaluate the symbolic score function at each $(s_t, a_t)$\n4. Update: $w \\leftarrow w + \\alpha \\cdot \\frac{1}{N}\\sum_{\\text{episodes}} \\sum_t (G_t - b)\\,\\nabla_w \\log\\pi(a_t \\mid s_t)$\n\nA **baseline** $b$ (running average of returns) reduces gradient variance.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "np_seed(42)$\n\n/* Policy parameters */\nww : [0.0, 0.0, 0.0]$\nsigma_pol : 1.5$\n\n/* Hyperparameters */\nalpha_lr : 0.01$\ndisc : 0.97$\nn_epochs : 40$\nn_batch : 5$\nsigma_decay : 0.98$\nsigma_min : 0.3$\n\n/* Tracking */\nreturn_history : []$\nbaseline : 0.0$\nbeta_bl : 0.9$  /* Baseline smoothing */\n\nfor epoch : 1 thru n_epochs do (\n  batch_grad : [0.0, 0.0, 0.0],\n  batch_ret : 0.0,\n\n  for b : 1 thru n_batch do (\n    /* Random initial state near upright */\n    theta_v : 0.4 * float(random(2.0) - 1.0),\n    omega_v : 0.2 * float(random(2.0) - 1.0),\n\n    /* Pre-generate noise for episode */\n    noise_arr : np_randn(horizon),\n\n    /* Collect trajectory: rewards and score vectors */\n    rew_arr : np_zeros(horizon),\n    score_list : [],\n\n    for k : 0 thru horizon - 1 do (\n      /* Evaluate policy mean numerically */\n      mu_val : float(subst([w1=ww[1], w2=ww[2], w3=ww[3],\n                            th=theta_v, om=omega_v], mu_expr)),\n\n      /* Sample action from N(mu, sigma^2) */\n      u_raw : mu_val + sigma_pol * np_ref(noise_arr, k),\n      u_act : max(-u_max, min(u_max, float(u_raw))),\n\n      /* Record reward */\n      rwd : -(theta_v^2 + 0.1*omega_v^2 + 0.01*u_act^2),\n      np_set(rew_arr, k, float(rwd)),\n\n      /* Evaluate symbolic score function at current (s, a, w) */\n      sv : float(subst([w1=ww[1], w2=ww[2], w3=ww[3],\n                        th=theta_v, om=omega_v, u_sym=u_act, sig=sigma_pol],\n                       score_exprs)),\n      score_list : endcons(sv, score_list),\n\n      /* Euler step */\n      omega_new : omega_v + dt_sim * (-gv/lp * sin(theta_v) - bp*omega_v\n                                       + u_act/(mp*lp^2)),\n      theta_v : theta_v + dt_sim * omega_new,\n      omega_v : omega_new\n    ),\n\n    /* Discounted returns via np_discount */\n    returns_arr : np_discount(rew_arr, disc),\n    ep_return : np_ref(returns_arr, 0),\n\n    /* Accumulate policy gradient with baseline */\n    for k : 1 thru horizon do (\n      gt : np_ref(returns_arr, k - 1) - baseline,\n      batch_grad : batch_grad + gt * score_list[k]\n    ),\n\n    batch_ret : batch_ret + ep_return\n  ),\n\n  /* Update policy weights */\n  ww : float(ww + (alpha_lr / n_batch) * batch_grad),\n\n  /* Update baseline and exploration */\n  avg_ret : batch_ret / n_batch,\n  baseline : beta_bl * baseline + (1 - beta_bl) * avg_ret,\n  sigma_pol : max(sigma_min, sigma_pol * sigma_decay),\n\n  return_history : endcons(avg_ret, return_history),\n\n  if mod(epoch, 10) = 0 then\n    print(\"Epoch\", epoch, \": avg return =\", avg_ret, \" w =\", ww, \" σ =\", sigma_pol)\n)$\n\nprint(\"\\nFinal policy weights:\", ww)$\nprint(\"Final σ:\", sigma_pol)$",
+      "metadata": {},
+      "execution_count": 28,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Epoch 10 : avg return = -1.1228499119029394  w =\n     [-0.06962357795332622,-0.03471576530016185,-0.24400252473946557]  σ =\n     1.22560921033132\nEpoch 20 : avg return = -1.9153370442159179  w =\n     [-0.0551354254757563,0.07488989076414751,-0.47091682914399796]  σ =\n     1.0014119576326417\nEpoch 30 : avg return = -0.9594710608092523  w =\n     [-0.06638375109170443,0.10603589317257232,-0.6315931486653269]  σ =\n     0.8182264790736555\nEpoch 40 : avg return = -0.5878155531978437  w =\n     [-0.07025932327851005,0.06975946554922369,-0.7628291674318786]  σ =\n     0.6685506059264261\nnFinal policy weights:\n                      [-0.07025932327851005,0.06975946554922369,\n                       -0.7628291674318786]\nFinal σ: 0.6685506059264261"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## 4. Learning Curve",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Learning curve */\nepoch_list : makelist(i, i, 1, n_epochs)$\nax_draw2d(\n  line_width = 2,\n  color = royalblue,\n  name = \"Avg return\",\n  lines(epoch_list, return_history),\n  title = \"REINFORCE Learning Curve\",\n  xlabel = \"Epoch\",\n  ylabel = \"Average Return\",\n  grid = true\n)$",
+      "metadata": {},
+      "execution_count": 29,
+      "outputs": [
+        {
+          "data": {
+            "application/x-maxima-plotly": [
+              "{\"data\":[{\"x\":[1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0,16.0,17.0,18.0,19.0,20.0,21.0,22.0,23.0,24.0,25.0,26.0,27.0,28.0,29.0,30.0,31.0,32.0,33.0,34.0,35.0,36.0,37.0,38.0,39.0,40.0],\"y\":[-1.8848424553241057,-3.4198102599350433,-1.9077437465247442,-1.3175060413325854,-3.3991861286595615,-2.3948552928398326,-1.349555125554454,-1.8480225715477705,-2.54573599565781,-1.1228499119029394,-1.86647807413134,-2.0219172472169276,-1.5341851759548908,-1.3988128488244465,-1.8927661314775044,-1.5920747691821073,-1.3255655063278633,-2.0364195243399807,-1.434244565622181,-1.9153370442159179,-0.7733014342220379,-1.108475620464617,-2.2699618476548515,-1.5985425364323809,-1.3850056996413658,-1.6938313021838447,-1.7490565141265506,-1.07802615199987,-0.6737582109269796,-0.9594710608092523,-0.7947791563632609,-0.7244203337117717,-1.110606504332106,-1.6200126850289482,-1.0248529890000353,-0.8783993576868706,-0.9540597757299221,-0.7123229724210198,-0.5174683111302413,-0.5878155531978437],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"royalblue\",\"width\":2},\"name\":\"Avg return\"}],\"layout\":{\"title\":{\"text\":\"REINFORCE Learning Curve\"},\"width\":700,\"height\":450,\"plot_bgcolor\":\"white\",\"paper_bgcolor\":\"white\",\"xaxis\":{\"title\":{\"text\":\"Epoch\"},\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"yaxis\":{\"title\":{\"text\":\"Average Return\"},\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1}}}"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## 5. Evaluate the Learned Policy\n\nSimulate the trained deterministic policy ($\\sigma = 0$, use the mean action) from a challenging initial angle.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Simulate with learned deterministic policy */\ntest_theta0 : 0.4$  /* ~23 degrees */\ntest_omega0 : 0.0$\n\ntheta_v : test_theta0$\nomega_v : test_omega0$\n\ntheta_hist : [theta_v]$\nomega_hist : [omega_v]$\nu_hist : []$\ntime_hist : [0.0]$\n\nfor k : 1 thru horizon do (\n  mu_val : float(subst([w1=ww[1], w2=ww[2], w3=ww[3],\n                        th=theta_v, om=omega_v], mu_expr)),\n  u_act : max(-u_max, min(u_max, float(mu_val))),\n  u_hist : endcons(u_act, u_hist),\n\n  omega_new : omega_v + dt_sim * (-gv/lp * sin(theta_v) - bp*omega_v\n                                   + u_act/(mp*lp^2)),\n  theta_v : theta_v + dt_sim * omega_new,\n  omega_v : omega_new,\n\n  theta_hist : endcons(theta_v, theta_hist),\n  omega_hist : endcons(omega_v, omega_hist),\n  time_hist : endcons(k * dt_sim, time_hist)\n)$\n\n/* Convert to degrees for readability */\ntheta_deg : map(lambda([x], float(x * 180 / %pi)), theta_hist)$\n\nax_multi(2, 1,\n  ax_draw2d(\n    line_width = 2,\n    color = royalblue,\n    name = \"θ (deg)\",\n    lines(time_hist, theta_deg),\n    color = tomato,\n    dash = \"dash\",\n    name = \"ω (rad/s)\",\n    lines(time_hist, omega_hist),\n    title = sconcat(\"Learned Policy (θ₀ = \", test_theta0, \" rad)\"),\n    xlabel = \"Time (s)\",\n    ylabel = \"State\",\n    grid = true\n  ),\n  ax_draw2d(\n    line_width = 2,\n    color = forestgreen,\n    lines(rest(time_hist), u_hist),\n    title = \"Control Effort\",\n    xlabel = \"Time (s)\",\n    ylabel = \"Torque u\",\n    grid = true\n  )\n)$",
+      "metadata": {},
+      "execution_count": 30,
+      "outputs": [
+        {
+          "data": {
+            "application/x-maxima-plotly": [
+              "{\"data\":[{\"x\":[0.0,0.05,0.1,0.15000000000000002,0.2,0.25,0.30000000000000004,0.35000000000000003,0.4,0.45,0.5,0.55,0.6000000000000001,0.65,0.7000000000000001,0.75,0.8,0.8500000000000001,0.9,0.9500000000000001,1.0,1.05,1.1,1.1500000000000001,1.2000000000000002,1.25,1.3,1.35,1.4000000000000001,1.4500000000000002,1.5,1.55,1.6,1.6500000000000001,1.7000000000000002,1.75,1.8,1.85,1.9000000000000001,1.9500000000000002,2.0,2.0500000000000003,2.1,2.15,2.2,2.25,2.3000000000000003,2.35,2.4000000000000004,2.45,2.5,2.5500000000000003,2.6,2.6500000000000004,2.7,2.75,2.8000000000000003,2.85,2.9000000000000004,2.95,3.0,3.0500000000000003,3.1,3.1500000000000004,3.2,3.25,3.3000000000000003,3.35,3.4000000000000004,3.45,3.5,3.5500000000000003,3.6,3.6500000000000004,3.7,3.75,3.8000000000000003,3.85,3.9000000000000004,3.95,4.0],\"y\":[22.91831180523293,22.376393786004215,21.328326810574918,19.820042365108574,17.906365696645484,15.64962221913238,13.118092558963781,10.384306426545614,7.523191301071745,4.610120956760283,1.7189345493371224,-1.0799864779557775,-3.7214926514107374,-6.147210498768633,-8.306795540037317,-10.15886027533923,-11.671570844919236,-12.822929558800237,-13.600776660113752,-14.002552349874183,-14.03486004838507,-13.712866255105652,-13.05956399881346,-12.104918520533525,-10.88490773645855,-9.440467555566524,-7.81635365010848,-6.059936216822667,-4.219951285199156,-2.3452394511432733,-0.48350872168246095,1.3198390177526966,3.022779365850943,4.587600809818129,5.981678194723688,7.178067873577201,8.155918060745375,8.900696800976586,9.404246900209687,9.664681724817003,9.686138058710835,9.478402706924651,9.05642896633697,8.439758199616033,7.651861169872418,6.7194139052222654,5.671523762385264,4.538922872123312,3.353147896720949,2.1457265276892787,0.9473919302509025,-0.212653952151532,-1.307408846416175,-2.312653668234327,-3.20743805863928,-3.9744590646764366,-4.6003283860674244,-5.075727632413796,-5.395454496566076,-5.558365498591492,-5.567222979808088,-5.428455428341807,-5.151841164577692,-4.75012609115249,-4.2385867733066265,-3.634550656377889,-2.956885768475256,-2.2254727485616352,-1.4606723838171083,-0.6828019148744598,0.08836693623104282,0.8340760142089652,1.5370038730463316,2.1816346723170392,2.7545654531471073,3.244746581149106,3.6436523582394362,3.945380942399349,4.146684672211532,4.2469336078072395,4.248016547357638],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"royalblue\",\"width\":2},\"name\":\"θ (deg)\"},{\"x\":[0.0,0.05,0.1,0.15000000000000002,0.2,0.25,0.30000000000000004,0.35000000000000003,0.4,0.45,0.5,0.55,0.6000000000000001,0.65,0.7000000000000001,0.75,0.8,0.8500000000000001,0.9,0.9500000000000001,1.0,1.05,1.1,1.1500000000000001,1.2000000000000002,1.25,1.3,1.35,1.4000000000000001,1.4500000000000002,1.5,1.55,1.6,1.6500000000000001,1.7000000000000002,1.75,1.8,1.85,1.9000000000000001,1.9500000000000002,2.0,2.0500000000000003,2.1,2.15,2.2,2.25,2.3000000000000003,2.35,2.4000000000000004,2.45,2.5,2.5500000000000003,2.6,2.6500000000000004,2.7,2.75,2.8000000000000003,2.85,2.9000000000000004,2.95,3.0,3.0500000000000003,3.1,3.1500000000000004,3.2,3.25,3.3000000000000003,3.35,3.4000000000000004,3.45,3.5,3.5500000000000003,3.6,3.6500000000000004,3.7,3.75,3.8000000000000003,3.85,3.9000000000000004,3.95,4.0],\"y\":[0.0,-0.18916507422854145,-0.3658443900531952,-0.5264905926000911,-0.6679991736655381,-0.7877520811102048,-0.883670553636704,-0.9542713811211743,-0.9987175843625938,-1.0168533770087975,-1.0092144419688074,-0.9770077485912634,-0.9220595987709098,-0.8467352632156901,-0.7538373889391237,-0.646492551821912,-0.5280356013777977,-0.4019000085750163,-0.2715198599002947,-0.14024617281581567,-0.011277514255132987,0.11239703727423592,0.22804550766013293,0.33323413570521737,0.4258641018389179,0.5042047400933661,0.5669227015533357,0.613105345005306,0.6422759048782601,0.654397880607534,0.6498666202929394,0.6294871122308057,0.594438320787455,0.5462257280607871,0.48662480788388596,0.4176187806574275,0.34133410714654866,0.25997682431780395,0.17577214360723503,0.09090890352503284,0.007489673437092378,-0.07251331722915151,-0.14729662260422993,-0.2152587056015644,-0.2750279467141959,-0.32548549738720156,-0.3657826638339872,-0.3953522929218006,-0.4139135501705203,-0.42146956697080284,-0.41829768531720934,-0.4049324024425085,-0.38214154814480816,-0.35089663858700954,-0.3123386741603357,-0.2677408397461539,-0.21846960690990622,-0.16594564220487618,-0.11160572973067834,-0.056866667461332954,-0.003091844213263313,0.04843901336034575,0.09655659321327736,0.1402250137232109,0.17856090699632216,0.21084838082735852,0.23654967038118463,0.25531130778895056,0.2669656897049112,0.27152801674163013,0.26918871081225865,0.26030157345451765,0.24536811081411924,0.2250185981407302,0.19999057023013397,0.17110549229549302,0.13924438430905647,0.10532314481942562,0.07026825763535363,0.034993479955296385,3.78017215090419e-4],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"tomato\",\"width\":2,\"dash\":\"dash\"},\"name\":\"ω (rad/s)\"}],\"layout\":{\"title\":{\"text\":\"Learned Policy (θ₀ = 0.4 rad)\"},\"width\":700,\"height\":450,\"plot_bgcolor\":\"white\",\"paper_bgcolor\":\"white\",\"xaxis\":{\"title\":{\"text\":\"Time (s)\"},\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"yaxis\":{\"title\":{\"text\":\"State\"},\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1}}}"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## 6. Phase Portrait: Learned vs Uncontrolled\n\nCompare the learned policy's trajectory with free (uncontrolled) swinging from the same initial condition.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Uncontrolled trajectory for comparison */\ntheta_v : test_theta0$\nomega_v : test_omega0$\nfree_theta : [theta_v]$\nfree_omega : [omega_v]$\n\nfor k : 1 thru horizon do (\n  omega_new : omega_v + dt_sim * (-gv/lp * sin(theta_v) - bp*omega_v),\n  theta_v : theta_v + dt_sim * omega_new,\n  omega_v : omega_new,\n  free_theta : endcons(theta_v, free_theta),\n  free_omega : endcons(omega_v, free_omega)\n)$\n\nax_draw2d(\n  line_width = 2,\n  color = royalblue,\n  name = \"Learned policy\",\n  lines(theta_hist, omega_hist),\n  color = tomato,\n  dash = \"dash\",\n  name = \"Uncontrolled\",\n  lines(free_theta, free_omega),\n  marker_symbol = \"triangle-up-open\",\n  marker_size = 10,\n  color = black,\n  name = \"Start\",\n  points([[test_theta0, test_omega0]]),\n  marker_symbol = \"circle\",\n  color = forestgreen,\n  name = \"Goal\",\n  points([[0, 0]]),\n  title = \"Phase Portrait: θ vs ω\",\n  xlabel = \"θ (rad)\",\n  ylabel = \"ω (rad/s)\",\n  grid = true\n)$",
+      "metadata": {},
+      "execution_count": 31,
+      "outputs": [
+        {
+          "data": {
+            "application/x-maxima-plotly": [
+              "{\"data\":[{\"x\":[0.4,0.39054174628857297,0.3722495267859132,0.3459249971559087,0.3125250384726318,0.27313743441712157,0.22895390673528637,0.18124033767922765,0.13130445846109795,0.08046178961065807,0.030001067512217698,-0.018849319917345474,-0.06495229985589096,-0.10728906301667547,-0.14498093246363164,-0.17730556005472725,-0.20370734012361713,-0.22380234055236795,-0.2373783335473827,-0.24439064218817347,-0.24495451790093012,-0.2393346660372183,-0.22793239065421167,-0.21127068386895081,-0.1899774787770049,-0.1647672417723366,-0.1364211066946698,-0.10576583944440451,-0.07365204420049151,-0.04093215017011481,-0.00843881915546784,0.023035536456072446,0.052757452495445195,0.08006873889848455,0.10439997929267886,0.12528091832555024,0.14234762368287768,0.15534646489876788,0.16413507207912964,0.16868051725538127,0.16905500092723588,0.1654293350657783,0.1580645039355668,0.1473015686554886,0.1335501713197788,0.11727589645041873,0.09898676325871937,0.07921914861262934,0.058523471104103324,0.03744999275556318,0.016535108489702716,-0.003711511632422712,-0.02281858903966312,-0.0403634209690136,-0.055980354677030386,-0.06936739666433808,-0.0802908770098334,-0.0885881591200772,-0.09416844560661111,-0.09701177897967776,-0.09716637119034092,-0.09474442052232364,-0.08991659086165978,-0.08290534017549923,-0.07397729482568313,-0.0634348757843152,-0.051607392265255965,-0.038841826875808436,-0.025493542390562875,-0.011917141553481368,0.0015422939871315659,0.014557372659857449,0.02682577820056341,0.03807670810759992,0.04807623661910662,0.05663151123388127,0.0635937304493341,0.06885988769030538,0.07237330057207306,0.07412297456983788,0.0741418754305924],\"y\":[0.0,-0.18916507422854145,-0.3658443900531952,-0.5264905926000911,-0.6679991736655381,-0.7877520811102048,-0.883670553636704,-0.9542713811211743,-0.9987175843625938,-1.0168533770087975,-1.0092144419688074,-0.9770077485912634,-0.9220595987709098,-0.8467352632156901,-0.7538373889391237,-0.646492551821912,-0.5280356013777977,-0.4019000085750163,-0.2715198599002947,-0.14024617281581567,-0.011277514255132987,0.11239703727423592,0.22804550766013293,0.33323413570521737,0.4258641018389179,0.5042047400933661,0.5669227015533357,0.613105345005306,0.6422759048782601,0.654397880607534,0.6498666202929394,0.6294871122308057,0.594438320787455,0.5462257280607871,0.48662480788388596,0.4176187806574275,0.34133410714654866,0.25997682431780395,0.17577214360723503,0.09090890352503284,0.007489673437092378,-0.07251331722915151,-0.14729662260422993,-0.2152587056015644,-0.2750279467141959,-0.32548549738720156,-0.3657826638339872,-0.3953522929218006,-0.4139135501705203,-0.42146956697080284,-0.41829768531720934,-0.4049324024425085,-0.38214154814480816,-0.35089663858700954,-0.3123386741603357,-0.2677408397461539,-0.21846960690990622,-0.16594564220487618,-0.11160572973067834,-0.056866667461332954,-0.003091844213263313,0.04843901336034575,0.09655659321327736,0.1402250137232109,0.17856090699632216,0.21084838082735852,0.23654967038118463,0.25531130778895056,0.2669656897049112,0.27152801674163013,0.26918871081225865,0.26030157345451765,0.24536811081411924,0.2250185981407302,0.19999057023013397,0.17110549229549302,0.13924438430905647,0.10532314481942562,0.07026825763535363,0.034993479955296385,3.78017215090419e-4],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"royalblue\",\"width\":2},\"name\":\"Learned policy\"},{\"x\":[0.4,0.39044951515488036,0.3716124662657895,0.34396412612729277,0.30818366646572204,0.2651429806126011,0.21589078926014343,0.16163117164519486,0.10369608479805564,0.043512082146332204,-0.01743779760434183,-0.07765528764336682,-0.13566910785318828,-0.19007577176249127,-0.23957681310534645,-0.2830107740352871,-0.31937901010884956,-0.3478651182333315,-0.36784842986953104,-0.3789124233252608,-0.3808490477792011,-0.37365983039185613,-0.3575543169810954,-0.33294596679184035,-0.3004451862627965,-0.2608488467383211,-0.21512547237624163,-0.16439536288653428,-0.10990524358891696,-0.0529975719273913,0.004924718461683915,0.062436619166745096,0.11813069698122936,0.1706558825968096,0.21875339242287878,0.261288173507002,0.29727485475799287,0.3258978455049053,0.346525809536402,0.35872115441272967,0.3622453572263452,0.35706089788513573,0.3433303333154934,0.32141269530178634,0.29185702074347636,0.2553925166381156,0.21291470170110555,0.16546690596873112,0.11421676588972227,0.06042779677766295,0.005426682550595592,-0.049432514841668426,-0.10280557749739508,-0.15339490698166597,-0.19998401572520824,-0.2414681977880583,-0.27688033282182417,-0.305411347956552,-0.326425395814502,-0.3394702056113933,-0.3442832709786691,-0.3407945416551381,-0.32912611698318994,-0.30958915775666423,-0.2826779165221851,-0.2490605154067735,-0.2095659464457772,-0.16516678306604965,-0.11695729234077362,-0.06612700643006744,-0.0139302887948956,0.03834707453551691,0.08942281952061629,0.13805301278885973,0.18306504933731393,0.22338739029484306,0.25807499549295854,0.28632989776528184,0.307516845062603,0.32117431408997105,0.32702141816833963],\"y\":[0.0,-0.1910096969023931,-0.37674097778181714,-0.5529668027699343,-0.7156091932314147,-0.860813717062419,-0.9850438270491535,-1.0851923522989715,-1.1587017369427843,-1.2036800530344687,-1.2189975950134806,-1.2043498007804996,-1.160276404196429,-1.0881332781860595,-0.9900208268571034,-0.868679218598813,-0.7273647214712485,-0.5697221624896389,-0.3996662327239904,-0.22127986911459518,-0.03873248907880533,0.14378434774689947,0.3221102682152138,0.4921670037851016,0.650015610580877,0.7919267904895075,0.9144674872415893,1.0146021897941468,1.0898023859523465,1.138153433230513,1.1584458077815043,1.1502380141012236,1.113881556289685,1.0505037123116052,0.961950196521383,0.8506956216824645,0.7197336250198173,0.5724598149382492,0.41255928062993386,0.24390689752655395,0.07048405627231127,-0.10368918682418996,-0.27461129139284635,-0.4383527602741408,-0.5911134911662,-0.7292900821072152,-0.8495562987402003,-0.9489559146474883,-1.025002801580177,-1.0757793822411863,-1.100022284541347,-1.0971839478452803,-1.0674612531145329,-1.0117865896854177,-0.9317821748708457,-0.8296836412570013,-0.7082427006753174,-0.5706203026945563,-0.42028095715899916,-0.26089619593782687,-0.096261307345517,0.06977458647062063,0.23336849343896393,0.3907391845305138,0.5382248246895827,0.6723480223082315,0.7898913792199265,0.887983267594551,0.9641898145055204,1.0166057182141237,1.0439343527034368,1.0455472666082501,1.0215148997019874,0.9726038653648688,0.9002407309690841,0.8064468191505821,0.6937521039623094,0.5650980454464657,0.42373894594642314,0.27314938054736015,0.11694208156737193],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"tomato\",\"width\":2,\"dash\":\"dash\"},\"name\":\"Uncontrolled\"},{\"x\":[0.4],\"y\":[0.0],\"type\":\"scatter\",\"mode\":\"markers\",\"marker\":{\"color\":\"black\",\"size\":10,\"symbol\":\"triangle-up-open\"},\"name\":\"Start\"},{\"x\":[0.0],\"y\":[0.0],\"type\":\"scatter\",\"mode\":\"markers\",\"marker\":{\"color\":\"forestgreen\",\"size\":10},\"name\":\"Goal\"}],\"layout\":{\"title\":{\"text\":\"Phase Portrait: θ vs ω\"},\"width\":700,\"height\":450,\"plot_bgcolor\":\"white\",\"paper_bgcolor\":\"white\",\"xaxis\":{\"title\":{\"text\":\"θ (rad)\"},\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"yaxis\":{\"title\":{\"text\":\"ω (rad/s)\"},\"showgrid\":true,\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1}}}"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Key Takeaways\n\n- **Symbolic score function**: Maxima's `diff()` computes $\\nabla_w \\log\\pi$ exactly — no backpropagation, no finite differences, no autodiff framework\n- **REINFORCE**: the simplest policy gradient method — sample trajectories, weight gradients by returns, update\n- **Baseline reduces variance**: subtracting a running-average baseline from returns stabilizes learning without introducing bias\n- **`np_discount`**: computes discounted returns $G_t = r_t + \\gamma r_{t+1} + \\gamma^2 r_{t+2} + \\cdots$ in a single reverse pass\n- **Maxima's sweet spot**: small parametric policies where exact symbolic gradients outweigh the overhead of a full deep learning stack\n\nFor harder problems (swing-up from arbitrary angles), combine with the Cross-Entropy Method for initialization or use `np_minimize` with `np_compile_gradient` for deterministic policy optimization.",
+      "metadata": {}
+    }
+  ]
+}

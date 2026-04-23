@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"numerics-optimize\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 14,
+      "execution_count": 27,
       "outputs": []
     },
     {
@@ -31,7 +31,7 @@
       "cell_type": "code",
       "source": "/* Per-observation log-likelihood */\nll_i(mu, sigma, x_i) := -log(sigma) - (x_i - mu)^2 / (2 * sigma^2)$\n\n/* Score function: derivatives of ll_i */\nscore_mu : diff(ll_i(mu, sigma, x[i]), mu);\nscore_sigma : diff(ll_i(mu, sigma, x[i]), sigma);",
       "metadata": {},
-      "execution_count": 15,
+      "execution_count": 28,
       "outputs": [
         {
           "name": "stdout",
@@ -46,7 +46,7 @@
               "{{\\left(x_{i}-\\mu\\right)^2}\\over{\\sigma^3}}-{{1}\\over{\\sigma}}"
             ]
           },
-          "execution_count": 15,
+          "execution_count": 28,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -61,7 +61,7 @@
       "cell_type": "code",
       "source": "/* Generate data from N(3, 2^2) */\nn_norm : 200$\ndata_norm : np_add(3.0, np_scale(2.0, np_randn([n_norm])))$\n\n/* Closed-form MLE */\nmu_cf : np_mean(data_norm)$\nsigma_cf : sqrt(np_mean(np_pow(np_sub(data_norm, mu_cf), 2)))$\nprint(\"Closed-form: mu =\", mu_cf, \", sigma =\", sigma_cf)$\n\n/* Numeric MLE via np_minimize (minimize negative log-likelihood) */\n/* We optimize [mu, log(sigma)] to keep sigma > 0 */\nnll_norm(p) := block([mu_v, sig_v],\n  mu_v : np_ref(p, 0),\n  sig_v : exp(np_ref(p, 1)),\n  n_norm * log(sig_v)\n    + np_sum(np_pow(np_sub(data_norm, mu_v), 2)) / (2 * sig_v^2))$\n\nnll_norm_grad(p) := block([mu_v, log_sig, sig_v, res],\n  mu_v : np_ref(p, 0),\n  log_sig : np_ref(p, 1),\n  sig_v : exp(log_sig),\n  res : np_sub(data_norm, mu_v),\n  ndarray([\n    -np_sum(res) / sig_v^2,\n    n_norm - np_sum(np_pow(res, 2)) / sig_v^2  /* chain rule: d/d(log_sig) */\n  ]))$\n\n[p_norm, _, _] : np_minimize(nll_norm, nll_norm_grad, ndarray([0.0, 0.0]))$\nprint(\"np_minimize: mu =\", np_ref(p_norm, 0),\n      \", sigma =\", exp(np_ref(p_norm, 1)))$",
       "metadata": {},
-      "execution_count": 16,
+      "execution_count": 29,
       "outputs": [
         {
           "name": "stdout",
@@ -76,7 +76,7 @@
       "cell_type": "code",
       "source": "mu_fit : np_ref(p_norm, 0)$\nsig_fit : exp(np_ref(p_norm, 1))$\nax_draw2d(\n  color=\"steelblue\",\n  ax_histogram(np_to_list(data_norm)),\n  title=\"Normal MLE: Histogram of Data\",\n  xlabel=\"x\", ylabel=\"Count\", grid=true\n)$",
       "metadata": {},
-      "execution_count": 17,
+      "execution_count": 30,
       "outputs": [
         {
           "data": {
@@ -98,7 +98,7 @@
       "cell_type": "code",
       "source": "/* Symbolic log-likelihood for Gamma */\nll_gamma_i(alpha, beta, x_i) := alpha*log(beta) - log(gamma(alpha))\n  + (alpha - 1)*log(x_i) - beta*x_i$\n\n/* Score function */\nscore_gamma_alpha : diff(ll_gamma_i(alpha, beta, x[i]), alpha);\nscore_gamma_beta : diff(ll_gamma_i(alpha, beta, x[i]), beta);",
       "metadata": {},
-      "execution_count": 18,
+      "execution_count": 31,
       "outputs": [
         {
           "name": "stdout",
@@ -113,7 +113,7 @@
               "{{\\alpha}\\over{\\beta}}-x_{i}"
             ]
           },
-          "execution_count": 18,
+          "execution_count": 31,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -128,7 +128,7 @@
       "cell_type": "code",
       "source": "/* Finite-difference gradient helper */\nfd_gradient(f, x, eps) := block([nd, g],\n  nd : np_size(x), g : np_zeros([nd]),\n  for j : 0 thru nd - 1 do block([xp, xm],\n    xp : np_copy(x), np_set(xp, j, np_ref(x, j) + eps),\n    xm : np_copy(x), np_set(xm, j, np_ref(x, j) - eps),\n    np_set(g, j, (f(xp) - f(xm)) / (2 * eps))),\n  g)$\n\n/* Generate Gamma(3, 2) data via sum-of-exponentials */\nn_gam : 300$\ndata_gam : np_zeros([n_gam])$\nfor k : 1 thru 3 do\n  data_gam : np_add(data_gam,\n    np_scale(0.5, np_neg(np_log(np_rand([n_gam])))))$\n\n/* NLL with log-transforms for positivity */\nnll_gam(p) := block([a, b, sum_log, sum_x],\n  a : exp(np_ref(p, 0)),\n  b : exp(np_ref(p, 1)),\n  sum_log : np_sum(np_log(data_gam)),\n  sum_x : np_sum(data_gam),\n  -(n_gam * (a*log(b) - log(gamma(a))) + (a - 1)*sum_log - b*sum_x))$\n\nnll_gam_grad(p) := fd_gradient(nll_gam, p, 1e-5)$\n\n[p_gam, _, _] : np_minimize(nll_gam, nll_gam_grad,\n  ndarray([0.5, 0.5]), 1e-8, 200)$\nprint(\"Fitted: alpha =\", exp(np_ref(p_gam, 0)),\n      \", beta =\", exp(np_ref(p_gam, 1)))$\nprint(\"True:   alpha = 3, beta = 2\")$",
       "metadata": {},
-      "execution_count": 19,
+      "execution_count": 32,
       "outputs": [
         {
           "name": "stdout",
@@ -143,7 +143,7 @@
       "cell_type": "code",
       "source": "ax_draw2d(\n  color=\"steelblue\",\n  ax_histogram(np_to_list(data_gam)),\n  title=\"Gamma MLE: Histogram of Data\",\n  xlabel=\"x\", ylabel=\"Count\", grid=true\n)$",
       "metadata": {},
-      "execution_count": 20,
+      "execution_count": 33,
       "outputs": [
         {
           "data": {
@@ -165,7 +165,7 @@
       "cell_type": "code",
       "source": "/* Hessian of per-observation log-likelihood */\nH_11 : diff(ll_i(mu, sigma, x[i]), mu, 2);\nH_12 : diff(diff(ll_i(mu, sigma, x[i]), mu), sigma);\nH_22 : diff(ll_i(mu, sigma, x[i]), sigma, 2);",
       "metadata": {},
-      "execution_count": 21,
+      "execution_count": 34,
       "outputs": [
         {
           "name": "stdout",
@@ -180,7 +180,7 @@
               "{{1}\\over{\\sigma^2}}-{{3\\,\\left(x_{i}-\\mu\\right)^2}\\over{\\sigma^4}}"
             ]
           },
-          "execution_count": 21,
+          "execution_count": 34,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -190,7 +190,7 @@
       "cell_type": "code",
       "source": "/* Fisher information: -E[H]\n   Using E[(x-mu)^2] = sigma^2, E[x-mu] = 0 */\nI_11 : ratsimp(-subst([(x[i] - mu)^2 = sigma^2, x[i] - mu = 0], H_11));\nI_22 : ratsimp(-subst([(x[i] - mu)^2 = sigma^2, x[i] - mu = 0], H_22));\nprint(\"Fisher information per observation:\")$\nprint(\"  I_11 =\", I_11, \", I_22 =\", I_22)$\n\n/* Standard errors: se = 1/sqrt(n * I_jj) */\nse_mu : 1 / sqrt(n_norm * float(subst(sigma = sigma_cf, I_11)))$\nse_sigma : 1 / sqrt(n_norm * float(subst(sigma = sigma_cf, ratsimp(I_22))))$\nprint(\"95% CI for mu:\", mu_cf, \"+/-\", 1.96*se_mu)$\nprint(\"95% CI for sigma:\", sigma_cf, \"+/-\", 1.96*se_sigma)$",
       "metadata": {},
-      "execution_count": 22,
+      "execution_count": 35,
       "outputs": [
         {
           "name": "stdout",
@@ -210,7 +210,7 @@
       "cell_type": "code",
       "source": "/* Sigmoid and its derivative */\nsigmoid_sym(z) := 1 / (1 + exp(-z))$\nratsimp(diff(sigmoid_sym(z), z));",
       "metadata": {},
-      "execution_count": 23,
+      "execution_count": 36,
       "outputs": [
         {
           "data": {
@@ -218,7 +218,7 @@
               "{{e^{z}}\\over{e^{2\\,z}+2\\,e^{z}+1}}"
             ]
           },
-          "execution_count": 23,
+          "execution_count": 36,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -228,13 +228,13 @@
       "cell_type": "code",
       "source": "/* Generate 2D classification data */\nn_lr : 100$\nx1_lr : np_randn([n_lr])$\nx2_lr : np_randn([n_lr])$\n\n/* True boundary: 1 + 2*x1 - 1.5*x2 > 0 */\nz_true : np_add(1.0, np_add(np_scale(2.0, x1_lr), np_scale(-1.5, x2_lr)))$\ny_lr : np_map(lambda([v], if v > 0 then 1.0 else 0.0), z_true)$\n\n/* Design matrix: [1, x1, x2] */\nX_lr : np_hstack(np_ones([n_lr, 1]),\n                 np_reshape(x1_lr, [n_lr, 1]),\n                 np_reshape(x2_lr, [n_lr, 1]))$\ny_lr_col : np_reshape(y_lr, [n_lr, 1])$\n\n/* Numerically stable sigmoid: clip input to avoid exp overflow */\nnp_sigmoid(z) := np_div(1.0, np_add(1.0, np_exp(np_neg(np_clip(z, -500.0, 500.0)))))$\n\n/* Negative log-likelihood */\nlr_nll(w) := block([z, p, p_safe],\n  z : np_matmul(X_lr, w),\n  p : np_sigmoid(z),\n  p_safe : np_clip(p, 1.0e-10, 1.0 - 1.0e-10),\n  -np_mean(np_add(\n    np_mul(y_lr_col, np_log(p_safe)),\n    np_mul(np_sub(1.0, y_lr_col),\n           np_log(np_sub(1.0, p_safe))))))$\n\nlr_grad(w) := block([z, p],\n  z : np_matmul(X_lr, w),\n  p : np_sigmoid(z),\n  np_scale(1.0 / n_lr,\n    np_matmul(np_transpose(X_lr), np_sub(p, y_lr_col))))$\n\n[w_lr, nll_lr, conv_lr] : np_minimize(lr_nll, lr_grad, np_zeros([3, 1]))$\nprint(\"Fitted w =\", np_to_list(np_flatten(w_lr)))$\nprint(\"True:  w = [1, 2, -1.5]\")$",
       "metadata": {},
-      "execution_count": 24,
+      "execution_count": 37,
       "outputs": [
         {
           "name": "stdout",
           "output_type": "stream",
           "text": [
-            "*************************************************\n  N=    3   NUMBER OF CORRECTIONS= 3\n       INITIAL VALUES\n F=  6.931471805599458D-01   GNORM=  3.761164029443863D-01\n*************************************************\n   I  NFN     FUNC                    GNORM                   STEPLENGTH\n   1    2     4.210458639576212D-01   1.863708524500784D-01   2.658751365725103D+00\n  28   32     6.102377849729093D-05   1.351944840873941D-05   1.000000000000000D+00\n THE MINIMIZATION TERMINATED WITHOUT DETECTING ERRORS.\n IFLAG = 0\nFitted w = [994.9408636632331,2000.2701547726429,-1504.0625752993801]\nTrue:  w = [1, 2, -1.5]"
+            "define: warning: redefining the built-in function np_sigmoid\n*************************************************\n  N=    3   NUMBER OF CORRECTIONS= 3\n       INITIAL VALUES\n F=  6.931471805599458D-01   GNORM=  3.761164029443863D-01\n*************************************************\n   I  NFN     FUNC                    GNORM                   STEPLENGTH\n   1    2     4.210458639576212D-01   1.863708524500784D-01   2.658751365725103D+00\n  28   32     6.102377849729093D-05   1.351944840873941D-05   1.000000000000000D+00\n THE MINIMIZATION TERMINATED WITHOUT DETECTING ERRORS.\n IFLAG = 0\nFitted w = [994.9408636632331,2000.2701547726429,-1504.0625752993801]\nTrue:  w = [1, 2, -1.5]"
           ]
         }
       ]
@@ -243,7 +243,7 @@
       "cell_type": "code",
       "source": "/* Decision boundary: w0 + w1*x1 + w2*x2 = 0  =>  x2 = -(w0 + w1*x1)/w2 */\nw0 : np_ref(w_lr, 0, 0)$  w1 : np_ref(w_lr, 1, 0)$  w2 : np_ref(w_lr, 2, 0)$\n\n/* Separate classes using boolean mask + extract */\nmask_pos : np_greater(y_lr, 0.5)$\nmask_neg : np_logical_not(mask_pos)$\n\nax_draw2d(\n  color=\"blue\", marker_size=5, name=\"Class 1\",\n  points(np_to_list(np_extract(mask_pos, x1_lr)),\n         np_to_list(np_extract(mask_pos, x2_lr))),\n  color=\"red\", marker_size=5, name=\"Class 0\",\n  points(np_to_list(np_extract(mask_neg, x1_lr)),\n         np_to_list(np_extract(mask_neg, x2_lr))),\n  color=\"black\", line_width=2, name=\"Decision boundary\",\n  explicit(-(w0 + w1*u) / w2, u, -3, 3),\n  title=\"Logistic Regression MLE\",\n  xlabel=\"x1\", ylabel=\"x2\", grid=true, showlegend=true\n)$",
       "metadata": {},
-      "execution_count": 25,
+      "execution_count": 38,
       "outputs": [
         {
           "data": {
@@ -265,7 +265,7 @@
       "cell_type": "code",
       "source": "/* Observed information: X^T diag(p*(1-p)) X */\np_hat : np_sigmoid(np_matmul(X_lr, w_lr))$\nW_vec : np_mul(p_hat, np_sub(1.0, p_hat))$\n\n/* X_weighted = diag(W) * X, implemented as element-wise scaling */\nX_w : np_hstack(\n  np_mul(W_vec, np_reshape(np_col(X_lr, 0), [n_lr, 1])),\n  np_mul(W_vec, np_reshape(np_col(X_lr, 1), [n_lr, 1])),\n  np_mul(W_vec, np_reshape(np_col(X_lr, 2), [n_lr, 1])))$\ninfo_mat : np_matmul(np_transpose(X_lr), X_w)$\ncov_w : np_inv(info_mat)$\n\nprint(\"Coefficient standard errors:\")$\nfor j : 0 thru 2 do\n  print(\"  se(w\", j, \") =\", sqrt(np_ref(cov_w, j, j)))$",
       "metadata": {},
-      "execution_count": 26,
+      "execution_count": 39,
       "outputs": [
         {
           "name": "stdout",

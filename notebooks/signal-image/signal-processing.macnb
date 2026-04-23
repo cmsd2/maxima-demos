@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 15,
+      "execution_count": 29,
       "outputs": []
     },
     {
@@ -31,7 +31,7 @@
       "cell_type": "code",
       "source": "/* Signal parameters */\nN : 256$\nfs : 256$           /* sampling rate (Hz) */\ndt : 1.0 / fs$\n\n/* Time vector: 0 to (N-1)/fs */\nt : np_scale(dt, np_arange(N))$\n\n/* Three sinusoidal components */\nf1 : 5$   f2 : 20$   f3 : 50$\nx1 : np_scale(1.0, np_sin(np_scale(2 * float(%pi) * f1, t)))$\nx2 : np_scale(0.5, np_sin(np_scale(2 * float(%pi) * f2, t)))$\nx3 : np_scale(0.3, np_sin(np_scale(2 * float(%pi) * f3, t)))$\n\n/* Composite signal (no noise for clarity) */\nsignal : np_add(np_add(x1, x2), x3)$\n\nprint(\"Signal: N =\", N, \", fs =\", fs, \"Hz\")$\nprint(\"Components:\", f1, \"Hz (amp 1.0),\", f2, \"Hz (amp 0.5),\", f3, \"Hz (amp 0.3)\")$",
       "metadata": {},
-      "execution_count": 16,
+      "execution_count": 30,
       "outputs": [
         {
           "name": "stdout",
@@ -44,9 +44,9 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Plot the composite signal (first 128 samples = 0.5 seconds) */\nt_list : makelist(np_ref(t, i), i, 0, 127)$\nsig_list : makelist(np_ref(signal, i), i, 0, 127)$\n\nax_draw2d(\n  color=\"steelblue\", line_width=1.5,\n  lines(t_list, sig_list),\n  title=\"Composite Signal (5 + 20 + 50 Hz)\",\n  xlabel=\"Time (s)\", ylabel=\"Amplitude\",\n  grid=true\n)$",
+      "source": "/* Plot the composite signal (first 128 samples = 0.5 seconds) */\nt_list : np_to_list(np_slice(t, [0, 128]))$\nsig_list : np_to_list(np_slice(signal, [0, 128]))$\n\nax_draw2d(\n  color=\"steelblue\", line_width=1.5,\n  lines(t_list, sig_list),\n  title=\"Composite Signal (5 + 20 + 50 Hz)\",\n  xlabel=\"Time (s)\", ylabel=\"Amplitude\",\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 17,
+      "execution_count": 31,
       "outputs": [
         {
           "data": {
@@ -66,9 +66,9 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Compute FFT */\nF : np_fft(signal)$\n\n/* Magnitude spectrum (only positive frequencies: bins 0..N/2) */\nmag : np_abs(F)$\nhalf_N : N / 2$\n\n/* Frequency axis */\nfreq_list : makelist(i * fs / N, i, 0, half_N)$\nmag_list : makelist(np_ref(mag, i), i, 0, half_N)$\n\n/* Normalize: divide by N to get true amplitudes, multiply by 2 for one-sided */\nnorm_mag_list : makelist(2 * m / N, m, mag_list)$\n/* DC component should not be doubled */\nnorm_mag_list[1] : mag_list[1] / N$\n\nprint(\"DC component:\", norm_mag_list[1])$\nprint(\"Peak at 5 Hz:\", norm_mag_list[f1 + 1])$\nprint(\"Peak at 20 Hz:\", norm_mag_list[f2 + 1])$\nprint(\"Peak at 50 Hz:\", norm_mag_list[f3 + 1])$",
+      "source": "/* Compute FFT */\nF : np_fft(signal)$\n\n/* Magnitude spectrum (only positive frequencies: bins 0..N/2) */\nmag : np_abs(F)$\nhalf_N : N / 2$\n\n/* Frequency axis */\nfreq_list : np_to_list(np_scale(float(fs) / N, np_arange(half_N + 1)))$\nmag_pos : np_slice(mag, [0, half_N + 1])$\n\n/* Normalize: divide by N to get true amplitudes, multiply by 2 for one-sided */\nnorm_mag : np_scale(2.0 / N, mag_pos)$\n/* DC component should not be doubled */\nnp_set(norm_mag, 0, np_ref(mag_pos, 0) / N)$\nnorm_mag_list : np_to_list(norm_mag)$\nmag_list : np_to_list(mag_pos)$\n\nprint(\"DC component:\", norm_mag_list[1])$\nprint(\"Peak at 5 Hz:\", norm_mag_list[f1 + 1])$\nprint(\"Peak at 20 Hz:\", norm_mag_list[f2 + 1])$\nprint(\"Peak at 50 Hz:\", norm_mag_list[f3 + 1])$",
       "metadata": {},
-      "execution_count": 18,
+      "execution_count": 32,
       "outputs": [
         {
           "name": "stdout",
@@ -83,7 +83,7 @@
       "cell_type": "code",
       "source": "/* Plot magnitude spectrum */\nax_draw2d(\n  color=\"crimson\", line_width=1.5,\n  lines(freq_list, norm_mag_list),\n  title=\"One-Sided Magnitude Spectrum\",\n  xlabel=\"Frequency (Hz)\", ylabel=\"Amplitude\",\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 19,
+      "execution_count": 33,
       "outputs": [
         {
           "data": {
@@ -105,7 +105,7 @@
       "cell_type": "code",
       "source": "/* Round-trip: ifft(fft(signal)) should equal signal */\nrecovered : np_real(np_ifft(F))$\n\n/* Max absolute error */\nerr : np_max(np_abs(np_sub(signal, recovered)))$\nprint(\"Max round-trip error:\", err)$",
       "metadata": {},
-      "execution_count": 20,
+      "execution_count": 34,
       "outputs": [
         {
           "name": "stdout",
@@ -125,7 +125,7 @@
       "cell_type": "code",
       "source": "/* Symbolic: impulse response of ideal low-pass filter.\n   Use a concrete cutoff to avoid interactive assume() questions. */\nh_ideal : sin(2 * %pi * 30 * tau) / (%pi * tau);\nprint(\"Ideal LP impulse response h(t) =\", h_ideal)$\n\n/* Verify its Fourier transform at a frequency inside the passband */\nassume(tau > 0)$\nH_at_5 : 2 * integrate(h_ideal * cos(2 * %pi * 5 * tau), tau, 0, inf);\nprint(\"H(f=5) =\", H_at_5, \"(should be 1 for f < 30)\")$",
       "metadata": {},
-      "execution_count": 21,
+      "execution_count": 35,
       "outputs": [
         {
           "name": "stdout",
@@ -140,7 +140,7 @@
       "cell_type": "code",
       "source": "/* Frequency-domain low-pass filter: zero bins above 30 Hz */\nf_cutoff : 30$\nbin_cutoff : round(f_cutoff * N / fs)$\nprint(\"Cutoff bin:\", bin_cutoff, \"out of\", N)$\n\n/* Copy FFT result, then zero high-frequency bins */\nF_filtered : np_copy(F)$\nfor k : bin_cutoff + 1 thru N - bin_cutoff - 1 do\n  np_set(F_filtered, k, 0.0)$\n\n/* Inverse FFT to get filtered signal */\nfiltered : np_real(np_ifft(F_filtered))$\n\nprint(\"Filtered signal: 50 Hz component should be removed\")$",
       "metadata": {},
-      "execution_count": 22,
+      "execution_count": 36,
       "outputs": [
         {
           "name": "stdout",
@@ -153,9 +153,9 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Plot original vs filtered signal */\nfilt_list : makelist(np_ref(filtered, i), i, 0, 127)$\n\nax_draw2d(\n  color=\"steelblue\", line_width=1, name=\"Original\",\n  lines(t_list, sig_list),\n  color=\"crimson\", line_width=2, name=\"Low-pass filtered (< 30 Hz)\",\n  lines(t_list, filt_list),\n  title=\"Frequency-Domain Low-Pass Filter\",\n  xlabel=\"Time (s)\", ylabel=\"Amplitude\",\n  showlegend=true, grid=true\n)$",
+      "source": "/* Plot original vs filtered signal */\nfilt_list : np_to_list(np_slice(filtered, [0, 128]))$\n\nax_draw2d(\n  color=\"steelblue\", line_width=1, name=\"Original\",\n  lines(t_list, sig_list),\n  color=\"crimson\", line_width=2, name=\"Low-pass filtered (< 30 Hz)\",\n  lines(t_list, filt_list),\n  title=\"Frequency-Domain Low-Pass Filter\",\n  xlabel=\"Time (s)\", ylabel=\"Amplitude\",\n  showlegend=true, grid=true\n)$",
       "metadata": {},
-      "execution_count": 23,
+      "execution_count": 37,
       "outputs": [
         {
           "data": {
@@ -170,9 +170,9 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Verify: FFT of filtered signal should have no energy above cutoff */\nF2 : np_fft(filtered)$\nmag2 : np_abs(F2)$\nnorm2 : makelist(2 * np_ref(mag2, i) / N, i, 0, half_N)$\nnorm2[1] : np_ref(mag2, 0) / N$\n\nax_draw2d(\n  color=\"gray\", line_width=1, name=\"Original spectrum\",\n  lines(freq_list, norm_mag_list),\n  color=\"crimson\", line_width=2, name=\"Filtered spectrum\",\n  lines(freq_list, norm2),\n  title=\"Spectrum After Low-Pass Filtering\",\n  xlabel=\"Frequency (Hz)\", ylabel=\"Amplitude\",\n  showlegend=true, grid=true\n)$",
+      "source": "/* Verify: FFT of filtered signal should have no energy above cutoff */\nF2 : np_fft(filtered)$\nmag2 : np_abs(F2)$\nnorm2_arr : np_scale(2.0 / N, np_slice(mag2, [0, half_N + 1]))$\nnp_set(norm2_arr, 0, np_ref(mag2, 0) / N)$\nnorm2 : np_to_list(norm2_arr)$\n\nax_draw2d(\n  color=\"gray\", line_width=1, name=\"Original spectrum\",\n  lines(freq_list, norm_mag_list),\n  color=\"crimson\", line_width=2, name=\"Filtered spectrum\",\n  lines(freq_list, norm2),\n  title=\"Spectrum After Low-Pass Filtering\",\n  xlabel=\"Frequency (Hz)\", ylabel=\"Amplitude\",\n  showlegend=true, grid=true\n)$",
       "metadata": {},
-      "execution_count": 24,
+      "execution_count": 38,
       "outputs": [
         {
           "data": {
@@ -192,9 +192,9 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Moving-average filter with window size M */\nM : 8$\nkernel : np_scale(1.0 / M, np_ones(M))$\n\n/* Convolve */\nsmoothed_full : np_convolve(signal, kernel)$\nprint(\"Input length:\", np_size(signal))$\nprint(\"Kernel length:\", np_size(kernel))$\nprint(\"Output length:\", np_size(smoothed_full), \"(full mode)\")$\n\n/* Trim to valid region (centered) for easier comparison */\noffset : floor((M - 1) / 2)$\nsmoothed_list : makelist(np_ref(smoothed_full, i + offset), i, 0, 127)$\n\nax_draw2d(\n  color=\"steelblue\", line_width=1, name=\"Original\",\n  lines(t_list, sig_list),\n  color=\"darkgreen\", line_width=2, name=concat(\"Moving average (M=\", M, \")\"),\n  lines(t_list, smoothed_list),\n  title=\"Time-Domain Smoothing via Convolution\",\n  xlabel=\"Time (s)\", ylabel=\"Amplitude\",\n  showlegend=true, grid=true\n)$",
+      "source": "/* Moving-average filter with window size M */\nM : 8$\nkernel : np_scale(1.0 / M, np_ones(M))$\n\n/* Convolve */\nsmoothed_full : np_convolve(signal, kernel)$\nprint(\"Input length:\", np_size(signal))$\nprint(\"Kernel length:\", np_size(kernel))$\nprint(\"Output length:\", np_size(smoothed_full), \"(full mode)\")$\n\n/* Trim to valid region (centered) for easier comparison */\noffset : floor((M - 1) / 2)$\nsmoothed_list : np_to_list(np_slice(smoothed_full, [offset, offset + 128]))$\n\nax_draw2d(\n  color=\"steelblue\", line_width=1, name=\"Original\",\n  lines(t_list, sig_list),\n  color=\"darkgreen\", line_width=2, name=concat(\"Moving average (M=\", M, \")\"),\n  lines(t_list, smoothed_list),\n  title=\"Time-Domain Smoothing via Convolution\",\n  xlabel=\"Time (s)\", ylabel=\"Amplitude\",\n  showlegend=true, grid=true\n)$",
       "metadata": {},
-      "execution_count": 25,
+      "execution_count": 39,
       "outputs": [
         {
           "name": "stdout",
@@ -223,7 +223,7 @@
       "cell_type": "code",
       "source": "/* FFT-based convolution for verification */\nL : np_size(signal) + np_size(kernel) - 1$\n\n/* Zero-pad both signals to length L */\nsig_padded : np_zeros(L)$\nfor i : 0 thru np_size(signal) - 1 do\n  np_set(sig_padded, i, np_ref(signal, i))$\n\nker_padded : np_zeros(L)$\nfor i : 0 thru np_size(kernel) - 1 do\n  np_set(ker_padded, i, np_ref(kernel, i))$\n\n/* Multiply in frequency domain */\nF_sig : np_fft(sig_padded)$\nF_ker : np_fft(ker_padded)$\nfft_conv : np_real(np_ifft(np_mul(F_sig, F_ker)))$\n\n/* Compare with direct convolution */\nerr_conv : np_max(np_abs(np_sub(smoothed_full, fft_conv)))$\nprint(\"Max difference between direct and FFT convolution:\", err_conv)$",
       "metadata": {},
-      "execution_count": 26,
+      "execution_count": 40,
       "outputs": [
         {
           "name": "stdout",
@@ -243,7 +243,7 @@
       "cell_type": "code",
       "source": "/* Symbolic Fourier coefficient of sin(2*pi*f0*t) */\nf0 : 5$\nx_sym : sin(2 * %pi * f0 * t_var)$\n\n/* Compute symbolic FT at specific frequencies */\nFT_sym(f) := integrate(x_sym * exp(-2 * %pi * %i * f * t_var), t_var, 0, 1)$\n\nprint(\"Symbolic FT at f=5:\", rectform(FT_sym(5)))$\nprint(\"Symbolic FT at f=0:\", rectform(FT_sym(0)))$\nprint(\"Symbolic FT at f=20:\", rectform(FT_sym(20)))$",
       "metadata": {},
-      "execution_count": 27,
+      "execution_count": 41,
       "outputs": [
         {
           "name": "stdout",
@@ -258,7 +258,7 @@
       "cell_type": "code",
       "source": "/* Compare with numeric FFT */\n/* Use 128 samples of sin(2*pi*5*t) on [0, 1) */\nN2 : 128$\nt2 : np_scale(1.0 / N2, np_arange(N2))$\nx_num : np_sin(np_scale(2 * float(%pi) * f0, t2))$\nF_num : np_fft(x_num)$\n\n/* The DFT bin at index k corresponds to frequency k Hz (since total duration = 1s) */\n/* FFT gives sum convention, so divide by N to approximate the integral */\nprint(\"Numeric FT at f=5 (bin 5, scaled):\",\n  rectform(np_ref(F_num, 5) / N2))$\nprint(\"Numeric FT at f=0 (bin 0, scaled):\",\n  rectform(np_ref(F_num, 0) / N2))$\n\n/* The symbolic integral gives -i/2 at f=f0.\n   The DFT approximation should converge to this. */\nprint(\"Expected (symbolic): -i/2 =\", rectform(-%i/2))$",
       "metadata": {},
-      "execution_count": 28,
+      "execution_count": 42,
       "outputs": [
         {
           "name": "stdout",
