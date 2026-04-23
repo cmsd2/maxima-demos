@@ -7771,7 +7771,7 @@ a.anchor-link {
 </head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=54e78997">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=31050d54">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7785,7 +7785,7 @@ computer algebra system.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=5dafcc64">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=1fe0dcf0">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7793,17 +7793,17 @@ computer algebra system.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">load</span><span class="p">(</span><span class="s2">"numerics"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">load</span><span class="p">(</span><span class="s2">"dataframes"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">load</span><span class="p">(</span><span class="s2">"dataframes-duckdb"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">load</span><span class="p">(</span><span class="s2">"ax-plots"</span><span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="nf">load</span><span class="p">(</span><span class="s">"numerics"</span><span class="p">)$</span>
+<span class="nf">load</span><span class="p">(</span><span class="s">"dataframes"</span><span class="p">)$</span>
+<span class="nf">load</span><span class="p">(</span><span class="s">"dataframes-duckdb"</span><span class="p">)$</span>
+<span class="nf">load</span><span class="p">(</span><span class="s">"ax-plots"</span><span class="p">)$</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=68f83c67">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=78b7c8be">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7814,7 +7814,7 @@ query it by name.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=82314c45">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ad86de43">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7822,9 +7822,9 @@ query it by name.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">sales</span> <span class="p">:</span> <span class="n">df_read_csv</span><span class="p">(</span><span class="s2">"../../data/sales.csv"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">df_register</span><span class="p">(</span><span class="n">sales</span><span class="p">,</span> <span class="s2">"sales"</span><span class="p">)</span><span class="err">$</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Registered 'sales' table:"</span><span class="p">,</span> <span class="n">df_table_shape</span><span class="p">(</span><span class="n">sales</span><span class="p">))</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="nv">sales</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">df_read_csv</span><span class="p">(</span><span class="s">"../../data/sales.csv"</span><span class="p">)$</span>
+<span class="nf">df_register</span><span class="p">(</span><span class="nv">sales</span><span class="p">,</span><span class="w"> </span><span class="s">"sales"</span><span class="p">)$</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Registered 'sales' table:"</span><span class="p">,</span><span class="w"> </span><span class="nf">df_table_shape</span><span class="p">(</span><span class="nv">sales</span><span class="p">))$</span>
 </pre></div>
 </div>
 </div>
@@ -7843,7 +7843,7 @@ query it by name.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3dd4d4b1">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=678315b0">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7853,7 +7853,7 @@ query it by name.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=44fcd17e">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d77584d5">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7861,7 +7861,7 @@ query it by name.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df_sql</span><span class="p">(</span><span class="s2">"SELECT region, COUNT(*) as n, SUM(revenue) as total_rev FROM sales GROUP BY region ORDER BY total_rev DESC"</span><span class="p">)</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="nf">df_sql</span><span class="p">(</span><span class="s">"SELECT region, COUNT(*) as n, SUM(revenue) as total_rev FROM sales GROUP BY region ORDER BY total_rev DESC"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7879,7 +7879,7 @@ query it by name.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=52a85a57">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=6a4dfe3e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7887,7 +7887,7 @@ query it by name.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df_sql</span><span class="p">(</span><span class="s2">"SELECT product, AVG(price) as avg_price, AVG(units) as avg_units FROM sales WHERE region = 'North' GROUP BY product"</span><span class="p">)</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="nf">df_sql</span><span class="p">(</span><span class="s">"SELECT product, AVG(price) as avg_price, AVG(units) as avg_units FROM sales WHERE region = 'North' GROUP BY product"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7906,7 +7906,7 @@ query it by name.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1028308a">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=044df78d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7917,7 +7917,7 @@ rows — a powerful SQL feature for analytical queries.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=90c28ad3">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=b687eac5">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7925,7 +7925,7 @@ rows — a powerful SQL feature for analytical queries.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df_sql</span><span class="p">(</span><span class="s2">"SELECT region, product, revenue, SUM(revenue) OVER (PARTITION BY region ORDER BY revenue) as running_total FROM sales ORDER BY region, revenue LIMIT 15"</span><span class="p">)</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="nf">df_sql</span><span class="p">(</span><span class="s">"SELECT region, product, revenue, SUM(revenue) OVER (PARTITION BY region ORDER BY revenue) as running_total FROM sales ORDER BY region, revenue LIMIT 15"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7943,7 +7943,7 @@ rows — a powerful SQL feature for analytical queries.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=1122a21d">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ae030e79">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7951,7 +7951,7 @@ rows — a powerful SQL feature for analytical queries.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df_sql</span><span class="p">(</span><span class="s2">"SELECT region, product, revenue, RANK() OVER (PARTITION BY region ORDER BY revenue DESC) as rank FROM sales ORDER BY region, rank LIMIT 20"</span><span class="p">)</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="nf">df_sql</span><span class="p">(</span><span class="s">"SELECT region, product, revenue, RANK() OVER (PARTITION BY region ORDER BY revenue DESC) as rank FROM sales ORDER BY region, rank LIMIT 20"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7970,7 +7970,7 @@ rows — a powerful SQL feature for analytical queries.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=550cdcce">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=0974ba7c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7981,7 +7981,7 @@ compute per-region averages and compare each to the grand average.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=5b09ced0">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=f7f6337b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7989,23 +7989,23 @@ compute per-region averages and compare each to the grand average.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">result</span> <span class="p">:</span> <span class="n">df_sql</span><span class="p">(</span><span class="s2">"</span>
-  <span class="n">WITH</span> <span class="n">region_stats</span> <span class="n">AS</span> <span class="p">(</span>
-    <span class="n">SELECT</span> <span class="n">region</span><span class="p">,</span> 
-           <span class="n">AVG</span><span class="p">(</span><span class="n">revenue</span><span class="p">)</span> <span class="k">as</span> <span class="n">avg_rev</span><span class="p">,</span>
-           <span class="n">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="n">n</span>
-    <span class="n">FROM</span> <span class="n">sales</span> 
-    <span class="n">GROUP</span> <span class="n">BY</span> <span class="n">region</span>
-  <span class="p">),</span>
-  <span class="n">overall</span> <span class="n">AS</span> <span class="p">(</span>
-    <span class="n">SELECT</span> <span class="n">AVG</span><span class="p">(</span><span class="n">revenue</span><span class="p">)</span> <span class="k">as</span> <span class="n">grand_avg</span> <span class="n">FROM</span> <span class="n">sales</span>
-  <span class="p">)</span>
-  <span class="n">SELECT</span> <span class="n">rs</span><span class="o">.</span><span class="n">region</span><span class="p">,</span> <span class="n">rs</span><span class="o">.</span><span class="n">avg_rev</span><span class="p">,</span> <span class="n">rs</span><span class="o">.</span><span class="n">n</span><span class="p">,</span>
-         <span class="n">rs</span><span class="o">.</span><span class="n">avg_rev</span> <span class="o">-</span> <span class="n">o</span><span class="o">.</span><span class="n">grand_avg</span> <span class="k">as</span> <span class="n">diff_from_avg</span>
-  <span class="n">FROM</span> <span class="n">region_stats</span> <span class="n">rs</span><span class="p">,</span> <span class="n">overall</span> <span class="n">o</span>
-  <span class="n">ORDER</span> <span class="n">BY</span> <span class="n">rs</span><span class="o">.</span><span class="n">avg_rev</span> <span class="n">DESC</span>
-<span class="s2">")$</span>
-<span class="n">result</span><span class="p">;</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="nv">result</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">df_sql</span><span class="p">(</span><span class="s">"</span>
+<span class="s">  WITH region_stats AS (</span>
+<span class="s">    SELECT region, </span>
+<span class="s">           AVG(revenue) as avg_rev,</span>
+<span class="s">           COUNT(*) as n</span>
+<span class="s">    FROM sales </span>
+<span class="s">    GROUP BY region</span>
+<span class="s">  ),</span>
+<span class="s">  overall AS (</span>
+<span class="s">    SELECT AVG(revenue) as grand_avg FROM sales</span>
+<span class="s">  )</span>
+<span class="s">  SELECT rs.region, rs.avg_rev, rs.n,</span>
+<span class="s">         rs.avg_rev - o.grand_avg as diff_from_avg</span>
+<span class="s">  FROM region_stats rs, overall o</span>
+<span class="s">  ORDER BY rs.avg_rev DESC</span>
+<span class="s">"</span><span class="p">)$</span>
+<span class="nv">result</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
@@ -8024,7 +8024,7 @@ compute per-region averages and compare each to the grand average.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6b9833de">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=da02f394">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8035,7 +8035,7 @@ data for enriched analysis.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=69aaee26">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=dc82a795">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8043,19 +8043,19 @@ data for enriched analysis.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">region_meta</span> <span class="p">:</span> <span class="n">df_sql</span><span class="p">(</span><span class="s2">"SELECT * FROM (VALUES </span>
-  <span class="p">(</span><span class="s1">'North'</span><span class="p">,</span> <span class="s1">'Urban'</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">),</span> 
-  <span class="p">(</span><span class="s1">'South'</span><span class="p">,</span> <span class="s1">'Suburban'</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">),</span>
-  <span class="p">(</span><span class="s1">'East'</span><span class="p">,</span> <span class="s1">'Urban'</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">),</span> 
-  <span class="p">(</span><span class="s1">'West'</span><span class="p">,</span> <span class="s1">'Rural'</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">)</span>
-<span class="p">)</span> <span class="n">AS</span> <span class="n">t</span><span class="p">(</span><span class="n">region</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">market_factor</span><span class="p">)</span><span class="s2">")$</span>
-<span class="n">df_register</span><span class="p">(</span><span class="n">region_meta</span><span class="p">,</span> <span class="s2">"regions"</span><span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="nv">region_meta</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">df_sql</span><span class="p">(</span><span class="s">"SELECT * FROM (VALUES </span>
+<span class="s">  ('North', 'Urban', 1.2), </span>
+<span class="s">  ('South', 'Suburban', 0.9),</span>
+<span class="s">  ('East', 'Urban', 1.1), </span>
+<span class="s">  ('West', 'Rural', 0.8)</span>
+<span class="s">) AS t(region, type, market_factor)"</span><span class="p">)$</span>
+<span class="nf">df_register</span><span class="p">(</span><span class="nv">region_meta</span><span class="p">,</span><span class="w"> </span><span class="s">"regions"</span><span class="p">)$</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9c384b81">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=7d825bac">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8063,13 +8063,13 @@ data for enriched analysis.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">df_sql</span><span class="p">(</span><span class="s2">"SELECT s.region, r.type, r.market_factor,</span>
-        <span class="n">SUM</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">revenue</span><span class="p">)</span> <span class="k">as</span> <span class="n">total_rev</span><span class="p">,</span>
-        <span class="n">SUM</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">revenue</span><span class="p">)</span> <span class="o">*</span> <span class="n">r</span><span class="o">.</span><span class="n">market_factor</span> <span class="k">as</span> <span class="n">adjusted_rev</span>
- <span class="n">FROM</span> <span class="n">sales</span> <span class="n">s</span> 
- <span class="n">JOIN</span> <span class="n">regions</span> <span class="n">r</span> <span class="n">ON</span> <span class="n">s</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">region</span>
- <span class="n">GROUP</span> <span class="n">BY</span> <span class="n">s</span><span class="o">.</span><span class="n">region</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="n">market_factor</span>
- <span class="n">ORDER</span> <span class="n">BY</span> <span class="n">adjusted_rev</span> <span class="n">DESC</span><span class="s2">")</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="nf">df_sql</span><span class="p">(</span><span class="s">"SELECT s.region, r.type, r.market_factor,</span>
+<span class="s">        SUM(s.revenue) as total_rev,</span>
+<span class="s">        SUM(s.revenue) * r.market_factor as adjusted_rev</span>
+<span class="s"> FROM sales s </span>
+<span class="s"> JOIN regions r ON s.region = r.region</span>
+<span class="s"> GROUP BY s.region, r.type, r.market_factor</span>
+<span class="s"> ORDER BY adjusted_rev DESC"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -8088,7 +8088,7 @@ data for enriched analysis.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c7658f3a">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a67aea8e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8099,7 +8099,7 @@ and pass them directly to ax-plots.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=a3751bc4">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=339d6ac6">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8107,15 +8107,15 @@ and pass them directly to ax-plots.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">prod_rev</span> <span class="p">:</span> <span class="n">df_sql</span><span class="p">(</span><span class="s2">"SELECT product, SUM(revenue) as total FROM sales GROUP BY product ORDER BY total DESC"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">ax_draw2d</span><span class="p">(</span>
-  <span class="n">ax_bar</span><span class="p">(</span>
-    <span class="n">df_to_string_list</span><span class="p">(</span><span class="n">df_table_column</span><span class="p">(</span><span class="n">prod_rev</span><span class="p">,</span> <span class="s2">"product"</span><span class="p">)),</span>
-    <span class="n">np_to_list</span><span class="p">(</span><span class="n">df_table_column</span><span class="p">(</span><span class="n">prod_rev</span><span class="p">,</span> <span class="s2">"total"</span><span class="p">))</span>
-  <span class="p">),</span>
-  <span class="n">title</span><span class="o">=</span><span class="s2">"Total Revenue by Product"</span><span class="p">,</span>
-  <span class="n">ylabel</span><span class="o">=</span><span class="s2">"Revenue ($)"</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">true</span>
-<span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="nv">prod_rev</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">df_sql</span><span class="p">(</span><span class="s">"SELECT product, SUM(revenue) as total FROM sales GROUP BY product ORDER BY total DESC"</span><span class="p">)$</span>
+<span class="nf">ax_draw2d</span><span class="p">(</span>
+<span class="w">  </span><span class="nf">ax_bar</span><span class="p">(</span>
+<span class="w">    </span><span class="nf">df_to_string_list</span><span class="p">(</span><span class="nf">df_table_column</span><span class="p">(</span><span class="nv">prod_rev</span><span class="p">,</span><span class="w"> </span><span class="s">"product"</span><span class="p">)),</span>
+<span class="w">    </span><span class="nf">np_to_list</span><span class="p">(</span><span class="nf">df_table_column</span><span class="p">(</span><span class="nv">prod_rev</span><span class="p">,</span><span class="w"> </span><span class="s">"total"</span><span class="p">))</span>
+<span class="w">  </span><span class="p">),</span>
+<span class="w">  </span><span class="nv">title</span><span class="o">=</span><span class="s">"Total Revenue by Product"</span><span class="p">,</span>
+<span class="w">  </span><span class="nv">ylabel</span><span class="o">=</span><span class="s">"Revenue ($)"</span><span class="p">,</span><span class="w"> </span><span class="nv">grid</span><span class="o">=</span><span class="no">true</span>
+<span class="p">)$</span>
 </pre></div>
 </div>
 </div>
@@ -8128,12 +8128,12 @@ and pass them directly to ax-plots.</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedSVG jp-OutputArea-output" data-mime-type="image/svg+xml" tabindex="0">
-<img alt="No description has been provided for this image" src="data:image/svg+xml;base64,PHN2ZyBjbGFzcz0ibWFpbi1zdmciIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHdpZHRoPSI4MDAiIGhlaWdodD0iNTAwIiBzdHlsZT0iIiB2aWV3Qm94PSIwIDAgODAwIDUwMCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjgwMCIgaGVpZ2h0PSI1MDAiIHN0eWxlPSJmaWxsOiByZ2IoMjU1LCAyNTUsIDI1NSk7IGZpbGwtb3BhY2l0eTogMTsiLz48ZGVmcyBpZD0iZGVmcy0wOTY0MDciPjxnIGNsYXNzPSJjbGlwcyI+PGNsaXBQYXRoIGlkPSJjbGlwMDk2NDA3eHlwbG90IiBjbGFzcz0icGxvdGNsaXAiPjxyZWN0IHdpZHRoPSI2NDAiIGhlaWdodD0iMzIwIi8+PC9jbGlwUGF0aD48Y2xpcFBhdGggY2xhc3M9ImF4ZXNjbGlwIiBpZD0iY2xpcDA5NjQwN3giPjxyZWN0IHg9IjgwIiB5PSIwIiB3aWR0aD0iNjQwIiBoZWlnaHQ9IjUwMCIvPjwvY2xpcFBhdGg+PGNsaXBQYXRoIGNsYXNzPSJheGVzY2xpcCIgaWQ9ImNsaXAwOTY0MDd5Ij48cmVjdCB4PSIwIiB5PSIxMDAiIHdpZHRoPSI4MDAiIGhlaWdodD0iMzIwIi8+PC9jbGlwUGF0aD48Y2xpcFBhdGggY2xhc3M9ImF4ZXNjbGlwIiBpZD0iY2xpcDA5NjQwN3h5Ij48cmVjdCB4PSI4MCIgeT0iMTAwIiB3aWR0aD0iNjQwIiBoZWlnaHQ9IjMyMCIvPjwvY2xpcFBhdGg+PC9nPjxnIGNsYXNzPSJncmFkaWVudHMiLz48ZyBjbGFzcz0icGF0dGVybnMiLz48L2RlZnM+PGcgY2xhc3M9ImJnbGF5ZXIiLz48ZyBjbGFzcz0ibGF5ZXItYmVsb3ciPjxnIGNsYXNzPSJpbWFnZWxheWVyIi8+PGcgY2xhc3M9InNoYXBlbGF5ZXIiLz48L2c+PGcgY2xhc3M9ImNhcnRlc2lhbmxheWVyIj48ZyBjbGFzcz0ic3VicGxvdCB4eSI+PGcgY2xhc3M9ImxheWVyLXN1YnBsb3QiPjxnIGNsYXNzPSJzaGFwZWxheWVyIi8+PGcgY2xhc3M9ImltYWdlbGF5ZXIiLz48L2c+PGcgY2xhc3M9Im1pbm9yLWdyaWRsYXllciI+PGcgY2xhc3M9IngiLz48ZyBjbGFzcz0ieSIvPjwvZz48ZyBjbGFzcz0iZ3JpZGxheWVyIj48ZyBjbGFzcz0ieCI+PHBhdGggY2xhc3M9InhncmlkIGNyaXNwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxODYuNjcwMDAwMDAwMDAwMDIsMCkiIGQ9Ik0wLDEwMHYzMjAiIHN0eWxlPSJzdHJva2U6IHJnYigyMjEsIDIyMSwgMjIxKTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMXB4OyIvPjxwYXRoIGNsYXNzPSJ4Z3JpZCBjcmlzcCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDAwLDApIiBkPSJNMCwxMDB2MzIwIiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjIxLCAyMjEsIDIyMSk7IHN0cm9rZS1vcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDFweDsiLz48cGF0aCBjbGFzcz0ieGdyaWQgY3Jpc3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDYxMy4zMywwKSIgZD0iTTAsMTAwdjMyMCIgc3R5bGU9InN0cm9rZTogcmdiKDIyMSwgMjIxLCAyMjEpOyBzdHJva2Utb3BhY2l0eTogMTsgc3Ryb2tlLXdpZHRoOiAxcHg7Ii8+PC9nPjxnIGNsYXNzPSJ5Ij48cGF0aCBjbGFzcz0ieWdyaWQgY3Jpc3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMzU2LjU5KSIgZD0iTTgwLDBoNjQwIiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjIxLCAyMjEsIDIyMSk7IHN0cm9rZS1vcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDFweDsiLz48cGF0aCBjbGFzcz0ieWdyaWQgY3Jpc3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMjkzLjE5KSIgZD0iTTgwLDBoNjQwIiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjIxLCAyMjEsIDIyMSk7IHN0cm9rZS1vcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDFweDsiLz48cGF0aCBjbGFzcz0ieWdyaWQgY3Jpc3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMjI5Ljc4KSIgZD0iTTgwLDBoNjQwIiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjIxLCAyMjEsIDIyMSk7IHN0cm9rZS1vcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDFweDsiLz48cGF0aCBjbGFzcz0ieWdyaWQgY3Jpc3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMTY2LjM4KSIgZD0iTTgwLDBoNjQwIiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjIxLCAyMjEsIDIyMSk7IHN0cm9rZS1vcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDFweDsiLz48cGF0aCBjbGFzcz0ieWdyaWQgY3Jpc3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMTAyLjk3KSIgZD0iTTgwLDBoNjQwIiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjIxLCAyMjEsIDIyMSk7IHN0cm9rZS1vcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDFweDsiLz48L2c+PC9nPjxnIGNsYXNzPSJ6ZXJvbGluZWxheWVyIj48cGF0aCBjbGFzcz0ieXpsIHpsIGNyaXNwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDQyMCkiIGQ9Ik04MCwwaDY0MCIgc3R5bGU9InN0cm9rZTogcmdiKDAsIDAsIDApOyBzdHJva2Utb3BhY2l0eTogMTsgc3Ryb2tlLXdpZHRoOiAxcHg7Ii8+PC9nPjxnIGNsYXNzPSJsYXllci1iZXR3ZWVuIj48ZyBjbGFzcz0ic2hhcGVsYXllciIvPjxnIGNsYXNzPSJpbWFnZWxheWVyIi8+PC9nPjxwYXRoIGNsYXNzPSJ4bGluZXMtYmVsb3ciLz48cGF0aCBjbGFzcz0ieWxpbmVzLWJlbG93Ii8+PGcgY2xhc3M9Im92ZXJsaW5lcy1iZWxvdyIvPjxnIGNsYXNzPSJ4YXhpc2xheWVyLWJlbG93Ii8+PGcgY2xhc3M9InlheGlzbGF5ZXItYmVsb3ciLz48ZyBjbGFzcz0ib3ZlcmF4ZXMtYmVsb3ciLz48ZyBjbGFzcz0ib3ZlcnBsb3QiPjxnIGNsYXNzPSJ4eSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoODAsMTAwKSIgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwOTY0MDd4eXBsb3QpIj48ZyBjbGFzcz0iYmFybGF5ZXIgbWxheWVyIj48ZyBjbGFzcz0idHJhY2UgYmFycyIgc3R5bGU9Im9wYWNpdHk6IDE7Ij48ZyBjbGFzcz0icG9pbnRzIj48ZyBjbGFzcz0icG9pbnQiPjxwYXRoIGQ9Ik0yMS4zMywzMjBWMTZIMTkyVjMyMFoiIHN0eWxlPSJ2ZWN0b3ItZWZmZWN0OiBub25lOyBvcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDAuNXB4OyBmaWxsOiByZ2IoOTksIDExMCwgMjUwKTsgZmlsbC1vcGFjaXR5OiAxOyBzdHJva2U6IHJnYigyMjksIDIzNiwgMjQ2KTsgc3Ryb2tlLW9wYWNpdHk6IDE7Ii8+PC9nPjxnIGNsYXNzPSJwb2ludCI+PHBhdGggZD0iTTIzNC42NywzMjBWNTguMUg0MDUuMzNWMzIwWiIgc3R5bGU9InZlY3Rvci1lZmZlY3Q6IG5vbmU7IG9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMC41cHg7IGZpbGw6IHJnYig5OSwgMTEwLCAyNTApOyBmaWxsLW9wYWNpdHk6IDE7IHN0cm9rZTogcmdiKDIyOSwgMjM2LCAyNDYpOyBzdHJva2Utb3BhY2l0eTogMTsiLz48L2c+PGcgY2xhc3M9InBvaW50Ij48cGF0aCBkPSJNNDQ4LDMyMFYxNDcuNTFINjE4LjY3VjMyMFoiIHN0eWxlPSJ2ZWN0b3ItZWZmZWN0OiBub25lOyBvcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDAuNXB4OyBmaWxsOiByZ2IoOTksIDExMCwgMjUwKTsgZmlsbC1vcGFjaXR5OiAxOyBzdHJva2U6IHJnYigyMjksIDIzNiwgMjQ2KTsgc3Ryb2tlLW9wYWNpdHk6IDE7Ii8+PC9nPjwvZz48L2c+PC9nPjwvZz48L2c+PGcgY2xhc3M9Inplcm9saW5lbGF5ZXItYWJvdmUiLz48cGF0aCBjbGFzcz0ieGxpbmVzLWFib3ZlIGNyaXNwIiBkPSJNNzksNDIwLjVINzIwIiBzdHlsZT0iZmlsbDogbm9uZTsgc3Ryb2tlLXdpZHRoOiAxcHg7IHN0cm9rZTogcmdiKDIyMSwgMjIxLCAyMjEpOyBzdHJva2Utb3BhY2l0eTogMTsiLz48cGF0aCBjbGFzcz0ieWxpbmVzLWFib3ZlIGNyaXNwIiBkPSJNNzkuNSwxMDBWNDIwIiBzdHlsZT0iZmlsbDogbm9uZTsgc3Ryb2tlLXdpZHRoOiAxcHg7IHN0cm9rZTogcmdiKDIyMSwgMjIxLCAyMjEpOyBzdHJva2Utb3BhY2l0eTogMTsiLz48ZyBjbGFzcz0ib3ZlcmxpbmVzLWFib3ZlIi8+PGcgY2xhc3M9InhheGlzbGF5ZXItYWJvdmUiPjxnIGNsYXNzPSJ4dGljayI+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMCIgeT0iNDM1LjQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE4Ni42NzAwMDAwMDAwMDAwMiwwKSIgc3R5bGU9ImZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJywgdmVyZGFuYSwgYXJpYWwsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJweDsgZmlsbDogcmdiKDQyLCA2MywgOTUpOyBmaWxsLW9wYWNpdHk6IDE7IHdoaXRlLXNwYWNlOiBwcmU7Ij5HaXptbzwvdGV4dD48L2c+PGcgY2xhc3M9Inh0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIwIiB5PSI0MzUuNCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDAwLDApIiBzdHlsZT0iZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiPkdhZGdldDwvdGV4dD48L2c+PGcgY2xhc3M9Inh0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIwIiB5PSI0MzUuNCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjEzLjMzLDApIiBzdHlsZT0iZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiPldpZGdldDwvdGV4dD48L2c+PC9nPjxnIGNsYXNzPSJ5YXhpc2xheWVyLWFib3ZlIj48ZyBjbGFzcz0ieXRpY2siPjx0ZXh0IHRleHQtYW5jaG9yPSJlbmQiIHg9Ijc2LjYiIHk9IjQuMTk5OTk5OTk5OTk5OTk5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDQyMCkiIHN0eWxlPSJmb250LWZhbWlseTogJ09wZW4gU2FucycsIHZlcmRhbmEsIGFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHg7IGZpbGw6IHJnYig0MiwgNjMsIDk1KTsgZmlsbC1vcGFjaXR5OiAxOyB3aGl0ZS1zcGFjZTogcHJlOyI+MDwvdGV4dD48L2c+PGcgY2xhc3M9Inl0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0iZW5kIiB4PSI3Ni42IiB5PSI0LjE5OTk5OTk5OTk5OTk5OSIgc3R5bGU9ImZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJywgdmVyZGFuYSwgYXJpYWwsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJweDsgZmlsbDogcmdiKDQyLCA2MywgOTUpOyBmaWxsLW9wYWNpdHk6IDE7IHdoaXRlLXNwYWNlOiBwcmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDM1Ni41OSkiPjIwazwvdGV4dD48L2c+PGcgY2xhc3M9Inl0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0iZW5kIiB4PSI3Ni42IiB5PSI0LjE5OTk5OTk5OTk5OTk5OSIgc3R5bGU9ImZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJywgdmVyZGFuYSwgYXJpYWwsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJweDsgZmlsbDogcmdiKDQyLCA2MywgOTUpOyBmaWxsLW9wYWNpdHk6IDE7IHdoaXRlLXNwYWNlOiBwcmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDI5My4xOSkiPjQwazwvdGV4dD48L2c+PGcgY2xhc3M9Inl0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0iZW5kIiB4PSI3Ni42IiB5PSI0LjE5OTk5OTk5OTk5OTk5OSIgc3R5bGU9ImZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJywgdmVyZGFuYSwgYXJpYWwsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJweDsgZmlsbDogcmdiKDQyLCA2MywgOTUpOyBmaWxsLW9wYWNpdHk6IDE7IHdoaXRlLXNwYWNlOiBwcmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDIyOS43OCkiPjYwazwvdGV4dD48L2c+PGcgY2xhc3M9Inl0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0iZW5kIiB4PSI3Ni42IiB5PSI0LjE5OTk5OTk5OTk5OTk5OSIgc3R5bGU9ImZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJywgdmVyZGFuYSwgYXJpYWwsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJweDsgZmlsbDogcmdiKDQyLCA2MywgOTUpOyBmaWxsLW9wYWNpdHk6IDE7IHdoaXRlLXNwYWNlOiBwcmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDE2Ni4zOCkiPjgwazwvdGV4dD48L2c+PGcgY2xhc3M9Inl0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0iZW5kIiB4PSI3Ni42IiB5PSI0LjE5OTk5OTk5OTk5OTk5OSIgc3R5bGU9ImZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJywgdmVyZGFuYSwgYXJpYWwsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJweDsgZmlsbDogcmdiKDQyLCA2MywgOTUpOyBmaWxsLW9wYWNpdHk6IDE7IHdoaXRlLXNwYWNlOiBwcmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDEwMi45NykiPjEwMGs8L3RleHQ+PC9nPjwvZz48ZyBjbGFzcz0ib3ZlcmF4ZXMtYWJvdmUiLz48L2c+PC9nPjxnIGNsYXNzPSJwb2xhcmxheWVyIi8+PGcgY2xhc3M9InNtaXRobGF5ZXIiLz48ZyBjbGFzcz0idGVybmFyeWxheWVyIi8+PGcgY2xhc3M9Imdlb2xheWVyIi8+PGcgY2xhc3M9ImZ1bm5lbGFyZWFsYXllciIvPjxnIGNsYXNzPSJwaWVsYXllciIvPjxnIGNsYXNzPSJpY2ljbGVsYXllciIvPjxnIGNsYXNzPSJ0cmVlbWFwbGF5ZXIiLz48ZyBjbGFzcz0ic3VuYnVyc3RsYXllciIvPjxnIGNsYXNzPSJnbGltYWdlcyIvPjxkZWZzIGlkPSJ0b3BkZWZzLTA5NjQwNyI+PGcgY2xhc3M9ImNsaXBzIi8+PC9kZWZzPjxnIGNsYXNzPSJsYXllci1hYm92ZSI+PGcgY2xhc3M9ImltYWdlbGF5ZXIiLz48ZyBjbGFzcz0ic2hhcGVsYXllciIvPjwvZz48ZyBjbGFzcz0iaW5mb2xheWVyIj48ZyBjbGFzcz0iZy1ndGl0bGUiPjx0ZXh0IGNsYXNzPSJndGl0bGUiIHg9IjQwIiB5PSI1MCIgdGV4dC1hbmNob3I9InN0YXJ0IiBkeT0iMGVtIiBzdHlsZT0ib3BhY2l0eTogMTsgZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxN3B4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiPlRvdGFsIFJldmVudWUgYnkgUHJvZHVjdDwvdGV4dD48L2c+PGcgY2xhc3M9ImcteHRpdGxlIi8+PGcgY2xhc3M9ImcteXRpdGxlIj48dGV4dCBjbGFzcz0ieXRpdGxlIiB0cmFuc2Zvcm09InJvdGF0ZSgtOTAsMjcuMTk5NjA5Mzc1LDI2MCkiIHg9IjI3LjE5OTYwOTM3NSIgeT0iMjYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBzdHlsZT0ib3BhY2l0eTogMTsgZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxNHB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiPlJldmVudWUgKCQpPC90ZXh0PjwvZz48L2c+PC9zdmc+"/>
+<img alt="No description has been provided for this image" src="data:image/svg+xml;base64,PHN2ZyBjbGFzcz0ibWFpbi1zdmciIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHdpZHRoPSI4MDAiIGhlaWdodD0iNTAwIiBzdHlsZT0iIiB2aWV3Qm94PSIwIDAgODAwIDUwMCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjgwMCIgaGVpZ2h0PSI1MDAiIHN0eWxlPSJmaWxsOiByZ2IoMjU1LCAyNTUsIDI1NSk7IGZpbGwtb3BhY2l0eTogMTsiLz48ZGVmcyBpZD0iZGVmcy05ZjI1NDciPjxnIGNsYXNzPSJjbGlwcyI+PGNsaXBQYXRoIGlkPSJjbGlwOWYyNTQ3eHlwbG90IiBjbGFzcz0icGxvdGNsaXAiPjxyZWN0IHdpZHRoPSI2NDAiIGhlaWdodD0iMzIwIi8+PC9jbGlwUGF0aD48Y2xpcFBhdGggY2xhc3M9ImF4ZXNjbGlwIiBpZD0iY2xpcDlmMjU0N3giPjxyZWN0IHg9IjgwIiB5PSIwIiB3aWR0aD0iNjQwIiBoZWlnaHQ9IjUwMCIvPjwvY2xpcFBhdGg+PGNsaXBQYXRoIGNsYXNzPSJheGVzY2xpcCIgaWQ9ImNsaXA5ZjI1NDd5Ij48cmVjdCB4PSIwIiB5PSIxMDAiIHdpZHRoPSI4MDAiIGhlaWdodD0iMzIwIi8+PC9jbGlwUGF0aD48Y2xpcFBhdGggY2xhc3M9ImF4ZXNjbGlwIiBpZD0iY2xpcDlmMjU0N3h5Ij48cmVjdCB4PSI4MCIgeT0iMTAwIiB3aWR0aD0iNjQwIiBoZWlnaHQ9IjMyMCIvPjwvY2xpcFBhdGg+PC9nPjxnIGNsYXNzPSJncmFkaWVudHMiLz48ZyBjbGFzcz0icGF0dGVybnMiLz48L2RlZnM+PGcgY2xhc3M9ImJnbGF5ZXIiLz48ZyBjbGFzcz0ibGF5ZXItYmVsb3ciPjxnIGNsYXNzPSJpbWFnZWxheWVyIi8+PGcgY2xhc3M9InNoYXBlbGF5ZXIiLz48L2c+PGcgY2xhc3M9ImNhcnRlc2lhbmxheWVyIj48ZyBjbGFzcz0ic3VicGxvdCB4eSI+PGcgY2xhc3M9ImxheWVyLXN1YnBsb3QiPjxnIGNsYXNzPSJzaGFwZWxheWVyIi8+PGcgY2xhc3M9ImltYWdlbGF5ZXIiLz48L2c+PGcgY2xhc3M9Im1pbm9yLWdyaWRsYXllciI+PGcgY2xhc3M9IngiLz48ZyBjbGFzcz0ieSIvPjwvZz48ZyBjbGFzcz0iZ3JpZGxheWVyIj48ZyBjbGFzcz0ieCI+PHBhdGggY2xhc3M9InhncmlkIGNyaXNwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxODYuNjcwMDAwMDAwMDAwMDIsMCkiIGQ9Ik0wLDEwMHYzMjAiIHN0eWxlPSJzdHJva2U6IHJnYigyMjEsIDIyMSwgMjIxKTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMXB4OyIvPjxwYXRoIGNsYXNzPSJ4Z3JpZCBjcmlzcCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDAwLDApIiBkPSJNMCwxMDB2MzIwIiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjIxLCAyMjEsIDIyMSk7IHN0cm9rZS1vcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDFweDsiLz48cGF0aCBjbGFzcz0ieGdyaWQgY3Jpc3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDYxMy4zMywwKSIgZD0iTTAsMTAwdjMyMCIgc3R5bGU9InN0cm9rZTogcmdiKDIyMSwgMjIxLCAyMjEpOyBzdHJva2Utb3BhY2l0eTogMTsgc3Ryb2tlLXdpZHRoOiAxcHg7Ii8+PC9nPjxnIGNsYXNzPSJ5Ij48cGF0aCBjbGFzcz0ieWdyaWQgY3Jpc3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMzU2LjU5KSIgZD0iTTgwLDBoNjQwIiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjIxLCAyMjEsIDIyMSk7IHN0cm9rZS1vcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDFweDsiLz48cGF0aCBjbGFzcz0ieWdyaWQgY3Jpc3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMjkzLjE5KSIgZD0iTTgwLDBoNjQwIiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjIxLCAyMjEsIDIyMSk7IHN0cm9rZS1vcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDFweDsiLz48cGF0aCBjbGFzcz0ieWdyaWQgY3Jpc3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMjI5Ljc4KSIgZD0iTTgwLDBoNjQwIiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjIxLCAyMjEsIDIyMSk7IHN0cm9rZS1vcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDFweDsiLz48cGF0aCBjbGFzcz0ieWdyaWQgY3Jpc3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMTY2LjM4KSIgZD0iTTgwLDBoNjQwIiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjIxLCAyMjEsIDIyMSk7IHN0cm9rZS1vcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDFweDsiLz48cGF0aCBjbGFzcz0ieWdyaWQgY3Jpc3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMTAyLjk3KSIgZD0iTTgwLDBoNjQwIiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjIxLCAyMjEsIDIyMSk7IHN0cm9rZS1vcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDFweDsiLz48L2c+PC9nPjxnIGNsYXNzPSJ6ZXJvbGluZWxheWVyIj48cGF0aCBjbGFzcz0ieXpsIHpsIGNyaXNwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDQyMCkiIGQ9Ik04MCwwaDY0MCIgc3R5bGU9InN0cm9rZTogcmdiKDAsIDAsIDApOyBzdHJva2Utb3BhY2l0eTogMTsgc3Ryb2tlLXdpZHRoOiAxcHg7Ii8+PC9nPjxnIGNsYXNzPSJsYXllci1iZXR3ZWVuIj48ZyBjbGFzcz0ic2hhcGVsYXllciIvPjxnIGNsYXNzPSJpbWFnZWxheWVyIi8+PC9nPjxwYXRoIGNsYXNzPSJ4bGluZXMtYmVsb3ciLz48cGF0aCBjbGFzcz0ieWxpbmVzLWJlbG93Ii8+PGcgY2xhc3M9Im92ZXJsaW5lcy1iZWxvdyIvPjxnIGNsYXNzPSJ4YXhpc2xheWVyLWJlbG93Ii8+PGcgY2xhc3M9InlheGlzbGF5ZXItYmVsb3ciLz48ZyBjbGFzcz0ib3ZlcmF4ZXMtYmVsb3ciLz48ZyBjbGFzcz0ib3ZlcnBsb3QiPjxnIGNsYXNzPSJ4eSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoODAsMTAwKSIgY2xpcC1wYXRoPSJ1cmwoI2NsaXA5ZjI1NDd4eXBsb3QpIj48ZyBjbGFzcz0iYmFybGF5ZXIgbWxheWVyIj48ZyBjbGFzcz0idHJhY2UgYmFycyIgc3R5bGU9Im9wYWNpdHk6IDE7Ij48ZyBjbGFzcz0icG9pbnRzIj48ZyBjbGFzcz0icG9pbnQiPjxwYXRoIGQ9Ik0yMS4zMywzMjBWMTZIMTkyVjMyMFoiIHN0eWxlPSJ2ZWN0b3ItZWZmZWN0OiBub25lOyBvcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDAuNXB4OyBmaWxsOiByZ2IoOTksIDExMCwgMjUwKTsgZmlsbC1vcGFjaXR5OiAxOyBzdHJva2U6IHJnYigyMjksIDIzNiwgMjQ2KTsgc3Ryb2tlLW9wYWNpdHk6IDE7Ii8+PC9nPjxnIGNsYXNzPSJwb2ludCI+PHBhdGggZD0iTTIzNC42NywzMjBWNTguMUg0MDUuMzNWMzIwWiIgc3R5bGU9InZlY3Rvci1lZmZlY3Q6IG5vbmU7IG9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMC41cHg7IGZpbGw6IHJnYig5OSwgMTEwLCAyNTApOyBmaWxsLW9wYWNpdHk6IDE7IHN0cm9rZTogcmdiKDIyOSwgMjM2LCAyNDYpOyBzdHJva2Utb3BhY2l0eTogMTsiLz48L2c+PGcgY2xhc3M9InBvaW50Ij48cGF0aCBkPSJNNDQ4LDMyMFYxNDcuNTFINjE4LjY3VjMyMFoiIHN0eWxlPSJ2ZWN0b3ItZWZmZWN0OiBub25lOyBvcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDAuNXB4OyBmaWxsOiByZ2IoOTksIDExMCwgMjUwKTsgZmlsbC1vcGFjaXR5OiAxOyBzdHJva2U6IHJnYigyMjksIDIzNiwgMjQ2KTsgc3Ryb2tlLW9wYWNpdHk6IDE7Ii8+PC9nPjwvZz48L2c+PC9nPjwvZz48L2c+PGcgY2xhc3M9Inplcm9saW5lbGF5ZXItYWJvdmUiLz48cGF0aCBjbGFzcz0ieGxpbmVzLWFib3ZlIGNyaXNwIiBkPSJNNzksNDIwLjVINzIwIiBzdHlsZT0iZmlsbDogbm9uZTsgc3Ryb2tlLXdpZHRoOiAxcHg7IHN0cm9rZTogcmdiKDIyMSwgMjIxLCAyMjEpOyBzdHJva2Utb3BhY2l0eTogMTsiLz48cGF0aCBjbGFzcz0ieWxpbmVzLWFib3ZlIGNyaXNwIiBkPSJNNzkuNSwxMDBWNDIwIiBzdHlsZT0iZmlsbDogbm9uZTsgc3Ryb2tlLXdpZHRoOiAxcHg7IHN0cm9rZTogcmdiKDIyMSwgMjIxLCAyMjEpOyBzdHJva2Utb3BhY2l0eTogMTsiLz48ZyBjbGFzcz0ib3ZlcmxpbmVzLWFib3ZlIi8+PGcgY2xhc3M9InhheGlzbGF5ZXItYWJvdmUiPjxnIGNsYXNzPSJ4dGljayI+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMCIgeT0iNDM1LjQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE4Ni42NzAwMDAwMDAwMDAwMiwwKSIgc3R5bGU9ImZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJywgdmVyZGFuYSwgYXJpYWwsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJweDsgZmlsbDogcmdiKDQyLCA2MywgOTUpOyBmaWxsLW9wYWNpdHk6IDE7IHdoaXRlLXNwYWNlOiBwcmU7Ij5HaXptbzwvdGV4dD48L2c+PGcgY2xhc3M9Inh0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIwIiB5PSI0MzUuNCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDAwLDApIiBzdHlsZT0iZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiPkdhZGdldDwvdGV4dD48L2c+PGcgY2xhc3M9Inh0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIwIiB5PSI0MzUuNCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjEzLjMzLDApIiBzdHlsZT0iZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiPldpZGdldDwvdGV4dD48L2c+PC9nPjxnIGNsYXNzPSJ5YXhpc2xheWVyLWFib3ZlIj48ZyBjbGFzcz0ieXRpY2siPjx0ZXh0IHRleHQtYW5jaG9yPSJlbmQiIHg9Ijc2LjYiIHk9IjQuMTk5OTk5OTk5OTk5OTk5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDQyMCkiIHN0eWxlPSJmb250LWZhbWlseTogJ09wZW4gU2FucycsIHZlcmRhbmEsIGFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHg7IGZpbGw6IHJnYig0MiwgNjMsIDk1KTsgZmlsbC1vcGFjaXR5OiAxOyB3aGl0ZS1zcGFjZTogcHJlOyI+MDwvdGV4dD48L2c+PGcgY2xhc3M9Inl0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0iZW5kIiB4PSI3Ni42IiB5PSI0LjE5OTk5OTk5OTk5OTk5OSIgc3R5bGU9ImZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJywgdmVyZGFuYSwgYXJpYWwsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJweDsgZmlsbDogcmdiKDQyLCA2MywgOTUpOyBmaWxsLW9wYWNpdHk6IDE7IHdoaXRlLXNwYWNlOiBwcmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDM1Ni41OSkiPjIwazwvdGV4dD48L2c+PGcgY2xhc3M9Inl0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0iZW5kIiB4PSI3Ni42IiB5PSI0LjE5OTk5OTk5OTk5OTk5OSIgc3R5bGU9ImZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJywgdmVyZGFuYSwgYXJpYWwsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJweDsgZmlsbDogcmdiKDQyLCA2MywgOTUpOyBmaWxsLW9wYWNpdHk6IDE7IHdoaXRlLXNwYWNlOiBwcmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDI5My4xOSkiPjQwazwvdGV4dD48L2c+PGcgY2xhc3M9Inl0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0iZW5kIiB4PSI3Ni42IiB5PSI0LjE5OTk5OTk5OTk5OTk5OSIgc3R5bGU9ImZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJywgdmVyZGFuYSwgYXJpYWwsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJweDsgZmlsbDogcmdiKDQyLCA2MywgOTUpOyBmaWxsLW9wYWNpdHk6IDE7IHdoaXRlLXNwYWNlOiBwcmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDIyOS43OCkiPjYwazwvdGV4dD48L2c+PGcgY2xhc3M9Inl0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0iZW5kIiB4PSI3Ni42IiB5PSI0LjE5OTk5OTk5OTk5OTk5OSIgc3R5bGU9ImZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJywgdmVyZGFuYSwgYXJpYWwsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJweDsgZmlsbDogcmdiKDQyLCA2MywgOTUpOyBmaWxsLW9wYWNpdHk6IDE7IHdoaXRlLXNwYWNlOiBwcmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDE2Ni4zOCkiPjgwazwvdGV4dD48L2c+PGcgY2xhc3M9Inl0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0iZW5kIiB4PSI3Ni42IiB5PSI0LjE5OTk5OTk5OTk5OTk5OSIgc3R5bGU9ImZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJywgdmVyZGFuYSwgYXJpYWwsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJweDsgZmlsbDogcmdiKDQyLCA2MywgOTUpOyBmaWxsLW9wYWNpdHk6IDE7IHdoaXRlLXNwYWNlOiBwcmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDEwMi45NykiPjEwMGs8L3RleHQ+PC9nPjwvZz48ZyBjbGFzcz0ib3ZlcmF4ZXMtYWJvdmUiLz48L2c+PC9nPjxnIGNsYXNzPSJwb2xhcmxheWVyIi8+PGcgY2xhc3M9InNtaXRobGF5ZXIiLz48ZyBjbGFzcz0idGVybmFyeWxheWVyIi8+PGcgY2xhc3M9Imdlb2xheWVyIi8+PGcgY2xhc3M9ImZ1bm5lbGFyZWFsYXllciIvPjxnIGNsYXNzPSJwaWVsYXllciIvPjxnIGNsYXNzPSJpY2ljbGVsYXllciIvPjxnIGNsYXNzPSJ0cmVlbWFwbGF5ZXIiLz48ZyBjbGFzcz0ic3VuYnVyc3RsYXllciIvPjxnIGNsYXNzPSJnbGltYWdlcyIvPjxkZWZzIGlkPSJ0b3BkZWZzLTlmMjU0NyI+PGcgY2xhc3M9ImNsaXBzIi8+PC9kZWZzPjxnIGNsYXNzPSJsYXllci1hYm92ZSI+PGcgY2xhc3M9ImltYWdlbGF5ZXIiLz48ZyBjbGFzcz0ic2hhcGVsYXllciIvPjwvZz48ZyBjbGFzcz0iaW5mb2xheWVyIj48ZyBjbGFzcz0iZy1ndGl0bGUiPjx0ZXh0IGNsYXNzPSJndGl0bGUiIHg9IjQwIiB5PSI1MCIgdGV4dC1hbmNob3I9InN0YXJ0IiBkeT0iMGVtIiBzdHlsZT0ib3BhY2l0eTogMTsgZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxN3B4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiPlRvdGFsIFJldmVudWUgYnkgUHJvZHVjdDwvdGV4dD48L2c+PGcgY2xhc3M9ImcteHRpdGxlIi8+PGcgY2xhc3M9ImcteXRpdGxlIj48dGV4dCBjbGFzcz0ieXRpdGxlIiB0cmFuc2Zvcm09InJvdGF0ZSgtOTAsMjcuMTk5NjA5Mzc1LDI2MCkiIHg9IjI3LjE5OTYwOTM3NSIgeT0iMjYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBzdHlsZT0ib3BhY2l0eTogMTsgZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxNHB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiPlJldmVudWUgKCQpPC90ZXh0PjwvZz48L2c+PC9zdmc+"/>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=6d85c656">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2e656b0d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8141,8 +8141,8 @@ and pass them directly to ax-plots.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">cross</span> <span class="p">:</span> <span class="n">df_sql</span><span class="p">(</span><span class="s2">"SELECT region, product, SUM(revenue) as rev FROM sales GROUP BY region, product ORDER BY region, product"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">cross</span><span class="p">;</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="nv">cross</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">df_sql</span><span class="p">(</span><span class="s">"SELECT region, product, SUM(revenue) as rev FROM sales GROUP BY region, product ORDER BY region, product"</span><span class="p">)$</span>
+<span class="nv">cross</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
@@ -8161,7 +8161,7 @@ and pass them directly to ax-plots.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=39f0a135">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1c8fdb95">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8173,7 +8173,7 @@ holds on average for each region.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=13b5bdd4">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=b9d64740">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8181,17 +8181,17 @@ holds on average for each region.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Fit</span> <span class="n">a</span> <span class="n">symbolic</span> <span class="n">model</span> <span class="n">to</span> <span class="n">the</span> <span class="n">per</span><span class="o">-</span><span class="n">region</span> <span class="n">data</span> <span class="o">*/</span>
-<span class="n">stats</span> <span class="p">:</span> <span class="n">df_sql</span><span class="p">(</span><span class="s2">"SELECT region, AVG(units) as avg_u, AVG(price) as avg_p, AVG(revenue) as avg_r FROM sales GROUP BY region"</span><span class="p">)</span><span class="err">$</span>
-<span class="o">/*</span> <span class="n">Revenue</span> <span class="n">should</span> <span class="n">approximately</span> <span class="n">equal</span> <span class="n">units</span> <span class="o">*</span> <span class="n">price</span> <span class="o">*/</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Revenue ~ units * price check:"</span><span class="p">)</span><span class="err">$</span>
-<span class="k">for</span> <span class="n">i</span> <span class="p">:</span> <span class="mi">0</span> <span class="n">thru</span> <span class="mi">3</span> <span class="n">do</span> <span class="n">block</span><span class="p">([</span><span class="n">u</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">r</span><span class="p">],</span>
-  <span class="n">u</span> <span class="p">:</span> <span class="n">np_ref</span><span class="p">(</span><span class="n">df_table_column</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="s2">"avg_u"</span><span class="p">),</span> <span class="n">i</span><span class="p">),</span>
-  <span class="n">p</span> <span class="p">:</span> <span class="n">np_ref</span><span class="p">(</span><span class="n">df_table_column</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="s2">"avg_p"</span><span class="p">),</span> <span class="n">i</span><span class="p">),</span>
-  <span class="n">r</span> <span class="p">:</span> <span class="n">np_ref</span><span class="p">(</span><span class="n">df_table_column</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="s2">"avg_r"</span><span class="p">),</span> <span class="n">i</span><span class="p">),</span>
-  <span class="nb">print</span><span class="p">(</span><span class="s2">"  "</span><span class="p">,</span> <span class="n">df_string_column_ref</span><span class="p">(</span><span class="n">df_table_column</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="s2">"region"</span><span class="p">),</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span>
-        <span class="s2">": u*p ="</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">p</span><span class="p">),</span> <span class="s2">"actual ="</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
-<span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* Fit a symbolic model to the per-region data */</span>
+<span class="nv">stats</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">df_sql</span><span class="p">(</span><span class="s">"SELECT region, AVG(units) as avg_u, AVG(price) as avg_p, AVG(revenue) as avg_r FROM sales GROUP BY region"</span><span class="p">)$</span>
+<span class="cm">/* Revenue should approximately equal units * price */</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Revenue ~ units * price check:"</span><span class="p">)$</span>
+<span class="k">for</span><span class="w"> </span><span class="nv">i</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">thru</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nf">block</span><span class="p">([</span><span class="nv">u</span><span class="p">,</span><span class="w"> </span><span class="nv">p</span><span class="p">,</span><span class="w"> </span><span class="nv">r</span><span class="p">],</span>
+<span class="w">  </span><span class="nv">u</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_ref</span><span class="p">(</span><span class="nf">df_table_column</span><span class="p">(</span><span class="nv">stats</span><span class="p">,</span><span class="w"> </span><span class="s">"avg_u"</span><span class="p">),</span><span class="w"> </span><span class="nv">i</span><span class="p">),</span>
+<span class="w">  </span><span class="nv">p</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_ref</span><span class="p">(</span><span class="nf">df_table_column</span><span class="p">(</span><span class="nv">stats</span><span class="p">,</span><span class="w"> </span><span class="s">"avg_p"</span><span class="p">),</span><span class="w"> </span><span class="nv">i</span><span class="p">),</span>
+<span class="w">  </span><span class="nv">r</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_ref</span><span class="p">(</span><span class="nf">df_table_column</span><span class="p">(</span><span class="nv">stats</span><span class="p">,</span><span class="w"> </span><span class="s">"avg_r"</span><span class="p">),</span><span class="w"> </span><span class="nv">i</span><span class="p">),</span>
+<span class="w">  </span><span class="nf">print</span><span class="p">(</span><span class="s">"  "</span><span class="p">,</span><span class="w"> </span><span class="nf">df_string_column_ref</span><span class="p">(</span><span class="nf">df_table_column</span><span class="p">(</span><span class="nv">stats</span><span class="p">,</span><span class="w"> </span><span class="s">"region"</span><span class="p">),</span><span class="w"> </span><span class="nv">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span>
+<span class="w">        </span><span class="s">": u*p ="</span><span class="p">,</span><span class="w"> </span><span class="nf">float</span><span class="p">(</span><span class="nv">u</span><span class="o">*</span><span class="nv">p</span><span class="p">),</span><span class="w"> </span><span class="s">"actual ="</span><span class="p">,</span><span class="w"> </span><span class="nv">r</span><span class="p">)</span>
+<span class="p">)$</span>
 </pre></div>
 </div>
 </div>
@@ -8214,7 +8214,7 @@ holds on average for each region.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5eea9592">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=1246ea4a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>

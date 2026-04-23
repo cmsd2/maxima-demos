@@ -7771,7 +7771,7 @@ a.anchor-link {
 </head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=8b56789f">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=dfadf00b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7786,7 +7786,7 @@ the original matrix, explore their properties, and discuss when to use each.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=5979f384">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=b6b28232">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7794,15 +7794,15 @@ the original matrix, explore their properties, and discuss when to use each.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [97]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">load</span><span class="p">(</span><span class="s2">"numerics"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">load</span><span class="p">(</span><span class="s2">"ax-plots"</span><span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="nf">load</span><span class="p">(</span><span class="s">"numerics"</span><span class="p">)$</span>
+<span class="nf">load</span><span class="p">(</span><span class="s">"ax-plots"</span><span class="p">)$</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b0e58cda">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=742b628d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7815,7 +7815,7 @@ tells us how sensitive linear systems involving $A$ are to perturbations.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=edac2294">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=550c04ec">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7823,16 +7823,16 @@ tells us how sensitive linear systems involving $A$ are to perturbations.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [98]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">A</span> <span class="n">well</span><span class="o">-</span><span class="n">conditioned</span> <span class="n">symmetric</span> <span class="n">matrix</span> <span class="o">*/</span>
-<span class="n">A</span> <span class="p">:</span> <span class="n">ndarray</span><span class="p">(</span><span class="n">matrix</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]))</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* A well-conditioned symmetric matrix */</span>
+<span class="nv">A</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">ndarray</span><span class="p">(</span><span class="nf">matrix</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">]))$</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Test matrix A:"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">np_to_matrix</span><span class="p">(</span><span class="n">A</span><span class="p">);</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Test matrix A:"</span><span class="p">)$</span>
+<span class="nf">np_to_matrix</span><span class="p">(</span><span class="nv">A</span><span class="p">);</span>
 
-<span class="o">/*</span> <span class="n">Condition</span> <span class="n">number</span><span class="p">:</span> <span class="n">kappa</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">=</span> <span class="o">||</span><span class="n">A</span><span class="o">||</span> <span class="o">*</span> <span class="o">||</span><span class="n">A</span><span class="o">^</span><span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">}</span><span class="o">||</span> <span class="o">*/</span>
-<span class="n">kappa</span> <span class="p">:</span> <span class="n">np_norm</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="o">*</span> <span class="n">np_norm</span><span class="p">(</span><span class="n">np_inv</span><span class="p">(</span><span class="n">A</span><span class="p">));</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Condition number kappa(A) ="</span><span class="p">,</span> <span class="n">kappa</span><span class="p">)</span><span class="err">$</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"This is well-conditioned (kappa close to 1 is ideal)."</span><span class="p">)</span><span class="err">$</span>
+<span class="cm">/* Condition number: kappa(A) = ||A|| * ||A^{-1}|| */</span>
+<span class="nv">kappa</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_norm</span><span class="p">(</span><span class="nv">A</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">np_norm</span><span class="p">(</span><span class="nf">np_inv</span><span class="p">(</span><span class="nv">A</span><span class="p">));</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Condition number kappa(A) ="</span><span class="p">,</span><span class="w"> </span><span class="nv">kappa</span><span class="p">)$</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"This is well-conditioned (kappa close to 1 is ideal)."</span><span class="p">)$</span>
 </pre></div>
 </div>
 </div>
@@ -7855,7 +7855,7 @@ This is well-conditioned (kappa close to 1 is ideal).</pre>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=567918c2">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=303af6b7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7871,7 +7871,7 @@ two triangular solves (forward and back substitution), each $O(n^2)$.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=6c85c316">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=b03a55fb">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7879,15 +7879,15 @@ two triangular solves (forward and back substitution), each $O(n^2)$.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [99]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">LU</span> <span class="n">decomposition</span><span class="p">:</span> <span class="n">PA</span> <span class="o">=</span> <span class="n">LU</span> <span class="o">*/</span>
-<span class="p">[</span><span class="n">L</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">P</span><span class="p">]</span> <span class="p">:</span> <span class="n">np_lu</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* LU decomposition: PA = LU */</span>
+<span class="p">[</span><span class="nv">L</span><span class="p">,</span><span class="w"> </span><span class="nv">U</span><span class="p">,</span><span class="w"> </span><span class="nv">P</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_lu</span><span class="p">(</span><span class="nv">A</span><span class="p">)$</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"L (lower triangular):"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">np_to_matrix</span><span class="p">(</span><span class="n">L</span><span class="p">);</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"U (upper triangular):"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">np_to_matrix</span><span class="p">(</span><span class="n">U</span><span class="p">);</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"P (permutation):"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">np_to_matrix</span><span class="p">(</span><span class="n">P</span><span class="p">);</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"L (lower triangular):"</span><span class="p">)$</span>
+<span class="nf">np_to_matrix</span><span class="p">(</span><span class="nv">L</span><span class="p">);</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"U (upper triangular):"</span><span class="p">)$</span>
+<span class="nf">np_to_matrix</span><span class="p">(</span><span class="nv">U</span><span class="p">);</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"P (permutation):"</span><span class="p">)$</span>
+<span class="nf">np_to_matrix</span><span class="p">(</span><span class="nv">P</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -7915,7 +7915,7 @@ P (permutation):</pre>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=5452432d">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ff1309ca">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7923,9 +7923,9 @@ P (permutation):</pre>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [100]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Verify</span><span class="p">:</span> <span class="n">PA</span> <span class="o">=</span> <span class="n">LU</span><span class="p">,</span> <span class="n">so</span> <span class="o">||</span><span class="n">PA</span> <span class="o">-</span> <span class="n">LU</span><span class="o">||</span> <span class="n">should</span> <span class="n">be</span> <span class="o">~</span><span class="mi">0</span> <span class="o">*/</span>
-<span class="n">lu_error</span> <span class="p">:</span> <span class="n">np_norm</span><span class="p">(</span><span class="n">np_sub</span><span class="p">(</span><span class="n">np_matmul</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">A</span><span class="p">),</span> <span class="n">np_matmul</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">U</span><span class="p">)));</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Reconstruction error ||PA - LU|| ="</span><span class="p">,</span> <span class="n">lu_error</span><span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* Verify: PA = LU, so ||PA - LU|| should be ~0 */</span>
+<span class="nv">lu_error</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_norm</span><span class="p">(</span><span class="nf">np_sub</span><span class="p">(</span><span class="nf">np_matmul</span><span class="p">(</span><span class="nv">P</span><span class="p">,</span><span class="w"> </span><span class="nv">A</span><span class="p">),</span><span class="w"> </span><span class="nf">np_matmul</span><span class="p">(</span><span class="nv">L</span><span class="p">,</span><span class="w"> </span><span class="nv">U</span><span class="p">)));</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Reconstruction error ||PA - LU|| ="</span><span class="p">,</span><span class="w"> </span><span class="nv">lu_error</span><span class="p">)$</span>
 </pre></div>
 </div>
 </div>
@@ -7945,7 +7945,7 @@ Reconstruction error ||PA - LU|| = 0.0</pre>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=775fd523">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e9c3b32f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7965,7 +7965,7 @@ means rounding errors are not amplified.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e1fc65ca">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=1c83a945">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7973,13 +7973,13 @@ means rounding errors are not amplified.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [101]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">QR</span> <span class="n">decomposition</span><span class="p">:</span> <span class="n">A</span> <span class="o">=</span> <span class="n">QR</span> <span class="o">*/</span>
-<span class="p">[</span><span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">]</span> <span class="p">:</span> <span class="n">np_qr</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* QR decomposition: A = QR */</span>
+<span class="p">[</span><span class="nv">Q</span><span class="p">,</span><span class="w"> </span><span class="nv">R</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_qr</span><span class="p">(</span><span class="nv">A</span><span class="p">)$</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Q (orthogonal):"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">np_to_matrix</span><span class="p">(</span><span class="n">Q</span><span class="p">);</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"R (upper triangular):"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">np_to_matrix</span><span class="p">(</span><span class="n">R</span><span class="p">);</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Q (orthogonal):"</span><span class="p">)$</span>
+<span class="nf">np_to_matrix</span><span class="p">(</span><span class="nv">Q</span><span class="p">);</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"R (upper triangular):"</span><span class="p">)$</span>
+<span class="nf">np_to_matrix</span><span class="p">(</span><span class="nv">R</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -8007,7 +8007,7 @@ R (upper triangular):</pre>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=29f12102">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=293d1649">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8015,17 +8015,17 @@ R (upper triangular):</pre>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [102]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Verify</span><span class="p">:</span> <span class="n">A</span> <span class="o">=</span> <span class="n">QR</span> <span class="o">*/</span>
-<span class="n">qr_error</span> <span class="p">:</span> <span class="n">np_norm</span><span class="p">(</span><span class="n">np_sub</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">np_matmul</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">)));</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Reconstruction error ||A - QR|| ="</span><span class="p">,</span> <span class="n">qr_error</span><span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* Verify: A = QR */</span>
+<span class="nv">qr_error</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_norm</span><span class="p">(</span><span class="nf">np_sub</span><span class="p">(</span><span class="nv">A</span><span class="p">,</span><span class="w"> </span><span class="nf">np_matmul</span><span class="p">(</span><span class="nv">Q</span><span class="p">,</span><span class="w"> </span><span class="nv">R</span><span class="p">)));</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Reconstruction error ||A - QR|| ="</span><span class="p">,</span><span class="w"> </span><span class="nv">qr_error</span><span class="p">)$</span>
 
-<span class="o">/*</span> <span class="n">Check</span> <span class="n">orthogonality</span><span class="p">:</span> <span class="n">Q</span><span class="o">^</span><span class="n">T</span> <span class="n">Q</span> <span class="n">should</span> <span class="n">be</span> <span class="n">the</span> <span class="n">identity</span> <span class="o">*/</span>
-<span class="n">QtQ</span> <span class="p">:</span> <span class="n">np_matmul</span><span class="p">(</span><span class="n">np_transpose</span><span class="p">(</span><span class="n">Q</span><span class="p">),</span> <span class="n">Q</span><span class="p">)</span><span class="err">$</span>
-<span class="n">ortho_error</span> <span class="p">:</span> <span class="n">np_norm</span><span class="p">(</span><span class="n">np_sub</span><span class="p">(</span><span class="n">QtQ</span><span class="p">,</span> <span class="n">np_eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)));</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Orthogonality error ||Q^T Q - I|| ="</span><span class="p">,</span> <span class="n">ortho_error</span><span class="p">)</span><span class="err">$</span>
+<span class="cm">/* Check orthogonality: Q^T Q should be the identity */</span>
+<span class="nv">QtQ</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_matmul</span><span class="p">(</span><span class="nf">np_transpose</span><span class="p">(</span><span class="nv">Q</span><span class="p">),</span><span class="w"> </span><span class="nv">Q</span><span class="p">)$</span>
+<span class="ow">or</span><span class="nv">tho_error</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_norm</span><span class="p">(</span><span class="nf">np_sub</span><span class="p">(</span><span class="nv">QtQ</span><span class="p">,</span><span class="w"> </span><span class="nf">np_eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)));</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Orthogonality error ||Q^T Q - I|| ="</span><span class="p">,</span><span class="w"> </span><span class="ow">or</span><span class="nv">tho_error</span><span class="p">)$</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Q^T Q (should be identity):"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">np_to_matrix</span><span class="p">(</span><span class="n">QtQ</span><span class="p">);</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Q^T Q (should be identity):"</span><span class="p">)$</span>
+<span class="nf">np_to_matrix</span><span class="p">(</span><span class="nv">QtQ</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -8054,7 +8054,7 @@ Q^T Q (should be identity):</pre>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e86be921">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2a8f22f8">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8074,7 +8074,7 @@ informative decomposition:</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=b506d7ed">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=1f95e927">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8082,14 +8082,14 @@ informative decomposition:</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [103]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">SVD</span><span class="p">:</span> <span class="n">A</span> <span class="o">=</span> <span class="n">U</span> <span class="o">*</span> <span class="n">diag</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> <span class="o">*</span> <span class="n">Vt</span> <span class="o">*/</span>
-<span class="p">[</span><span class="n">U_svd</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">Vt</span><span class="p">]</span> <span class="p">:</span> <span class="n">np_svd</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* SVD: A = U * diag(S) * Vt */</span>
+<span class="p">[</span><span class="nv">U_svd</span><span class="p">,</span><span class="w"> </span><span class="nv">S</span><span class="p">,</span><span class="w"> </span><span class="nv">Vt</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_svd</span><span class="p">(</span><span class="nv">A</span><span class="p">)$</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"U (left singular vectors):"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">np_to_matrix</span><span class="p">(</span><span class="n">U_svd</span><span class="p">);</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Singular values S:"</span><span class="p">,</span> <span class="n">np_to_list</span><span class="p">(</span><span class="n">S</span><span class="p">))</span><span class="err">$</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Vt (right singular vectors, transposed):"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">np_to_matrix</span><span class="p">(</span><span class="n">Vt</span><span class="p">);</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"U (left singular vectors):"</span><span class="p">)$</span>
+<span class="nf">np_to_matrix</span><span class="p">(</span><span class="nv">U_svd</span><span class="p">);</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Singular values S:"</span><span class="p">,</span><span class="w"> </span><span class="nf">np_to_list</span><span class="p">(</span><span class="nv">S</span><span class="p">))$</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Vt (right singular vectors, transposed):"</span><span class="p">)$</span>
+<span class="nf">np_to_matrix</span><span class="p">(</span><span class="nv">Vt</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -8118,7 +8118,7 @@ Vt (right singular vectors, transposed):</pre>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=62b6478b">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=68d71f71">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8126,17 +8126,17 @@ Vt (right singular vectors, transposed):</pre>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [104]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Reconstruct</span> <span class="n">A</span> <span class="kn">from</span><span class="w"> </span><span class="nn">U</span> <span class="o">*</span> <span class="n">diag</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> <span class="o">*</span> <span class="n">Vt</span> <span class="o">*/</span>
-<span class="n">S_mat</span> <span class="p">:</span> <span class="n">np_diag</span><span class="p">(</span><span class="n">np_to_list</span><span class="p">(</span><span class="n">S</span><span class="p">))</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* Reconstruct A from U * diag(S) * Vt */</span>
+<span class="nv">S_mat</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_diag</span><span class="p">(</span><span class="nf">np_to_list</span><span class="p">(</span><span class="nv">S</span><span class="p">))$</span>
 
-<span class="n">A_reconstructed</span> <span class="p">:</span> <span class="n">np_matmul</span><span class="p">(</span><span class="n">np_matmul</span><span class="p">(</span><span class="n">U_svd</span><span class="p">,</span> <span class="n">S_mat</span><span class="p">),</span> <span class="n">Vt</span><span class="p">)</span><span class="err">$</span>
-<span class="n">svd_error</span> <span class="p">:</span> <span class="n">np_norm</span><span class="p">(</span><span class="n">np_sub</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">A_reconstructed</span><span class="p">));</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Reconstruction error ||A - U*diag(S)*Vt|| ="</span><span class="p">,</span> <span class="n">svd_error</span><span class="p">)</span><span class="err">$</span>
+<span class="nv">A_reconstructed</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_matmul</span><span class="p">(</span><span class="nf">np_matmul</span><span class="p">(</span><span class="nv">U_svd</span><span class="p">,</span><span class="w"> </span><span class="nv">S_mat</span><span class="p">),</span><span class="w"> </span><span class="nv">Vt</span><span class="p">)$</span>
+<span class="nv">svd_error</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_norm</span><span class="p">(</span><span class="nf">np_sub</span><span class="p">(</span><span class="nv">A</span><span class="p">,</span><span class="w"> </span><span class="nv">A_reconstructed</span><span class="p">));</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Reconstruction error ||A - U*diag(S)*Vt|| ="</span><span class="p">,</span><span class="w"> </span><span class="nv">svd_error</span><span class="p">)$</span>
 
-<span class="o">/*</span> <span class="n">Condition</span> <span class="n">number</span> <span class="kn">from</span><span class="w"> </span><span class="nn">singular</span> <span class="n">values</span> <span class="o">*/</span>
-<span class="n">svals</span> <span class="p">:</span> <span class="n">np_to_list</span><span class="p">(</span><span class="n">S</span><span class="p">)</span><span class="err">$</span>
-<span class="n">kappa_svd</span> <span class="p">:</span> <span class="n">svals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">svals</span><span class="p">[</span><span class="n">length</span><span class="p">(</span><span class="n">svals</span><span class="p">)];</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Condition number from SVD (sigma_max / sigma_min) ="</span><span class="p">,</span> <span class="n">kappa_svd</span><span class="p">)</span><span class="err">$</span>
+<span class="cm">/* Condition number from singular values */</span>
+<span class="nv">svals</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_to_list</span><span class="p">(</span><span class="nv">S</span><span class="p">)$</span>
+<span class="nv">kappa_svd</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nv">svals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">svals</span><span class="p">[</span><span class="nf">length</span><span class="p">(</span><span class="nv">svals</span><span class="p">)];</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Condition number from SVD (sigma_max / sigma_min) ="</span><span class="p">,</span><span class="w"> </span><span class="nv">kappa_svd</span><span class="p">)$</span>
 </pre></div>
 </div>
 </div>
@@ -8158,7 +8158,7 @@ Condition number from SVD (sigma_max / sigma_min) = 3.0541520438237635</pre>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=030de0bc">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b3b18e5c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8174,7 +8174,7 @@ numerically (<code>np_det</code> via LAPACK), and verify they agree.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=6c40d24f">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9feaf34e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8182,18 +8182,18 @@ numerically (<code>np_det</code> via LAPACK), and verify they agree.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [105]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Symbolic</span> <span class="n">determinant</span> <span class="p">(</span><span class="n">exact</span> <span class="n">integer</span> <span class="n">result</span><span class="p">)</span> <span class="o">*/</span>
-<span class="n">det_sym</span> <span class="p">:</span> <span class="n">determinant</span><span class="p">(</span><span class="n">matrix</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]));</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Symbolic determinant ="</span><span class="p">,</span> <span class="n">det_sym</span><span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* Symbolic determinant (exact integer result) */</span>
+<span class="nv">det_sym</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">determinant</span><span class="p">(</span><span class="nf">matrix</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">]));</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Symbolic determinant ="</span><span class="p">,</span><span class="w"> </span><span class="nv">det_sym</span><span class="p">)$</span>
 
-<span class="o">/*</span> <span class="n">Numeric</span> <span class="n">determinant</span> <span class="n">via</span> <span class="n">LAPACK</span> <span class="o">*/</span>
-<span class="n">det_num</span> <span class="p">:</span> <span class="n">np_det</span><span class="p">(</span><span class="n">A</span><span class="p">);</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Numeric determinant  ="</span><span class="p">,</span> <span class="n">det_num</span><span class="p">)</span><span class="err">$</span>
+<span class="cm">/* Numeric determinant via LAPACK */</span>
+<span class="nv">det_num</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_det</span><span class="p">(</span><span class="nv">A</span><span class="p">);</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Numeric determinant  ="</span><span class="p">,</span><span class="w"> </span><span class="nv">det_num</span><span class="p">)$</span>
 
-<span class="o">/*</span> <span class="n">Product</span> <span class="n">of</span> <span class="n">singular</span> <span class="n">values</span> <span class="n">gives</span> <span class="o">|</span><span class="n">det</span><span class="o">|</span> <span class="o">*/</span>
-<span class="n">det_svd</span> <span class="p">:</span> <span class="n">apply</span><span class="p">(</span><span class="s2">"*"</span><span class="p">,</span> <span class="n">np_to_list</span><span class="p">(</span><span class="n">S</span><span class="p">));</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Product of singular values ="</span><span class="p">,</span> <span class="n">det_svd</span><span class="p">)</span><span class="err">$</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"(matches |det| since A is positive definite)"</span><span class="p">)</span><span class="err">$</span>
+<span class="cm">/* Product of singular values gives |det| */</span>
+<span class="nv">det_svd</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="s">"*"</span><span class="p">,</span><span class="w"> </span><span class="nf">np_to_list</span><span class="p">(</span><span class="nv">S</span><span class="p">));</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Product of singular values ="</span><span class="p">,</span><span class="w"> </span><span class="nv">det_svd</span><span class="p">)$</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"(matches |det| since A is positive definite)"</span><span class="p">)$</span>
 </pre></div>
 </div>
 </div>
@@ -8218,7 +8218,7 @@ Product of singular values = 43.00000000000001
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=33cf0a67">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c83da820">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8266,7 +8266,7 @@ Product of singular values = 43.00000000000001
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=95913bdb">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6be86c01">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8281,7 +8281,7 @@ that QR and SVD produce valid factorisations.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c33da61d">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=b6681fbf">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8289,12 +8289,12 @@ that QR and SVD produce valid factorisations.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [106]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Non</span><span class="o">-</span><span class="n">square</span> <span class="n">matrix</span><span class="p">:</span> <span class="mi">4</span><span class="n">x2</span> <span class="p">(</span><span class="n">tall</span><span class="p">)</span> <span class="o">*/</span>
-<span class="n">B</span> <span class="p">:</span> <span class="n">ndarray</span><span class="p">(</span><span class="n">matrix</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]))</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* Non-square matrix: 4x2 (tall) */</span>
+<span class="nv">B</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">ndarray</span><span class="p">(</span><span class="nf">matrix</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">]))$</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"B (4x2):"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">np_to_matrix</span><span class="p">(</span><span class="n">B</span><span class="p">);</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Shape:"</span><span class="p">,</span> <span class="n">np_shape</span><span class="p">(</span><span class="n">B</span><span class="p">))</span><span class="err">$</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"B (4x2):"</span><span class="p">)$</span>
+<span class="nf">np_to_matrix</span><span class="p">(</span><span class="nv">B</span><span class="p">);</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Shape:"</span><span class="p">,</span><span class="w"> </span><span class="nf">np_shape</span><span class="p">(</span><span class="nv">B</span><span class="p">))$</span>
 </pre></div>
 </div>
 </div>
@@ -8314,7 +8314,7 @@ Shape: [4,2]</pre>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e5861278">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=76f483b2">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8322,17 +8322,17 @@ Shape: [4,2]</pre>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [107]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">QR</span> <span class="n">of</span> <span class="n">non</span><span class="o">-</span><span class="n">square</span> <span class="n">matrix</span> <span class="o">*/</span>
-<span class="p">[</span><span class="n">Q_B</span><span class="p">,</span> <span class="n">R_B</span><span class="p">]</span> <span class="p">:</span> <span class="n">np_qr</span><span class="p">(</span><span class="n">B</span><span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* QR of non-square matrix */</span>
+<span class="p">[</span><span class="nv">Q_B</span><span class="p">,</span><span class="w"> </span><span class="nv">R_B</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_qr</span><span class="p">(</span><span class="nv">B</span><span class="p">)$</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"QR decomposition of B:"</span><span class="p">)</span><span class="err">$</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Q shape:"</span><span class="p">,</span> <span class="n">np_shape</span><span class="p">(</span><span class="n">Q_B</span><span class="p">))</span><span class="err">$</span>
-<span class="n">np_to_matrix</span><span class="p">(</span><span class="n">Q_B</span><span class="p">);</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"R shape:"</span><span class="p">,</span> <span class="n">np_shape</span><span class="p">(</span><span class="n">R_B</span><span class="p">))</span><span class="err">$</span>
-<span class="n">np_to_matrix</span><span class="p">(</span><span class="n">R_B</span><span class="p">);</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"QR decomposition of B:"</span><span class="p">)$</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Q shape:"</span><span class="p">,</span><span class="w"> </span><span class="nf">np_shape</span><span class="p">(</span><span class="nv">Q_B</span><span class="p">))$</span>
+<span class="nf">np_to_matrix</span><span class="p">(</span><span class="nv">Q_B</span><span class="p">);</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"R shape:"</span><span class="p">,</span><span class="w"> </span><span class="nf">np_shape</span><span class="p">(</span><span class="nv">R_B</span><span class="p">))$</span>
+<span class="nf">np_to_matrix</span><span class="p">(</span><span class="nv">R_B</span><span class="p">);</span>
 
-<span class="n">qr_B_error</span> <span class="p">:</span> <span class="n">np_norm</span><span class="p">(</span><span class="n">np_sub</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">np_matmul</span><span class="p">(</span><span class="n">Q_B</span><span class="p">,</span> <span class="n">R_B</span><span class="p">)));</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Reconstruction error ||B - QR|| ="</span><span class="p">,</span> <span class="n">qr_B_error</span><span class="p">)</span><span class="err">$</span>
+<span class="nv">qr_B_error</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_norm</span><span class="p">(</span><span class="nf">np_sub</span><span class="p">(</span><span class="nv">B</span><span class="p">,</span><span class="w"> </span><span class="nf">np_matmul</span><span class="p">(</span><span class="nv">Q_B</span><span class="p">,</span><span class="w"> </span><span class="nv">R_B</span><span class="p">)));</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Reconstruction error ||B - QR|| ="</span><span class="p">,</span><span class="w"> </span><span class="nv">qr_B_error</span><span class="p">)$</span>
 </pre></div>
 </div>
 </div>
@@ -8359,7 +8359,7 @@ Reconstruction error ||B - QR|| = 7.483924389696347e-15</pre>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d3cda1fe">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=1b0a933b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8367,25 +8367,25 @@ Reconstruction error ||B - QR|| = 7.483924389696347e-15</pre>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [108]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">SVD</span> <span class="n">of</span> <span class="n">non</span><span class="o">-</span><span class="n">square</span> <span class="n">matrix</span> <span class="o">*/</span>
-<span class="p">[</span><span class="n">U_B</span><span class="p">,</span> <span class="n">S_B</span><span class="p">,</span> <span class="n">Vt_B</span><span class="p">]</span> <span class="p">:</span> <span class="n">np_svd</span><span class="p">(</span><span class="n">B</span><span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* SVD of non-square matrix */</span>
+<span class="p">[</span><span class="nv">U_B</span><span class="p">,</span><span class="w"> </span><span class="nv">S_B</span><span class="p">,</span><span class="w"> </span><span class="nv">Vt_B</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_svd</span><span class="p">(</span><span class="nv">B</span><span class="p">)$</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"SVD of B:"</span><span class="p">)</span><span class="err">$</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"U shape:"</span><span class="p">,</span> <span class="n">np_shape</span><span class="p">(</span><span class="n">U_B</span><span class="p">))</span><span class="err">$</span>
-<span class="n">np_to_matrix</span><span class="p">(</span><span class="n">U_B</span><span class="p">);</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Singular values:"</span><span class="p">,</span> <span class="n">np_to_list</span><span class="p">(</span><span class="n">S_B</span><span class="p">))</span><span class="err">$</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Vt shape:"</span><span class="p">,</span> <span class="n">np_shape</span><span class="p">(</span><span class="n">Vt_B</span><span class="p">))</span><span class="err">$</span>
-<span class="n">np_to_matrix</span><span class="p">(</span><span class="n">Vt_B</span><span class="p">);</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"SVD of B:"</span><span class="p">)$</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"U shape:"</span><span class="p">,</span><span class="w"> </span><span class="nf">np_shape</span><span class="p">(</span><span class="nv">U_B</span><span class="p">))$</span>
+<span class="nf">np_to_matrix</span><span class="p">(</span><span class="nv">U_B</span><span class="p">);</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Singular values:"</span><span class="p">,</span><span class="w"> </span><span class="nf">np_to_list</span><span class="p">(</span><span class="nv">S_B</span><span class="p">))$</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Vt shape:"</span><span class="p">,</span><span class="w"> </span><span class="nf">np_shape</span><span class="p">(</span><span class="nv">Vt_B</span><span class="p">))$</span>
+<span class="nf">np_to_matrix</span><span class="p">(</span><span class="nv">Vt_B</span><span class="p">);</span>
 
-<span class="o">/*</span> <span class="n">Reconstruct</span><span class="p">:</span> <span class="n">U</span> <span class="o">*</span> <span class="n">diag</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> <span class="o">*</span> <span class="n">Vt</span> <span class="o">*/</span>
-<span class="n">S_B_mat</span> <span class="p">:</span> <span class="n">np_diag</span><span class="p">(</span><span class="n">np_to_list</span><span class="p">(</span><span class="n">S_B</span><span class="p">))</span><span class="err">$</span>
-<span class="n">B_reconstructed</span> <span class="p">:</span> <span class="n">np_matmul</span><span class="p">(</span><span class="n">np_matmul</span><span class="p">(</span><span class="n">U_B</span><span class="p">,</span> <span class="n">S_B_mat</span><span class="p">),</span> <span class="n">Vt_B</span><span class="p">)</span><span class="err">$</span>
-<span class="n">svd_B_error</span> <span class="p">:</span> <span class="n">np_norm</span><span class="p">(</span><span class="n">np_sub</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">B_reconstructed</span><span class="p">));</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Reconstruction error ||B - U*diag(S)*Vt|| ="</span><span class="p">,</span> <span class="n">svd_B_error</span><span class="p">)</span><span class="err">$</span>
+<span class="cm">/* Reconstruct: U * diag(S) * Vt */</span>
+<span class="nv">S_B_mat</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_diag</span><span class="p">(</span><span class="nf">np_to_list</span><span class="p">(</span><span class="nv">S_B</span><span class="p">))$</span>
+<span class="nv">B_reconstructed</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_matmul</span><span class="p">(</span><span class="nf">np_matmul</span><span class="p">(</span><span class="nv">U_B</span><span class="p">,</span><span class="w"> </span><span class="nv">S_B_mat</span><span class="p">),</span><span class="w"> </span><span class="nv">Vt_B</span><span class="p">)$</span>
+<span class="nv">svd_B_error</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_norm</span><span class="p">(</span><span class="nf">np_sub</span><span class="p">(</span><span class="nv">B</span><span class="p">,</span><span class="w"> </span><span class="nv">B_reconstructed</span><span class="p">));</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Reconstruction error ||B - U*diag(S)*Vt|| ="</span><span class="p">,</span><span class="w"> </span><span class="nv">svd_B_error</span><span class="p">)$</span>
 
-<span class="o">/*</span> <span class="n">Rank</span> <span class="kn">from</span><span class="w"> </span><span class="nn">singular</span> <span class="n">values</span> <span class="o">*/</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Matrix rank (number of nonzero singular values) = 2"</span><span class="p">)</span><span class="err">$</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"The columns of B are linearly independent."</span><span class="p">)</span><span class="err">$</span>
+<span class="cm">/* Rank from singular values */</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Matrix rank (number of nonzero singular values) = 2"</span><span class="p">)$</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"The columns of B are linearly independent."</span><span class="p">)$</span>
 </pre></div>
 </div>
 </div>
@@ -8417,7 +8417,7 @@ The columns of B are linearly independent.</pre>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c616b658">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=27c12ad3">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>

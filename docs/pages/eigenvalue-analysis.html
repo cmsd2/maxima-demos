@@ -7771,7 +7771,7 @@ a.anchor-link {
 </head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=dcdba093">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=53fffa90">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7786,7 +7786,7 @@ and visual interpretation.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=916d28bb">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c26a811b">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7794,15 +7794,15 @@ and visual interpretation.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [127]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">load</span><span class="p">(</span><span class="s2">"numerics"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">load</span><span class="p">(</span><span class="s2">"ax-plots"</span><span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="nf">load</span><span class="p">(</span><span class="s">"numerics"</span><span class="p">)$</span>
+<span class="nf">load</span><span class="p">(</span><span class="s">"ax-plots"</span><span class="p">)$</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2c5ca6a0">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=0d659d09">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7819,7 +7819,7 @@ matrix. We derive $K$ symbolically from the spring forces.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ef22081f">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=44d2c816">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7827,27 +7827,27 @@ matrix. We derive $K$ symbolically from the spring forces.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [128]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Symbolic</span> <span class="n">mass</span> <span class="ow">and</span> <span class="n">stiffness</span> <span class="n">matrices</span> <span class="o">*/</span>
-<span class="n">M_sym</span> <span class="p">:</span> <span class="n">matrix</span><span class="p">(</span>
-  <span class="p">[</span><span class="n">m1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-  <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">m2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-  <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">m3</span><span class="p">]</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* Symbolic mass and stiffness matrices */</span>
+<span class="nv">M_sym</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span>
+<span class="w">  </span><span class="p">[</span><span class="nv">m1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span>
+<span class="w">  </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nv">m2</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span>
+<span class="w">  </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nv">m3</span><span class="p">]</span>
 <span class="p">);</span>
 
-<span class="o">/*</span> <span class="n">Stiffness</span><span class="p">:</span> <span class="n">F_i</span> <span class="o">=</span> <span class="nb">sum</span> <span class="n">of</span> <span class="n">spring</span> <span class="n">forces</span> <span class="n">on</span> <span class="n">mass</span> <span class="n">i</span> <span class="o">*/</span>
-<span class="o">/*</span> <span class="n">Mass</span> <span class="mi">1</span><span class="p">:</span> <span class="o">-</span><span class="n">k1</span><span class="o">*</span><span class="n">x1</span> <span class="o">+</span> <span class="n">k2</span><span class="o">*</span><span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">k1</span><span class="o">+</span><span class="n">k2</span><span class="p">)</span><span class="o">*</span><span class="n">x1</span> <span class="o">+</span> <span class="n">k2</span><span class="o">*</span><span class="n">x2</span>           <span class="o">*/</span>
-<span class="o">/*</span> <span class="n">Mass</span> <span class="mi">2</span><span class="p">:</span> <span class="o">-</span><span class="n">k2</span><span class="o">*</span><span class="p">(</span><span class="n">x2</span><span class="o">-</span><span class="n">x1</span><span class="p">)</span> <span class="o">+</span> <span class="n">k3</span><span class="o">*</span><span class="p">(</span><span class="n">x3</span><span class="o">-</span><span class="n">x2</span><span class="p">)</span> <span class="o">=</span> <span class="n">k2</span><span class="o">*</span><span class="n">x1</span> <span class="o">-</span> <span class="p">(</span><span class="n">k2</span><span class="o">+</span><span class="n">k3</span><span class="p">)</span><span class="o">*</span><span class="n">x2</span> <span class="o">+</span> <span class="n">k3</span><span class="o">*</span><span class="n">x3</span> <span class="o">*/</span>
-<span class="o">/*</span> <span class="n">Mass</span> <span class="mi">3</span><span class="p">:</span> <span class="o">-</span><span class="n">k3</span><span class="o">*</span><span class="p">(</span><span class="n">x3</span><span class="o">-</span><span class="n">x2</span><span class="p">)</span> <span class="o">-</span> <span class="n">k4</span><span class="o">*</span><span class="n">x3</span> <span class="o">=</span> <span class="n">k3</span><span class="o">*</span><span class="n">x2</span> <span class="o">-</span> <span class="p">(</span><span class="n">k3</span><span class="o">+</span><span class="n">k4</span><span class="p">)</span><span class="o">*</span><span class="n">x3</span>              <span class="o">*/</span>
-<span class="n">K_sym</span> <span class="p">:</span> <span class="n">matrix</span><span class="p">(</span>
-  <span class="p">[</span><span class="n">k1</span><span class="o">+</span><span class="n">k2</span><span class="p">,</span>  <span class="o">-</span><span class="n">k2</span><span class="p">,</span>      <span class="mi">0</span><span class="p">],</span>
-  <span class="p">[</span><span class="o">-</span><span class="n">k2</span><span class="p">,</span>    <span class="n">k2</span><span class="o">+</span><span class="n">k3</span><span class="p">,</span>   <span class="o">-</span><span class="n">k3</span><span class="p">],</span>
-  <span class="p">[</span><span class="mi">0</span><span class="p">,</span>      <span class="o">-</span><span class="n">k3</span><span class="p">,</span>     <span class="n">k3</span><span class="o">+</span><span class="n">k4</span><span class="p">]</span>
+<span class="cm">/* Stiffness: F_i = sum of spring forces on mass i */</span>
+<span class="cm">/* Mass 1: -k1*x1 + k2*(x2 - x1) = -(k1+k2)*x1 + k2*x2           */</span>
+<span class="cm">/* Mass 2: -k2*(x2-x1) + k3*(x3-x2) = k2*x1 - (k2+k3)*x2 + k3*x3 */</span>
+<span class="cm">/* Mass 3: -k3*(x3-x2) - k4*x3 = k3*x2 - (k3+k4)*x3              */</span>
+<span class="nv">K_sym</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span>
+<span class="w">  </span><span class="p">[</span><span class="nv">k1</span><span class="o">+</span><span class="nv">k2</span><span class="p">,</span><span class="w">  </span><span class="o">-</span><span class="nv">k2</span><span class="p">,</span><span class="w">      </span><span class="mi">0</span><span class="p">],</span>
+<span class="w">  </span><span class="p">[</span><span class="o">-</span><span class="nv">k2</span><span class="p">,</span><span class="w">    </span><span class="nv">k2</span><span class="o">+</span><span class="nv">k3</span><span class="p">,</span><span class="w">   </span><span class="o">-</span><span class="nv">k3</span><span class="p">],</span>
+<span class="w">  </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w">      </span><span class="o">-</span><span class="nv">k3</span><span class="p">,</span><span class="w">     </span><span class="nv">k3</span><span class="o">+</span><span class="nv">k4</span><span class="p">]</span>
 <span class="p">);</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Mass matrix M:"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">M_sym</span><span class="p">;</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Stiffness matrix K:"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">K_sym</span><span class="p">;</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Mass matrix M:"</span><span class="p">)$</span>
+<span class="nv">M_sym</span><span class="p">;</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Stiffness matrix K:"</span><span class="p">)$</span>
+<span class="nv">K_sym</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
@@ -7875,7 +7875,7 @@ Stiffness matrix K:</pre>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=a7598d16">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c4393504">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7883,16 +7883,16 @@ Stiffness matrix K:</pre>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [129]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Assign</span> <span class="n">numeric</span> <span class="n">values</span> <span class="o">*/</span>
-<span class="n">params</span> <span class="p">:</span> <span class="p">[</span><span class="n">m1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">m2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">m3</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">k1</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">k2</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">k3</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">k4</span><span class="o">=</span><span class="mi">10</span><span class="p">]</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* Assign numeric values */</span>
+<span class="nv">params</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nv">m1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nv">m2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nv">m3</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nv">k1</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nv">k2</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nv">k3</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nv">k4</span><span class="o">=</span><span class="mi">10</span><span class="p">]$</span>
 
-<span class="n">M_num</span> <span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">subst</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">M_sym</span><span class="p">));</span>
-<span class="n">K_num</span> <span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">subst</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">K_sym</span><span class="p">));</span>
+<span class="nv">M_num</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">float</span><span class="p">(</span><span class="nf">subst</span><span class="p">(</span><span class="nv">params</span><span class="p">,</span><span class="w"> </span><span class="nv">M_sym</span><span class="p">));</span>
+<span class="nv">K_num</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">float</span><span class="p">(</span><span class="nf">subst</span><span class="p">(</span><span class="nv">params</span><span class="p">,</span><span class="w"> </span><span class="nv">K_sym</span><span class="p">));</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"M (numeric):"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">M_num</span><span class="p">;</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"K (numeric):"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">K_num</span><span class="p">;</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"M (numeric):"</span><span class="p">)$</span>
+<span class="nv">M_num</span><span class="p">;</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"K (numeric):"</span><span class="p">)$</span>
+<span class="nv">K_num</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
@@ -7921,7 +7921,7 @@ K (numeric):</pre>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=79b5b417">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b036a8b3">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7936,7 +7936,7 @@ eigenvectors $\phi_i$ are the <strong>mode shapes</strong>.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0fc52111">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ae78ff98">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7944,15 +7944,15 @@ eigenvectors $\phi_i$ are the <strong>mode shapes</strong>.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [130]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Convert</span> <span class="n">to</span> <span class="n">ndarrays</span> <span class="o">*/</span>
-<span class="n">M_nd</span> <span class="p">:</span> <span class="n">ndarray</span><span class="p">(</span><span class="n">M_num</span><span class="p">)</span><span class="err">$</span>
-<span class="n">K_nd</span> <span class="p">:</span> <span class="n">ndarray</span><span class="p">(</span><span class="n">K_num</span><span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* Convert to ndarrays */</span>
+<span class="nv">M_nd</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">ndarray</span><span class="p">(</span><span class="nv">M_num</span><span class="p">)$</span>
+<span class="nv">K_nd</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">ndarray</span><span class="p">(</span><span class="nv">K_num</span><span class="p">)$</span>
 
-<span class="o">/*</span> <span class="n">Standard</span> <span class="n">eigenvalue</span> <span class="n">problem</span><span class="p">:</span> <span class="n">M</span><span class="o">^</span><span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">}</span> <span class="n">K</span> <span class="o">*/</span>
-<span class="n">MinvK</span> <span class="p">:</span> <span class="n">np_matmul</span><span class="p">(</span><span class="n">np_inv</span><span class="p">(</span><span class="n">M_nd</span><span class="p">),</span> <span class="n">K_nd</span><span class="p">)</span><span class="err">$</span>
+<span class="cm">/* Standard eigenvalue problem: M^{-1} K */</span>
+<span class="nv">MinvK</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_matmul</span><span class="p">(</span><span class="nf">np_inv</span><span class="p">(</span><span class="nv">M_nd</span><span class="p">),</span><span class="w"> </span><span class="nv">K_nd</span><span class="p">)$</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"M^{-1} K:"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">np_to_matrix</span><span class="p">(</span><span class="n">MinvK</span><span class="p">);</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"M^{-1} K:"</span><span class="p">)$</span>
+<span class="nf">np_to_matrix</span><span class="p">(</span><span class="nv">MinvK</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -7976,7 +7976,7 @@ eigenvectors $\phi_i$ are the <strong>mode shapes</strong>.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=7aa526c3">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=b555e2f9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7984,19 +7984,19 @@ eigenvectors $\phi_i$ are the <strong>mode shapes</strong>.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [131]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Eigendecomposition</span> <span class="o">*/</span>
-<span class="p">[</span><span class="n">eigenvals</span><span class="p">,</span> <span class="n">eigenvecs</span><span class="p">]</span> <span class="p">:</span> <span class="n">np_eig</span><span class="p">(</span><span class="n">MinvK</span><span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* Eigendecomposition */</span>
+<span class="p">[</span><span class="nv">eigenvals</span><span class="p">,</span><span class="w"> </span><span class="nv">eigenvecs</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_eig</span><span class="p">(</span><span class="nv">MinvK</span><span class="p">)$</span>
 
-<span class="n">lambdas</span> <span class="p">:</span> <span class="n">np_to_list</span><span class="p">(</span><span class="n">eigenvals</span><span class="p">)</span><span class="err">$</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Eigenvalues (omega^2):"</span><span class="p">)</span><span class="err">$</span>
-<span class="k">for</span> <span class="n">i</span> <span class="p">:</span> <span class="mi">1</span> <span class="n">thru</span> <span class="n">length</span><span class="p">(</span><span class="n">lambdas</span><span class="p">)</span> <span class="n">do</span>
-  <span class="nb">print</span><span class="p">(</span><span class="n">sconcat</span><span class="p">(</span><span class="s2">"  lambda_"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s2">" = "</span><span class="p">,</span> <span class="n">lambdas</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span><span class="err">$</span>
+<span class="nv">lambdas</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_to_list</span><span class="p">(</span><span class="nv">eigenvals</span><span class="p">)$</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Eigenvalues (omega^2):"</span><span class="p">)$</span>
+<span class="k">for</span><span class="w"> </span><span class="nv">i</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">thru</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="nv">lambdas</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nf">print</span><span class="p">(</span><span class="nf">sconcat</span><span class="p">(</span><span class="s">"  lambda_"</span><span class="p">,</span><span class="w"> </span><span class="nv">i</span><span class="p">,</span><span class="w"> </span><span class="s">" = "</span><span class="p">,</span><span class="w"> </span><span class="nv">lambdas</span><span class="p">[</span><span class="nv">i</span><span class="p">]))$</span>
 
-<span class="o">/*</span> <span class="n">Natural</span> <span class="n">frequencies</span> <span class="o">*/</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Natural frequencies (omega = sqrt(lambda)):"</span><span class="p">)</span><span class="err">$</span>
-<span class="k">for</span> <span class="n">i</span> <span class="p">:</span> <span class="mi">1</span> <span class="n">thru</span> <span class="n">length</span><span class="p">(</span><span class="n">lambdas</span><span class="p">)</span> <span class="n">do</span>
-  <span class="nb">print</span><span class="p">(</span><span class="n">sconcat</span><span class="p">(</span><span class="s2">"  omega_"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s2">" = "</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lambdas</span><span class="p">[</span><span class="n">i</span><span class="p">])),</span>
-                <span class="s2">" rad/s  (f = "</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lambdas</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="nb">float</span><span class="p">(</span><span class="o">%</span><span class="n">pi</span><span class="p">)),</span> <span class="s2">" Hz)"</span><span class="p">))</span><span class="err">$</span>
+<span class="cm">/* Natural frequencies */</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Natural frequencies (omega = sqrt(lambda)):"</span><span class="p">)$</span>
+<span class="k">for</span><span class="w"> </span><span class="nv">i</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">thru</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="nv">lambdas</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nf">print</span><span class="p">(</span><span class="nf">sconcat</span><span class="p">(</span><span class="s">"  omega_"</span><span class="p">,</span><span class="w"> </span><span class="nv">i</span><span class="p">,</span><span class="w"> </span><span class="s">" = "</span><span class="p">,</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="nv">lambdas</span><span class="p">[</span><span class="nv">i</span><span class="p">])),</span>
+<span class="w">                </span><span class="s">" rad/s  (f = "</span><span class="p">,</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="nv">lambdas</span><span class="p">[</span><span class="nv">i</span><span class="p">]))</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="nf">float</span><span class="p">(</span><span class="no">%pi</span><span class="p">)),</span><span class="w"> </span><span class="s">" Hz)"</span><span class="p">))$</span>
 </pre></div>
 </div>
 </div>
@@ -8022,7 +8022,7 @@ Natural frequencies (omega = sqrt(lambda)):
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=347cd320">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=229031b0">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8038,7 +8038,7 @@ of the masses at that natural frequency. We extract and plot each mode.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9b9b1470">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=53601acd">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8046,11 +8046,11 @@ of the masses at that natural frequency. We extract and plot each mode.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [132]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Extract</span> <span class="n">eigenvectors</span> <span class="p">(</span><span class="n">columns</span> <span class="n">of</span> <span class="n">the</span> <span class="n">eigenvector</span> <span class="n">matrix</span><span class="p">)</span> <span class="o">*/</span>
-<span class="n">V_mat</span> <span class="p">:</span> <span class="n">np_to_matrix</span><span class="p">(</span><span class="n">eigenvecs</span><span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* Extract eigenvectors (columns of the eigenvector matrix) */</span>
+<span class="nv">V_mat</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_to_matrix</span><span class="p">(</span><span class="nv">eigenvecs</span><span class="p">)$</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Eigenvector matrix (columns = mode shapes):"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">V_mat</span><span class="p">;</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Eigenvector matrix (columns = mode shapes):"</span><span class="p">)$</span>
+<span class="nv">V_mat</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
@@ -8074,7 +8074,7 @@ of the masses at that natural frequency. We extract and plot each mode.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=57d9e43b">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=a2c42bae">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8082,28 +8082,28 @@ of the masses at that natural frequency. We extract and plot each mode.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [133]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Plot</span> <span class="n">mode</span> <span class="n">shapes</span> <span class="k">as</span> <span class="n">bar</span> <span class="n">charts</span> <span class="o">*/</span>
-<span class="n">positions</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span><span class="err">$</span>
-<span class="n">mode_labels</span> <span class="p">:</span> <span class="p">[</span><span class="s2">"Mode 1 (lowest freq)"</span><span class="p">,</span> <span class="s2">"Mode 2 (middle freq)"</span><span class="p">,</span> <span class="s2">"Mode 3 (highest freq)"</span><span class="p">]</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* Plot mode shapes as bar charts */</span>
+<span class="nv">positions</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]$</span>
+<span class="nv">mode_labels</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s">"Mode 1 (lowest freq)"</span><span class="p">,</span><span class="w"> </span><span class="s">"Mode 2 (middle freq)"</span><span class="p">,</span><span class="w"> </span><span class="s">"Mode 3 (highest freq)"</span><span class="p">]$</span>
 
-<span class="o">/*</span> <span class="n">Extract</span> <span class="n">each</span> <span class="n">mode</span> <span class="n">shape</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">eigenvector</span> <span class="n">matrix</span> <span class="n">columns</span> <span class="o">*/</span>
-<span class="n">modes</span> <span class="p">:</span> <span class="n">makelist</span><span class="p">(</span>
-  <span class="n">makelist</span><span class="p">(</span><span class="n">V_mat</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">],</span> <span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
-  <span class="n">col</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span>
-<span class="p">)</span><span class="err">$</span>
+<span class="cm">/* Extract each mode shape from the eigenvector matrix columns */</span>
+<span class="nv">modes</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">makelist</span><span class="p">(</span>
+<span class="w">  </span><span class="nf">makelist</span><span class="p">(</span><span class="nv">V_mat</span><span class="p">[</span><span class="nv">row</span><span class="p">][</span><span class="nv">col</span><span class="p">],</span><span class="w"> </span><span class="nv">row</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">),</span>
+<span class="w">  </span><span class="nv">col</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span>
+<span class="p">)$</span>
 
-<span class="o">/*</span> <span class="n">Sort</span> <span class="n">modes</span> <span class="n">by</span> <span class="n">eigenvalue</span> <span class="n">magnitude</span> <span class="p">(</span><span class="n">ascending</span> <span class="n">frequency</span><span class="p">)</span> <span class="o">*/</span>
-<span class="n">indexed</span> <span class="p">:</span> <span class="n">makelist</span><span class="p">([</span><span class="nb">abs</span><span class="p">(</span><span class="n">lambdas</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="err">$</span>
-<span class="n">indexed</span> <span class="p">:</span> <span class="n">sort</span><span class="p">(</span><span class="n">indexed</span><span class="p">,</span> <span class="k">lambda</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="err">$</span>
-<span class="n">sorted_indices</span> <span class="p">:</span> <span class="n">makelist</span><span class="p">(</span><span class="n">indexed</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="err">$</span>
+<span class="cm">/* Sort modes by eigenvalue magnitude (ascending frequency) */</span>
+<span class="no">ind</span><span class="nv">exed</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">makelist</span><span class="p">([</span><span class="nf">abs</span><span class="p">(</span><span class="nv">lambdas</span><span class="p">[</span><span class="nv">i</span><span class="p">]),</span><span class="w"> </span><span class="nv">i</span><span class="p">],</span><span class="w"> </span><span class="nv">i</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)$</span>
+<span class="no">ind</span><span class="nv">exed</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">sort</span><span class="p">(</span><span class="no">ind</span><span class="nv">exed</span><span class="p">,</span><span class="w"> </span><span class="nf">lambda</span><span class="p">([</span><span class="nv">a</span><span class="p">,</span><span class="w"> </span><span class="nv">b</span><span class="p">],</span><span class="w"> </span><span class="nv">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nv">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]))$</span>
+<span class="nv">sorted_indices</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">makelist</span><span class="p">(</span><span class="no">ind</span><span class="nv">exed</span><span class="p">[</span><span class="nv">i</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="nv">i</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)$</span>
 
-<span class="k">for</span> <span class="n">k</span> <span class="p">:</span> <span class="mi">1</span> <span class="n">thru</span> <span class="mi">3</span> <span class="n">do</span> <span class="n">block</span><span class="p">(</span>
-  <span class="p">[</span><span class="n">idx</span> <span class="p">:</span> <span class="n">sorted_indices</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">mode_data</span><span class="p">],</span>
-  <span class="n">mode_data</span> <span class="p">:</span> <span class="n">makelist</span><span class="p">([</span><span class="n">positions</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">modes</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">j</span><span class="p">]],</span> <span class="n">j</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
-  <span class="nb">print</span><span class="p">(</span><span class="n">sconcat</span><span class="p">(</span><span class="n">mode_labels</span><span class="p">[</span><span class="n">k</span><span class="p">],</span>
-                <span class="s2">"  (omega = "</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lambdas</span><span class="p">[</span><span class="n">idx</span><span class="p">])),</span> <span class="s2">" rad/s)"</span><span class="p">)),</span>
-  <span class="nb">print</span><span class="p">(</span><span class="s2">"  Displacements:"</span><span class="p">,</span> <span class="n">modes</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
-<span class="p">)</span><span class="err">$</span>
+<span class="k">for</span><span class="w"> </span><span class="nv">k</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">thru</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nf">block</span><span class="p">(</span>
+<span class="w">  </span><span class="p">[</span><span class="nv">idx</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nv">sorted_indices</span><span class="p">[</span><span class="nv">k</span><span class="p">],</span><span class="w"> </span><span class="nv">mode_data</span><span class="p">],</span>
+<span class="w">  </span><span class="nv">mode_data</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">makelist</span><span class="p">([</span><span class="nv">positions</span><span class="p">[</span><span class="nv">j</span><span class="p">],</span><span class="w"> </span><span class="nv">modes</span><span class="p">[</span><span class="nv">idx</span><span class="p">][</span><span class="nv">j</span><span class="p">]],</span><span class="w"> </span><span class="nv">j</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">),</span>
+<span class="w">  </span><span class="nf">print</span><span class="p">(</span><span class="nf">sconcat</span><span class="p">(</span><span class="nv">mode_labels</span><span class="p">[</span><span class="nv">k</span><span class="p">],</span>
+<span class="w">                </span><span class="s">"  (omega = "</span><span class="p">,</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="nv">lambdas</span><span class="p">[</span><span class="nv">idx</span><span class="p">])),</span><span class="w"> </span><span class="s">" rad/s)"</span><span class="p">)),</span>
+<span class="w">  </span><span class="nf">print</span><span class="p">(</span><span class="s">"  Displacements:"</span><span class="p">,</span><span class="w"> </span><span class="nv">modes</span><span class="p">[</span><span class="nv">idx</span><span class="p">])</span>
+<span class="p">)$</span>
 </pre></div>
 </div>
 </div>
@@ -8128,7 +8128,7 @@ Mode 3 (highest freq)  (omega = 5.116672736016928 rad/s)
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=9f26d006">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=00a6134a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8136,47 +8136,47 @@ Mode 3 (highest freq)  (omega = 5.116672736016928 rad/s)
 <div class="jp-InputPrompt jp-InputArea-prompt">In [134]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Visualise</span> <span class="nb">all</span> <span class="n">three</span> <span class="n">mode</span> <span class="n">shapes</span> <span class="o">*/</span>
-<span class="n">colors</span> <span class="p">:</span> <span class="p">[</span><span class="s2">"#377eb8"</span><span class="p">,</span> <span class="s2">"#e41a1c"</span><span class="p">,</span> <span class="s2">"#4daf4a"</span><span class="p">]</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* Visualise all three mode shapes */</span>
+<span class="nv">colors</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s">"#377eb8"</span><span class="p">,</span><span class="w"> </span><span class="s">"#e41a1c"</span><span class="p">,</span><span class="w"> </span><span class="s">"#4daf4a"</span><span class="p">]$</span>
 
-<span class="o">/*</span> <span class="n">Build</span> <span class="n">displacement</span> <span class="n">data</span> <span class="k">for</span> <span class="n">plotting</span><span class="p">:</span> <span class="n">include</span> <span class="n">wall</span> <span class="n">anchors</span> <span class="n">at</span> <span class="n">positions</span> <span class="mi">0</span> <span class="ow">and</span> <span class="mi">4</span> <span class="o">*/</span>
-<span class="n">mode_plots</span> <span class="p">:</span> <span class="p">[]</span><span class="err">$</span>
-<span class="k">for</span> <span class="n">k</span> <span class="p">:</span> <span class="mi">1</span> <span class="n">thru</span> <span class="mi">3</span> <span class="n">do</span> <span class="n">block</span><span class="p">(</span>
-  <span class="p">[</span><span class="n">idx</span> <span class="p">:</span> <span class="n">sorted_indices</span><span class="p">[</span><span class="n">k</span><span class="p">],</span>
-   <span class="n">disp</span><span class="p">,</span> <span class="n">pts</span><span class="p">],</span>
-  <span class="n">disp</span> <span class="p">:</span> <span class="n">modes</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
-  <span class="o">/*</span> <span class="n">Normalize</span> <span class="n">so</span> <span class="nb">max</span> <span class="n">displacement</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*/</span>
-  <span class="n">disp</span> <span class="p">:</span> <span class="n">disp</span> <span class="o">/</span> <span class="n">lmax</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">abs</span><span class="p">,</span> <span class="n">disp</span><span class="p">)),</span>
-  <span class="n">pts</span> <span class="p">:</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">disp</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">disp</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="n">disp</span><span class="p">[</span><span class="mi">3</span><span class="p">]],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
-<span class="p">)</span><span class="err">$</span>
+<span class="cm">/* Build displacement data for plotting: include wall anchors at positions 0 and 4 */</span>
+<span class="nv">mode_plots</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">[]$</span>
+<span class="k">for</span><span class="w"> </span><span class="nv">k</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">thru</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nf">block</span><span class="p">(</span>
+<span class="w">  </span><span class="p">[</span><span class="nv">idx</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nv">sorted_indices</span><span class="p">[</span><span class="nv">k</span><span class="p">],</span>
+<span class="w">   </span><span class="nv">disp</span><span class="p">,</span><span class="w"> </span><span class="nv">pts</span><span class="p">],</span>
+<span class="w">  </span><span class="nv">disp</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nv">modes</span><span class="p">[</span><span class="nv">idx</span><span class="p">],</span>
+<span class="w">  </span><span class="cm">/* Normalize so max displacement = 1 */</span>
+<span class="w">  </span><span class="nv">disp</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nv">disp</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">lmax</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nv">abs</span><span class="p">,</span><span class="w"> </span><span class="nv">disp</span><span class="p">)),</span>
+<span class="w">  </span><span class="nv">pts</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nv">disp</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nv">disp</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nv">disp</span><span class="p">[</span><span class="mi">3</span><span class="p">]],</span><span class="w"> </span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">]]</span>
+<span class="p">)$</span>
 
-<span class="o">/*</span> <span class="n">Plot</span> <span class="n">mode</span> <span class="n">shapes</span> <span class="k">with</span> <span class="n">walls</span> <span class="n">anchored</span> <span class="n">at</span> <span class="n">zero</span> <span class="o">*/</span>
-<span class="n">ax_draw2d</span><span class="p">(</span>
-  <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="n">sconcat</span><span class="p">(</span><span class="s2">"Mode 1 (w="</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lambdas</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]]))),</span> <span class="s2">")"</span><span class="p">),</span>
-  <span class="n">lines</span><span class="p">(</span>
-    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-    <span class="n">block</span><span class="p">([</span><span class="n">d</span> <span class="p">:</span> <span class="n">modes</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]]],</span>
-          <span class="n">d</span> <span class="p">:</span> <span class="n">d</span> <span class="o">/</span> <span class="n">lmax</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">abs</span><span class="p">,</span> <span class="n">d</span><span class="p">)),</span>
-          <span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">d</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-  <span class="p">),</span>
-  <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="n">sconcat</span><span class="p">(</span><span class="s2">"Mode 2 (w="</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lambdas</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">[</span><span class="mi">2</span><span class="p">]]))),</span> <span class="s2">")"</span><span class="p">),</span>
-  <span class="n">lines</span><span class="p">(</span>
-    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-    <span class="n">block</span><span class="p">([</span><span class="n">d</span> <span class="p">:</span> <span class="n">modes</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">[</span><span class="mi">2</span><span class="p">]]],</span>
-          <span class="n">d</span> <span class="p">:</span> <span class="n">d</span> <span class="o">/</span> <span class="n">lmax</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">abs</span><span class="p">,</span> <span class="n">d</span><span class="p">)),</span>
-          <span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">d</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-  <span class="p">),</span>
-  <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="n">sconcat</span><span class="p">(</span><span class="s2">"Mode 3 (w="</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">lambdas</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">[</span><span class="mi">3</span><span class="p">]]))),</span> <span class="s2">")"</span><span class="p">),</span>
-  <span class="n">lines</span><span class="p">(</span>
-    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-    <span class="n">block</span><span class="p">([</span><span class="n">d</span> <span class="p">:</span> <span class="n">modes</span><span class="p">[</span><span class="n">sorted_indices</span><span class="p">[</span><span class="mi">3</span><span class="p">]]],</span>
-          <span class="n">d</span> <span class="p">:</span> <span class="n">d</span> <span class="o">/</span> <span class="n">lmax</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">abs</span><span class="p">,</span> <span class="n">d</span><span class="p">)),</span>
-          <span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">d</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-  <span class="p">),</span>
-  <span class="n">title</span><span class="o">=</span><span class="s2">"Vibration Mode Shapes (normalised)"</span><span class="p">,</span>
-  <span class="n">xlabel</span><span class="o">=</span><span class="s2">"Mass position"</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">"Displacement"</span><span class="p">,</span>
-  <span class="n">grid</span><span class="o">=</span><span class="n">true</span>
-<span class="p">)</span><span class="err">$</span>
+<span class="cm">/* Plot mode shapes with walls anchored at zero */</span>
+<span class="nf">ax_draw2d</span><span class="p">(</span>
+<span class="w">  </span><span class="nv">color</span><span class="o">=</span><span class="nv">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="nv">name</span><span class="o">=</span><span class="nf">sconcat</span><span class="p">(</span><span class="s">"Mode 1 (w="</span><span class="p">,</span><span class="w"> </span><span class="nf">float</span><span class="p">(</span><span class="nf">sqrt</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="nv">lambdas</span><span class="p">[</span><span class="nv">sorted_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]]))),</span><span class="w"> </span><span class="s">")"</span><span class="p">),</span>
+<span class="w">  </span><span class="nf">lines</span><span class="p">(</span>
+<span class="w">    </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
+<span class="w">    </span><span class="nf">block</span><span class="p">([</span><span class="nv">d</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nv">modes</span><span class="p">[</span><span class="nv">sorted_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]]],</span>
+<span class="w">          </span><span class="nv">d</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nv">d</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">lmax</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nv">abs</span><span class="p">,</span><span class="w"> </span><span class="nv">d</span><span class="p">)),</span>
+<span class="w">          </span><span class="nf">append</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="nv">d</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="w">  </span><span class="p">),</span>
+<span class="w">  </span><span class="nv">color</span><span class="o">=</span><span class="nv">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="nv">name</span><span class="o">=</span><span class="nf">sconcat</span><span class="p">(</span><span class="s">"Mode 2 (w="</span><span class="p">,</span><span class="w"> </span><span class="nf">float</span><span class="p">(</span><span class="nf">sqrt</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="nv">lambdas</span><span class="p">[</span><span class="nv">sorted_indices</span><span class="p">[</span><span class="mi">2</span><span class="p">]]))),</span><span class="w"> </span><span class="s">")"</span><span class="p">),</span>
+<span class="w">  </span><span class="nf">lines</span><span class="p">(</span>
+<span class="w">    </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
+<span class="w">    </span><span class="nf">block</span><span class="p">([</span><span class="nv">d</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nv">modes</span><span class="p">[</span><span class="nv">sorted_indices</span><span class="p">[</span><span class="mi">2</span><span class="p">]]],</span>
+<span class="w">          </span><span class="nv">d</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nv">d</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">lmax</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nv">abs</span><span class="p">,</span><span class="w"> </span><span class="nv">d</span><span class="p">)),</span>
+<span class="w">          </span><span class="nf">append</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="nv">d</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="w">  </span><span class="p">),</span>
+<span class="w">  </span><span class="nv">color</span><span class="o">=</span><span class="nv">colors</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="w"> </span><span class="nv">name</span><span class="o">=</span><span class="nf">sconcat</span><span class="p">(</span><span class="s">"Mode 3 (w="</span><span class="p">,</span><span class="w"> </span><span class="nf">float</span><span class="p">(</span><span class="nf">sqrt</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="nv">lambdas</span><span class="p">[</span><span class="nv">sorted_indices</span><span class="p">[</span><span class="mi">3</span><span class="p">]]))),</span><span class="w"> </span><span class="s">")"</span><span class="p">),</span>
+<span class="w">  </span><span class="nf">lines</span><span class="p">(</span>
+<span class="w">    </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
+<span class="w">    </span><span class="nf">block</span><span class="p">([</span><span class="nv">d</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nv">modes</span><span class="p">[</span><span class="nv">sorted_indices</span><span class="p">[</span><span class="mi">3</span><span class="p">]]],</span>
+<span class="w">          </span><span class="nv">d</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nv">d</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">lmax</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nv">abs</span><span class="p">,</span><span class="w"> </span><span class="nv">d</span><span class="p">)),</span>
+<span class="w">          </span><span class="nf">append</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="nv">d</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="w">  </span><span class="p">),</span>
+<span class="w">  </span><span class="nv">title</span><span class="o">=</span><span class="s">"Vibration Mode Shapes (normalised)"</span><span class="p">,</span>
+<span class="w">  </span><span class="nv">xlabel</span><span class="o">=</span><span class="s">"Mass position"</span><span class="p">,</span><span class="w"> </span><span class="nv">ylabel</span><span class="o">=</span><span class="s">"Displacement"</span><span class="p">,</span>
+<span class="w">  </span><span class="nv">grid</span><span class="o">=</span><span class="no">true</span>
+<span class="p">)$</span>
 </pre></div>
 </div>
 </div>
@@ -8189,13 +8189,13 @@ Mode 3 (highest freq)  (omega = 5.116672736016928 rad/s)
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedSVG jp-OutputArea-output" data-mime-type="image/svg+xml" tabindex="0">
-<img alt="No description has been provided for this image" src="data:image/svg+xml;base64,PHN2ZyBjbGFzcz0ibWFpbi1zdmciIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHdpZHRoPSI4MDAiIGhlaWdodD0iNTAwIiBzdHlsZT0iIiB2aWV3Qm94PSIwIDAgODAwIDUwMCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjgwMCIgaGVpZ2h0PSI1MDAiIHN0eWxlPSJmaWxsOiByZ2IoMjU1LCAyNTUsIDI1NSk7IGZpbGwtb3BhY2l0eTogMTsiLz48ZGVmcyBpZD0iZGVmcy0yNWRkYzUiPjxnIGNsYXNzPSJjbGlwcyI+PGNsaXBQYXRoIGlkPSJjbGlwMjVkZGM1eHlwbG90IiBjbGFzcz0icGxvdGNsaXAiPjxyZWN0IHdpZHRoPSI0NDEiIGhlaWdodD0iMzIwIi8+PC9jbGlwUGF0aD48Y2xpcFBhdGggY2xhc3M9ImF4ZXNjbGlwIiBpZD0iY2xpcDI1ZGRjNXgiPjxyZWN0IHg9IjgwIiB5PSIwIiB3aWR0aD0iNDQxIiBoZWlnaHQ9IjUwMCIvPjwvY2xpcFBhdGg+PGNsaXBQYXRoIGNsYXNzPSJheGVzY2xpcCIgaWQ9ImNsaXAyNWRkYzV5Ij48cmVjdCB4PSIwIiB5PSIxMDAiIHdpZHRoPSI4MDAiIGhlaWdodD0iMzIwIi8+PC9jbGlwUGF0aD48Y2xpcFBhdGggY2xhc3M9ImF4ZXNjbGlwIiBpZD0iY2xpcDI1ZGRjNXh5Ij48cmVjdCB4PSI4MCIgeT0iMTAwIiB3aWR0aD0iNDQxIiBoZWlnaHQ9IjMyMCIvPjwvY2xpcFBhdGg+PC9nPjxnIGNsYXNzPSJncmFkaWVudHMiLz48ZyBjbGFzcz0icGF0dGVybnMiLz48L2RlZnM+PGcgY2xhc3M9ImJnbGF5ZXIiLz48ZyBjbGFzcz0ibGF5ZXItYmVsb3ciPjxnIGNsYXNzPSJpbWFnZWxheWVyIi8+PGcgY2xhc3M9InNoYXBlbGF5ZXIiLz48L2c+PGcgY2xhc3M9ImNhcnRlc2lhbmxheWVyIj48ZyBjbGFzcz0ic3VicGxvdCB4eSI+PGcgY2xhc3M9ImxheWVyLXN1YnBsb3QiPjxnIGNsYXNzPSJzaGFwZWxheWVyIi8+PGcgY2xhc3M9ImltYWdlbGF5ZXIiLz48L2c+PGcgY2xhc3M9Im1pbm9yLWdyaWRsYXllciI+PGcgY2xhc3M9IngiLz48ZyBjbGFzcz0ieSIvPjwvZz48ZyBjbGFzcz0iZ3JpZGxheWVyIj48ZyBjbGFzcz0ieCI+PHBhdGggY2xhc3M9InhncmlkIGNyaXNwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxOTAuMjUsMCkiIGQ9Ik0wLDEwMHYzMjAiIHN0eWxlPSJzdHJva2U6IHJnYigyMjEsIDIyMSwgMjIxKTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMXB4OyIvPjxwYXRoIGNsYXNzPSJ4Z3JpZCBjcmlzcCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzAwLjUsMCkiIGQ9Ik0wLDEwMHYzMjAiIHN0eWxlPSJzdHJva2U6IHJnYigyMjEsIDIyMSwgMjIxKTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMXB4OyIvPjxwYXRoIGNsYXNzPSJ4Z3JpZCBjcmlzcCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDEwLjc1LDApIiBkPSJNMCwxMDB2MzIwIiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjIxLCAyMjEsIDIyMSk7IHN0cm9rZS1vcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDFweDsiLz48L2c+PGcgY2xhc3M9InkiPjxwYXRoIGNsYXNzPSJ5Z3JpZCBjcmlzcCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCw0MDQpIiBkPSJNODAsMGg0NDEiIHN0eWxlPSJzdHJva2U6IHJnYigyMjEsIDIyMSwgMjIxKTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMXB4OyIvPjxwYXRoIGNsYXNzPSJ5Z3JpZCBjcmlzcCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwzMzIpIiBkPSJNODAsMGg0NDEiIHN0eWxlPSJzdHJva2U6IHJnYigyMjEsIDIyMSwgMjIxKTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMXB4OyIvPjxwYXRoIGNsYXNzPSJ5Z3JpZCBjcmlzcCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwxODgpIiBkPSJNODAsMGg0NDEiIHN0eWxlPSJzdHJva2U6IHJnYigyMjEsIDIyMSwgMjIxKTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMXB4OyIvPjxwYXRoIGNsYXNzPSJ5Z3JpZCBjcmlzcCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwxMTYpIiBkPSJNODAsMGg0NDEiIHN0eWxlPSJzdHJva2U6IHJnYigyMjEsIDIyMSwgMjIxKTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMXB4OyIvPjwvZz48L2c+PGcgY2xhc3M9Inplcm9saW5lbGF5ZXIiPjxwYXRoIGNsYXNzPSJ5emwgemwgY3Jpc3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMjYwKSIgZD0iTTgwLDBoNDQxIiBzdHlsZT0ic3Ryb2tlOiByZ2IoMCwgMCwgMCk7IHN0cm9rZS1vcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDFweDsiLz48L2c+PGcgY2xhc3M9ImxheWVyLWJldHdlZW4iPjxnIGNsYXNzPSJzaGFwZWxheWVyIi8+PGcgY2xhc3M9ImltYWdlbGF5ZXIiLz48L2c+PHBhdGggY2xhc3M9InhsaW5lcy1iZWxvdyIvPjxwYXRoIGNsYXNzPSJ5bGluZXMtYmVsb3ciLz48ZyBjbGFzcz0ib3ZlcmxpbmVzLWJlbG93Ii8+PGcgY2xhc3M9InhheGlzbGF5ZXItYmVsb3ciLz48ZyBjbGFzcz0ieWF4aXNsYXllci1iZWxvdyIvPjxnIGNsYXNzPSJvdmVyYXhlcy1iZWxvdyIvPjxnIGNsYXNzPSJvdmVycGxvdCI+PGcgY2xhc3M9Inh5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4MCwxMDApIiBjbGlwLXBhdGg9InVybCgjY2xpcDI1ZGRjNXh5cGxvdCkiPjxnIGNsYXNzPSJzY2F0dGVybGF5ZXIgbWxheWVyIj48ZyBjbGFzcz0idHJhY2Ugc2NhdHRlciB0cmFjZTZhYjU3MSIgc3R5bGU9InN0cm9rZS1taXRlcmxpbWl0OiAyOyBvcGFjaXR5OiAxOyI+PGcgY2xhc3M9ImZpbGxzIi8+PGcgY2xhc3M9ImVycm9yYmFycyIvPjxnIGNsYXNzPSJsaW5lcyI+PHBhdGggY2xhc3M9ImpzLWxpbmUiIGQ9Ik0wLDE2MEwxMTAuMjUsMjQ5TDIyMC41LDMwNEwzMzAuNzUsMjQ5TDQ0MSwxNjAiIHN0eWxlPSJ2ZWN0b3ItZWZmZWN0OiBub25lOyBmaWxsOiBub25lOyBzdHJva2U6IHJnYig1NSwgMTI2LCAxODQpOyBzdHJva2Utb3BhY2l0eTogMTsgc3Ryb2tlLXdpZHRoOiAycHg7IG9wYWNpdHk6IDE7Ii8+PC9nPjxnIGNsYXNzPSJwb2ludHMiLz48ZyBjbGFzcz0idGV4dCIvPjwvZz48ZyBjbGFzcz0idHJhY2Ugc2NhdHRlciB0cmFjZTE2NDExNyIgc3R5bGU9InN0cm9rZS1taXRlcmxpbWl0OiAyOyBvcGFjaXR5OiAxOyI+PGcgY2xhc3M9ImZpbGxzIi8+PGcgY2xhc3M9ImVycm9yYmFycyIvPjxnIGNsYXNzPSJsaW5lcyI+PHBhdGggY2xhc3M9ImpzLWxpbmUiIGQ9Ik0wLDE2MEwxMTAuMjUsMTZMMjIwLjUsMTYwTDMzMC43NSwzMDRMNDQxLDE2MCIgc3R5bGU9InZlY3Rvci1lZmZlY3Q6IG5vbmU7IGZpbGw6IG5vbmU7IHN0cm9rZTogcmdiKDIyOCwgMjYsIDI4KTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMnB4OyBvcGFjaXR5OiAxOyIvPjwvZz48ZyBjbGFzcz0icG9pbnRzIi8+PGcgY2xhc3M9InRleHQiLz48L2c+PGcgY2xhc3M9InRyYWNlIHNjYXR0ZXIgdHJhY2U2OWRkYWUiIHN0eWxlPSJzdHJva2UtbWl0ZXJsaW1pdDogMjsgb3BhY2l0eTogMTsiPjxnIGNsYXNzPSJmaWxscyIvPjxnIGNsYXNzPSJlcnJvcmJhcnMiLz48ZyBjbGFzcz0ibGluZXMiPjxwYXRoIGNsYXNzPSJqcy1saW5lIiBkPSJNMCwxNjBMMTEwLjI1LDE2TDIyMC41LDI0OUwzMzAuNzUsMTZMNDQxLDE2MCIgc3R5bGU9InZlY3Rvci1lZmZlY3Q6IG5vbmU7IGZpbGw6IG5vbmU7IHN0cm9rZTogcmdiKDc3LCAxNzUsIDc0KTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMnB4OyBvcGFjaXR5OiAxOyIvPjwvZz48ZyBjbGFzcz0icG9pbnRzIi8+PGcgY2xhc3M9InRleHQiLz48L2c+PC9nPjwvZz48L2c+PGcgY2xhc3M9Inplcm9saW5lbGF5ZXItYWJvdmUiLz48cGF0aCBjbGFzcz0ieGxpbmVzLWFib3ZlIGNyaXNwIiBkPSJNNzksNDIwLjVINTIxIiBzdHlsZT0iZmlsbDogbm9uZTsgc3Ryb2tlLXdpZHRoOiAxcHg7IHN0cm9rZTogcmdiKDAsIDAsIDApOyBzdHJva2Utb3BhY2l0eTogMTsiLz48cGF0aCBjbGFzcz0ieWxpbmVzLWFib3ZlIGNyaXNwIiBkPSJNNzkuNSwxMDBWNDIwIiBzdHlsZT0iZmlsbDogbm9uZTsgc3Ryb2tlLXdpZHRoOiAxcHg7IHN0cm9rZTogcmdiKDAsIDAsIDApOyBzdHJva2Utb3BhY2l0eTogMTsiLz48ZyBjbGFzcz0ib3ZlcmxpbmVzLWFib3ZlIi8+PGcgY2xhc3M9InhheGlzbGF5ZXItYWJvdmUiPjxnIGNsYXNzPSJ4dGljayI+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMCIgeT0iNDM1LjQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDgwLDApIiBzdHlsZT0iZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiPjA8L3RleHQ+PC9nPjxnIGNsYXNzPSJ4dGljayI+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMCIgeT0iNDM1LjQiIHN0eWxlPSJmb250LWZhbWlseTogJ09wZW4gU2FucycsIHZlcmRhbmEsIGFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHg7IGZpbGw6IHJnYig0MiwgNjMsIDk1KTsgZmlsbC1vcGFjaXR5OiAxOyB3aGl0ZS1zcGFjZTogcHJlOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTkwLjI1LDApIj4xPC90ZXh0PjwvZz48ZyBjbGFzcz0ieHRpY2siPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjAiIHk9IjQzNS40IiBzdHlsZT0iZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMwMC41LDApIj4yPC90ZXh0PjwvZz48ZyBjbGFzcz0ieHRpY2siPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjAiIHk9IjQzNS40IiBzdHlsZT0iZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQxMC43NSwwKSI+MzwvdGV4dD48L2c+PGcgY2xhc3M9Inh0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIwIiB5PSI0MzUuNCIgc3R5bGU9ImZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJywgdmVyZGFuYSwgYXJpYWwsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJweDsgZmlsbDogcmdiKDQyLCA2MywgOTUpOyBmaWxsLW9wYWNpdHk6IDE7IHdoaXRlLXNwYWNlOiBwcmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MjEsMCkiPjQ8L3RleHQ+PC9nPjwvZz48ZyBjbGFzcz0ieWF4aXNsYXllci1hYm92ZSI+PGcgY2xhc3M9Inl0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0iZW5kIiB4PSI3Ni42IiB5PSI0LjE5OTk5OTk5OTk5OTk5OSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCw0MDQpIiBzdHlsZT0iZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiPuKIkjE8L3RleHQ+PC9nPjxnIGNsYXNzPSJ5dGljayI+PHRleHQgdGV4dC1hbmNob3I9ImVuZCIgeD0iNzYuNiIgeT0iNC4xOTk5OTk5OTk5OTk5OTkiIHN0eWxlPSJmb250LWZhbWlseTogJ09wZW4gU2FucycsIHZlcmRhbmEsIGFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHg7IGZpbGw6IHJnYig0MiwgNjMsIDk1KTsgZmlsbC1vcGFjaXR5OiAxOyB3aGl0ZS1zcGFjZTogcHJlOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwzMzIpIj7iiJIwLjU8L3RleHQ+PC9nPjxnIGNsYXNzPSJ5dGljayI+PHRleHQgdGV4dC1hbmNob3I9ImVuZCIgeD0iNzYuNiIgeT0iNC4xOTk5OTk5OTk5OTk5OTkiIHN0eWxlPSJmb250LWZhbWlseTogJ09wZW4gU2FucycsIHZlcmRhbmEsIGFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHg7IGZpbGw6IHJnYig0MiwgNjMsIDk1KTsgZmlsbC1vcGFjaXR5OiAxOyB3aGl0ZS1zcGFjZTogcHJlOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwyNjApIj4wPC90ZXh0PjwvZz48ZyBjbGFzcz0ieXRpY2siPjx0ZXh0IHRleHQtYW5jaG9yPSJlbmQiIHg9Ijc2LjYiIHk9IjQuMTk5OTk5OTk5OTk5OTk5IiBzdHlsZT0iZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMTg4KSI+MC41PC90ZXh0PjwvZz48ZyBjbGFzcz0ieXRpY2siPjx0ZXh0IHRleHQtYW5jaG9yPSJlbmQiIHg9Ijc2LjYiIHk9IjQuMTk5OTk5OTk5OTk5OTk5IiBzdHlsZT0iZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMTE2KSI+MTwvdGV4dD48L2c+PC9nPjxnIGNsYXNzPSJvdmVyYXhlcy1hYm92ZSIvPjwvZz48L2c+PGcgY2xhc3M9InBvbGFybGF5ZXIiLz48ZyBjbGFzcz0ic21pdGhsYXllciIvPjxnIGNsYXNzPSJ0ZXJuYXJ5bGF5ZXIiLz48ZyBjbGFzcz0iZ2VvbGF5ZXIiLz48ZyBjbGFzcz0iZnVubmVsYXJlYWxheWVyIi8+PGcgY2xhc3M9InBpZWxheWVyIi8+PGcgY2xhc3M9ImljaWNsZWxheWVyIi8+PGcgY2xhc3M9InRyZWVtYXBsYXllciIvPjxnIGNsYXNzPSJzdW5idXJzdGxheWVyIi8+PGcgY2xhc3M9ImdsaW1hZ2VzIi8+PGRlZnMgaWQ9InRvcGRlZnMtMjVkZGM1Ij48ZyBjbGFzcz0iY2xpcHMiLz48Y2xpcFBhdGggaWQ9ImxlZ2VuZDI1ZGRjNSI+PHJlY3Qgd2lkdGg9IjI1OCIgaGVpZ2h0PSI2NyIgeD0iMCIgeT0iMCIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsYXNzPSJsYXllci1hYm92ZSI+PGcgY2xhc3M9ImltYWdlbGF5ZXIiLz48ZyBjbGFzcz0ic2hhcGVsYXllciIvPjwvZz48ZyBjbGFzcz0iaW5mb2xheWVyIj48ZyBjbGFzcz0ibGVnZW5kIiBwb2ludGVyLWV2ZW50cz0iYWxsIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MjkuODE5OTk5OTk5OTk5OSwxMDApIj48cmVjdCBjbGFzcz0iYmciIHNoYXBlLXJlbmRlcmluZz0iY3Jpc3BFZGdlcyIgc3R5bGU9InN0cm9rZTogcmdiKDY4LCA2OCwgNjgpOyBzdHJva2Utb3BhY2l0eTogMTsgZmlsbDogcmdiKDI1NSwgMjU1LCAyNTUpOyBmaWxsLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMHB4OyIgd2lkdGg9IjI1OCIgaGVpZ2h0PSI2NyIgeD0iMCIgeT0iMCIvPjxnIGNsYXNzPSJzY3JvbGxib3giIHRyYW5zZm9ybT0iIiBjbGlwLXBhdGg9InVybCgjbGVnZW5kMjVkZGM1KSI+PGcgY2xhc3M9Imdyb3VwcyI+PGcgY2xhc3M9InRyYWNlcyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwxNC41KSIgc3R5bGU9Im9wYWNpdHk6IDE7Ij48dGV4dCBjbGFzcz0ibGVnZW5kdGV4dCIgdGV4dC1hbmNob3I9InN0YXJ0IiB4PSI0MCIgeT0iNC42ODAwMDAwMDAwMDAwMDEiIHN0eWxlPSJmb250LWZhbWlseTogJ09wZW4gU2FucycsIHZlcmRhbmEsIGFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHg7IGZpbGw6IHJnYig0MiwgNjMsIDk1KTsgZmlsbC1vcGFjaXR5OiAxOyB3aGl0ZS1zcGFjZTogcHJlOyI+TW9kZSAxICh3PTEuOTU0Mzk1MDc1ODQ4NTQ3OCk8L3RleHQ+PGcgY2xhc3M9ImxheWVycyIgc3R5bGU9Im9wYWNpdHk6IDE7Ij48ZyBjbGFzcz0ibGVnZW5kZmlsbCIvPjxnIGNsYXNzPSJsZWdlbmRsaW5lcyI+PHBhdGggY2xhc3M9ImpzLWxpbmUiIGQ9Ik01LDBoMzAiIHN0eWxlPSJmaWxsOiBub25lOyBzdHJva2U6IHJnYig1NSwgMTI2LCAxODQpOyBzdHJva2Utb3BhY2l0eTogMTsgc3Ryb2tlLXdpZHRoOiAycHg7Ii8+PC9nPjxnIGNsYXNzPSJsZWdlbmRzeW1ib2xzIj48ZyBjbGFzcz0ibGVnZW5kcG9pbnRzIi8+PC9nPjwvZz48cmVjdCBjbGFzcz0ibGVnZW5kdG9nZ2xlIiB4PSIwIiB5PSItOS41IiB3aWR0aD0iMjUyLjY4NzUiIGhlaWdodD0iMTkiIHN0eWxlPSJmaWxsOiByZ2IoMCwgMCwgMCk7IGZpbGwtb3BhY2l0eTogMDsiLz48L2c+PGcgY2xhc3M9InRyYWNlcyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwzMy41KSIgc3R5bGU9Im9wYWNpdHk6IDE7Ij48dGV4dCBjbGFzcz0ibGVnZW5kdGV4dCIgdGV4dC1hbmNob3I9InN0YXJ0IiB4PSI0MCIgeT0iNC42ODAwMDAwMDAwMDAwMDEiIHN0eWxlPSJmb250LWZhbWlseTogJ09wZW4gU2FucycsIHZlcmRhbmEsIGFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHg7IGZpbGw6IHJnYig0MiwgNjMsIDk1KTsgZmlsbC1vcGFjaXR5OiAxOyB3aGl0ZS1zcGFjZTogcHJlOyI+TW9kZSAyICh3PTQuNDcyMTM1OTU0OTk5NTgpPC90ZXh0PjxnIGNsYXNzPSJsYXllcnMiIHN0eWxlPSJvcGFjaXR5OiAxOyI+PGcgY2xhc3M9ImxlZ2VuZGZpbGwiLz48ZyBjbGFzcz0ibGVnZW5kbGluZXMiPjxwYXRoIGNsYXNzPSJqcy1saW5lIiBkPSJNNSwwaDMwIiBzdHlsZT0iZmlsbDogbm9uZTsgc3Ryb2tlOiByZ2IoMjI4LCAyNiwgMjgpOyBzdHJva2Utb3BhY2l0eTogMTsgc3Ryb2tlLXdpZHRoOiAycHg7Ii8+PC9nPjxnIGNsYXNzPSJsZWdlbmRzeW1ib2xzIj48ZyBjbGFzcz0ibGVnZW5kcG9pbnRzIi8+PC9nPjwvZz48cmVjdCBjbGFzcz0ibGVnZW5kdG9nZ2xlIiB4PSIwIiB5PSItOS41IiB3aWR0aD0iMjUyLjY4NzUiIGhlaWdodD0iMTkiIHN0eWxlPSJmaWxsOiByZ2IoMCwgMCwgMCk7IGZpbGwtb3BhY2l0eTogMDsiLz48L2c+PGcgY2xhc3M9InRyYWNlcyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCw1Mi41KSIgc3R5bGU9Im9wYWNpdHk6IDE7Ij48dGV4dCBjbGFzcz0ibGVnZW5kdGV4dCIgdGV4dC1hbmNob3I9InN0YXJ0IiB4PSI0MCIgeT0iNC42ODAwMDAwMDAwMDAwMDEiIHN0eWxlPSJmb250LWZhbWlseTogJ09wZW4gU2FucycsIHZlcmRhbmEsIGFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHg7IGZpbGw6IHJnYig0MiwgNjMsIDk1KTsgZmlsbC1vcGFjaXR5OiAxOyB3aGl0ZS1zcGFjZTogcHJlOyI+TW9kZSAzICh3PTUuMTE2NjcyNzM2MDE2OTI4KTwvdGV4dD48ZyBjbGFzcz0ibGF5ZXJzIiBzdHlsZT0ib3BhY2l0eTogMTsiPjxnIGNsYXNzPSJsZWdlbmRmaWxsIi8+PGcgY2xhc3M9ImxlZ2VuZGxpbmVzIj48cGF0aCBjbGFzcz0ianMtbGluZSIgZD0iTTUsMGgzMCIgc3R5bGU9ImZpbGw6IG5vbmU7IHN0cm9rZTogcmdiKDc3LCAxNzUsIDc0KTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMnB4OyIvPjwvZz48ZyBjbGFzcz0ibGVnZW5kc3ltYm9scyI+PGcgY2xhc3M9ImxlZ2VuZHBvaW50cyIvPjwvZz48L2c+PHJlY3QgY2xhc3M9ImxlZ2VuZHRvZ2dsZSIgeD0iMCIgeT0iLTkuNSIgd2lkdGg9IjI1Mi42ODc1IiBoZWlnaHQ9IjE5IiBzdHlsZT0iZmlsbDogcmdiKDAsIDAsIDApOyBmaWxsLW9wYWNpdHk6IDA7Ii8+PC9nPjwvZz48L2c+PHJlY3QgY2xhc3M9InNjcm9sbGJhciIgcng9IjIwIiByeT0iMyIgd2lkdGg9IjAiIGhlaWdodD0iMCIgc3R5bGU9ImZpbGw6IHJnYigxMjgsIDEzOSwgMTY0KTsgZmlsbC1vcGFjaXR5OiAxOyIgeD0iMCIgeT0iMCIvPjwvZz48ZyBjbGFzcz0iZy1ndGl0bGUiPjx0ZXh0IGNsYXNzPSJndGl0bGUiIHg9IjQwIiB5PSI1MCIgdGV4dC1hbmNob3I9InN0YXJ0IiBkeT0iMGVtIiBzdHlsZT0ib3BhY2l0eTogMTsgZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxN3B4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiPlZpYnJhdGlvbiBNb2RlIFNoYXBlcyAobm9ybWFsaXNlZCk8L3RleHQ+PC9nPjxnIGNsYXNzPSJnLXh0aXRsZSI+PHRleHQgY2xhc3M9Inh0aXRsZSIgeD0iMzAwLjUiIHk9IjQ2Mi43MDAzOTA2MjUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIHN0eWxlPSJvcGFjaXR5OiAxOyBmb250LWZhbWlseTogJ09wZW4gU2FucycsIHZlcmRhbmEsIGFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDE0cHg7IGZpbGw6IHJnYig0MiwgNjMsIDk1KTsgZmlsbC1vcGFjaXR5OiAxOyB3aGl0ZS1zcGFjZTogcHJlOyI+TWFzcyBwb3NpdGlvbjwvdGV4dD48L2c+PGcgY2xhc3M9ImcteXRpdGxlIj48dGV4dCBjbGFzcz0ieXRpdGxlIiB0cmFuc2Zvcm09InJvdGF0ZSgtOTAsMjcuNzQ2NDg0Mzc1LDI2MCkiIHg9IjI3Ljc0NjQ4NDM3NSIgeT0iMjYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBzdHlsZT0ib3BhY2l0eTogMTsgZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxNHB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiPkRpc3BsYWNlbWVudDwvdGV4dD48L2c+PC9nPjwvc3ZnPg=="/>
+<img alt="No description has been provided for this image" src="data:image/svg+xml;base64,PHN2ZyBjbGFzcz0ibWFpbi1zdmciIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHdpZHRoPSI4MDAiIGhlaWdodD0iNTAwIiBzdHlsZT0iIiB2aWV3Qm94PSIwIDAgODAwIDUwMCI+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjgwMCIgaGVpZ2h0PSI1MDAiIHN0eWxlPSJmaWxsOiByZ2IoMjU1LCAyNTUsIDI1NSk7IGZpbGwtb3BhY2l0eTogMTsiLz48ZGVmcyBpZD0iZGVmcy01MzFkNDgiPjxnIGNsYXNzPSJjbGlwcyI+PGNsaXBQYXRoIGlkPSJjbGlwNTMxZDQ4eHlwbG90IiBjbGFzcz0icGxvdGNsaXAiPjxyZWN0IHdpZHRoPSI0NDEiIGhlaWdodD0iMzIwIi8+PC9jbGlwUGF0aD48Y2xpcFBhdGggY2xhc3M9ImF4ZXNjbGlwIiBpZD0iY2xpcDUzMWQ0OHgiPjxyZWN0IHg9IjgwIiB5PSIwIiB3aWR0aD0iNDQxIiBoZWlnaHQ9IjUwMCIvPjwvY2xpcFBhdGg+PGNsaXBQYXRoIGNsYXNzPSJheGVzY2xpcCIgaWQ9ImNsaXA1MzFkNDh5Ij48cmVjdCB4PSIwIiB5PSIxMDAiIHdpZHRoPSI4MDAiIGhlaWdodD0iMzIwIi8+PC9jbGlwUGF0aD48Y2xpcFBhdGggY2xhc3M9ImF4ZXNjbGlwIiBpZD0iY2xpcDUzMWQ0OHh5Ij48cmVjdCB4PSI4MCIgeT0iMTAwIiB3aWR0aD0iNDQxIiBoZWlnaHQ9IjMyMCIvPjwvY2xpcFBhdGg+PC9nPjxnIGNsYXNzPSJncmFkaWVudHMiLz48ZyBjbGFzcz0icGF0dGVybnMiLz48L2RlZnM+PGcgY2xhc3M9ImJnbGF5ZXIiLz48ZyBjbGFzcz0ibGF5ZXItYmVsb3ciPjxnIGNsYXNzPSJpbWFnZWxheWVyIi8+PGcgY2xhc3M9InNoYXBlbGF5ZXIiLz48L2c+PGcgY2xhc3M9ImNhcnRlc2lhbmxheWVyIj48ZyBjbGFzcz0ic3VicGxvdCB4eSI+PGcgY2xhc3M9ImxheWVyLXN1YnBsb3QiPjxnIGNsYXNzPSJzaGFwZWxheWVyIi8+PGcgY2xhc3M9ImltYWdlbGF5ZXIiLz48L2c+PGcgY2xhc3M9Im1pbm9yLWdyaWRsYXllciI+PGcgY2xhc3M9IngiLz48ZyBjbGFzcz0ieSIvPjwvZz48ZyBjbGFzcz0iZ3JpZGxheWVyIj48ZyBjbGFzcz0ieCI+PHBhdGggY2xhc3M9InhncmlkIGNyaXNwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxOTAuMjUsMCkiIGQ9Ik0wLDEwMHYzMjAiIHN0eWxlPSJzdHJva2U6IHJnYigyMjEsIDIyMSwgMjIxKTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMXB4OyIvPjxwYXRoIGNsYXNzPSJ4Z3JpZCBjcmlzcCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzAwLjUsMCkiIGQ9Ik0wLDEwMHYzMjAiIHN0eWxlPSJzdHJva2U6IHJnYigyMjEsIDIyMSwgMjIxKTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMXB4OyIvPjxwYXRoIGNsYXNzPSJ4Z3JpZCBjcmlzcCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDEwLjc1LDApIiBkPSJNMCwxMDB2MzIwIiBzdHlsZT0ic3Ryb2tlOiByZ2IoMjIxLCAyMjEsIDIyMSk7IHN0cm9rZS1vcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDFweDsiLz48L2c+PGcgY2xhc3M9InkiPjxwYXRoIGNsYXNzPSJ5Z3JpZCBjcmlzcCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCw0MDQpIiBkPSJNODAsMGg0NDEiIHN0eWxlPSJzdHJva2U6IHJnYigyMjEsIDIyMSwgMjIxKTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMXB4OyIvPjxwYXRoIGNsYXNzPSJ5Z3JpZCBjcmlzcCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwzMzIpIiBkPSJNODAsMGg0NDEiIHN0eWxlPSJzdHJva2U6IHJnYigyMjEsIDIyMSwgMjIxKTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMXB4OyIvPjxwYXRoIGNsYXNzPSJ5Z3JpZCBjcmlzcCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwxODgpIiBkPSJNODAsMGg0NDEiIHN0eWxlPSJzdHJva2U6IHJnYigyMjEsIDIyMSwgMjIxKTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMXB4OyIvPjxwYXRoIGNsYXNzPSJ5Z3JpZCBjcmlzcCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwxMTYpIiBkPSJNODAsMGg0NDEiIHN0eWxlPSJzdHJva2U6IHJnYigyMjEsIDIyMSwgMjIxKTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMXB4OyIvPjwvZz48L2c+PGcgY2xhc3M9Inplcm9saW5lbGF5ZXIiPjxwYXRoIGNsYXNzPSJ5emwgemwgY3Jpc3AiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMjYwKSIgZD0iTTgwLDBoNDQxIiBzdHlsZT0ic3Ryb2tlOiByZ2IoMCwgMCwgMCk7IHN0cm9rZS1vcGFjaXR5OiAxOyBzdHJva2Utd2lkdGg6IDFweDsiLz48L2c+PGcgY2xhc3M9ImxheWVyLWJldHdlZW4iPjxnIGNsYXNzPSJzaGFwZWxheWVyIi8+PGcgY2xhc3M9ImltYWdlbGF5ZXIiLz48L2c+PHBhdGggY2xhc3M9InhsaW5lcy1iZWxvdyIvPjxwYXRoIGNsYXNzPSJ5bGluZXMtYmVsb3ciLz48ZyBjbGFzcz0ib3ZlcmxpbmVzLWJlbG93Ii8+PGcgY2xhc3M9InhheGlzbGF5ZXItYmVsb3ciLz48ZyBjbGFzcz0ieWF4aXNsYXllci1iZWxvdyIvPjxnIGNsYXNzPSJvdmVyYXhlcy1iZWxvdyIvPjxnIGNsYXNzPSJvdmVycGxvdCI+PGcgY2xhc3M9Inh5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4MCwxMDApIiBjbGlwLXBhdGg9InVybCgjY2xpcDUzMWQ0OHh5cGxvdCkiPjxnIGNsYXNzPSJzY2F0dGVybGF5ZXIgbWxheWVyIj48ZyBjbGFzcz0idHJhY2Ugc2NhdHRlciB0cmFjZWIyZDI5NyIgc3R5bGU9InN0cm9rZS1taXRlcmxpbWl0OiAyOyBvcGFjaXR5OiAxOyI+PGcgY2xhc3M9ImZpbGxzIi8+PGcgY2xhc3M9ImVycm9yYmFycyIvPjxnIGNsYXNzPSJsaW5lcyI+PHBhdGggY2xhc3M9ImpzLWxpbmUiIGQ9Ik0wLDE2MEwxMTAuMjUsMjQ5TDIyMC41LDMwNEwzMzAuNzUsMjQ5TDQ0MSwxNjAiIHN0eWxlPSJ2ZWN0b3ItZWZmZWN0OiBub25lOyBmaWxsOiBub25lOyBzdHJva2U6IHJnYig1NSwgMTI2LCAxODQpOyBzdHJva2Utb3BhY2l0eTogMTsgc3Ryb2tlLXdpZHRoOiAycHg7IG9wYWNpdHk6IDE7Ii8+PC9nPjxnIGNsYXNzPSJwb2ludHMiLz48ZyBjbGFzcz0idGV4dCIvPjwvZz48ZyBjbGFzcz0idHJhY2Ugc2NhdHRlciB0cmFjZTY0OTcwNyIgc3R5bGU9InN0cm9rZS1taXRlcmxpbWl0OiAyOyBvcGFjaXR5OiAxOyI+PGcgY2xhc3M9ImZpbGxzIi8+PGcgY2xhc3M9ImVycm9yYmFycyIvPjxnIGNsYXNzPSJsaW5lcyI+PHBhdGggY2xhc3M9ImpzLWxpbmUiIGQ9Ik0wLDE2MEwxMTAuMjUsMTZMMjIwLjUsMTYwTDMzMC43NSwzMDRMNDQxLDE2MCIgc3R5bGU9InZlY3Rvci1lZmZlY3Q6IG5vbmU7IGZpbGw6IG5vbmU7IHN0cm9rZTogcmdiKDIyOCwgMjYsIDI4KTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMnB4OyBvcGFjaXR5OiAxOyIvPjwvZz48ZyBjbGFzcz0icG9pbnRzIi8+PGcgY2xhc3M9InRleHQiLz48L2c+PGcgY2xhc3M9InRyYWNlIHNjYXR0ZXIgdHJhY2VmNWU4MTciIHN0eWxlPSJzdHJva2UtbWl0ZXJsaW1pdDogMjsgb3BhY2l0eTogMTsiPjxnIGNsYXNzPSJmaWxscyIvPjxnIGNsYXNzPSJlcnJvcmJhcnMiLz48ZyBjbGFzcz0ibGluZXMiPjxwYXRoIGNsYXNzPSJqcy1saW5lIiBkPSJNMCwxNjBMMTEwLjI1LDE2TDIyMC41LDI0OUwzMzAuNzUsMTZMNDQxLDE2MCIgc3R5bGU9InZlY3Rvci1lZmZlY3Q6IG5vbmU7IGZpbGw6IG5vbmU7IHN0cm9rZTogcmdiKDc3LCAxNzUsIDc0KTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMnB4OyBvcGFjaXR5OiAxOyIvPjwvZz48ZyBjbGFzcz0icG9pbnRzIi8+PGcgY2xhc3M9InRleHQiLz48L2c+PC9nPjwvZz48L2c+PGcgY2xhc3M9Inplcm9saW5lbGF5ZXItYWJvdmUiLz48cGF0aCBjbGFzcz0ieGxpbmVzLWFib3ZlIGNyaXNwIiBkPSJNNzksNDIwLjVINTIxIiBzdHlsZT0iZmlsbDogbm9uZTsgc3Ryb2tlLXdpZHRoOiAxcHg7IHN0cm9rZTogcmdiKDAsIDAsIDApOyBzdHJva2Utb3BhY2l0eTogMTsiLz48cGF0aCBjbGFzcz0ieWxpbmVzLWFib3ZlIGNyaXNwIiBkPSJNNzkuNSwxMDBWNDIwIiBzdHlsZT0iZmlsbDogbm9uZTsgc3Ryb2tlLXdpZHRoOiAxcHg7IHN0cm9rZTogcmdiKDAsIDAsIDApOyBzdHJva2Utb3BhY2l0eTogMTsiLz48ZyBjbGFzcz0ib3ZlcmxpbmVzLWFib3ZlIi8+PGcgY2xhc3M9InhheGlzbGF5ZXItYWJvdmUiPjxnIGNsYXNzPSJ4dGljayI+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMCIgeT0iNDM1LjQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDgwLDApIiBzdHlsZT0iZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiPjA8L3RleHQ+PC9nPjxnIGNsYXNzPSJ4dGljayI+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMCIgeT0iNDM1LjQiIHN0eWxlPSJmb250LWZhbWlseTogJ09wZW4gU2FucycsIHZlcmRhbmEsIGFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHg7IGZpbGw6IHJnYig0MiwgNjMsIDk1KTsgZmlsbC1vcGFjaXR5OiAxOyB3aGl0ZS1zcGFjZTogcHJlOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTkwLjI1LDApIj4xPC90ZXh0PjwvZz48ZyBjbGFzcz0ieHRpY2siPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjAiIHk9IjQzNS40IiBzdHlsZT0iZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMwMC41LDApIj4yPC90ZXh0PjwvZz48ZyBjbGFzcz0ieHRpY2siPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjAiIHk9IjQzNS40IiBzdHlsZT0iZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQxMC43NSwwKSI+MzwvdGV4dD48L2c+PGcgY2xhc3M9Inh0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB4PSIwIiB5PSI0MzUuNCIgc3R5bGU9ImZvbnQtZmFtaWx5OiAnT3BlbiBTYW5zJywgdmVyZGFuYSwgYXJpYWwsIHNhbnMtc2VyaWY7IGZvbnQtc2l6ZTogMTJweDsgZmlsbDogcmdiKDQyLCA2MywgOTUpOyBmaWxsLW9wYWNpdHk6IDE7IHdoaXRlLXNwYWNlOiBwcmU7IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MjEsMCkiPjQ8L3RleHQ+PC9nPjwvZz48ZyBjbGFzcz0ieWF4aXNsYXllci1hYm92ZSI+PGcgY2xhc3M9Inl0aWNrIj48dGV4dCB0ZXh0LWFuY2hvcj0iZW5kIiB4PSI3Ni42IiB5PSI0LjE5OTk5OTk5OTk5OTk5OSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCw0MDQpIiBzdHlsZT0iZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiPuKIkjE8L3RleHQ+PC9nPjxnIGNsYXNzPSJ5dGljayI+PHRleHQgdGV4dC1hbmNob3I9ImVuZCIgeD0iNzYuNiIgeT0iNC4xOTk5OTk5OTk5OTk5OTkiIHN0eWxlPSJmb250LWZhbWlseTogJ09wZW4gU2FucycsIHZlcmRhbmEsIGFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHg7IGZpbGw6IHJnYig0MiwgNjMsIDk1KTsgZmlsbC1vcGFjaXR5OiAxOyB3aGl0ZS1zcGFjZTogcHJlOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwzMzIpIj7iiJIwLjU8L3RleHQ+PC9nPjxnIGNsYXNzPSJ5dGljayI+PHRleHQgdGV4dC1hbmNob3I9ImVuZCIgeD0iNzYuNiIgeT0iNC4xOTk5OTk5OTk5OTk5OTkiIHN0eWxlPSJmb250LWZhbWlseTogJ09wZW4gU2FucycsIHZlcmRhbmEsIGFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHg7IGZpbGw6IHJnYig0MiwgNjMsIDk1KTsgZmlsbC1vcGFjaXR5OiAxOyB3aGl0ZS1zcGFjZTogcHJlOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwyNjApIj4wPC90ZXh0PjwvZz48ZyBjbGFzcz0ieXRpY2siPjx0ZXh0IHRleHQtYW5jaG9yPSJlbmQiIHg9Ijc2LjYiIHk9IjQuMTk5OTk5OTk5OTk5OTk5IiBzdHlsZT0iZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMTg4KSI+MC41PC90ZXh0PjwvZz48ZyBjbGFzcz0ieXRpY2siPjx0ZXh0IHRleHQtYW5jaG9yPSJlbmQiIHg9Ijc2LjYiIHk9IjQuMTk5OTk5OTk5OTk5OTk5IiBzdHlsZT0iZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxMnB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMTE2KSI+MTwvdGV4dD48L2c+PC9nPjxnIGNsYXNzPSJvdmVyYXhlcy1hYm92ZSIvPjwvZz48L2c+PGcgY2xhc3M9InBvbGFybGF5ZXIiLz48ZyBjbGFzcz0ic21pdGhsYXllciIvPjxnIGNsYXNzPSJ0ZXJuYXJ5bGF5ZXIiLz48ZyBjbGFzcz0iZ2VvbGF5ZXIiLz48ZyBjbGFzcz0iZnVubmVsYXJlYWxheWVyIi8+PGcgY2xhc3M9InBpZWxheWVyIi8+PGcgY2xhc3M9ImljaWNsZWxheWVyIi8+PGcgY2xhc3M9InRyZWVtYXBsYXllciIvPjxnIGNsYXNzPSJzdW5idXJzdGxheWVyIi8+PGcgY2xhc3M9ImdsaW1hZ2VzIi8+PGRlZnMgaWQ9InRvcGRlZnMtNTMxZDQ4Ij48ZyBjbGFzcz0iY2xpcHMiLz48Y2xpcFBhdGggaWQ9ImxlZ2VuZDUzMWQ0OCI+PHJlY3Qgd2lkdGg9IjI1OCIgaGVpZ2h0PSI2NyIgeD0iMCIgeT0iMCIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsYXNzPSJsYXllci1hYm92ZSI+PGcgY2xhc3M9ImltYWdlbGF5ZXIiLz48ZyBjbGFzcz0ic2hhcGVsYXllciIvPjwvZz48ZyBjbGFzcz0iaW5mb2xheWVyIj48ZyBjbGFzcz0ibGVnZW5kIiBwb2ludGVyLWV2ZW50cz0iYWxsIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MjkuODE5OTk5OTk5OTk5OSwxMDApIj48cmVjdCBjbGFzcz0iYmciIHNoYXBlLXJlbmRlcmluZz0iY3Jpc3BFZGdlcyIgc3R5bGU9InN0cm9rZTogcmdiKDY4LCA2OCwgNjgpOyBzdHJva2Utb3BhY2l0eTogMTsgZmlsbDogcmdiKDI1NSwgMjU1LCAyNTUpOyBmaWxsLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMHB4OyIgd2lkdGg9IjI1OCIgaGVpZ2h0PSI2NyIgeD0iMCIgeT0iMCIvPjxnIGNsYXNzPSJzY3JvbGxib3giIHRyYW5zZm9ybT0iIiBjbGlwLXBhdGg9InVybCgjbGVnZW5kNTMxZDQ4KSI+PGcgY2xhc3M9Imdyb3VwcyI+PGcgY2xhc3M9InRyYWNlcyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwxNC41KSIgc3R5bGU9Im9wYWNpdHk6IDE7Ij48dGV4dCBjbGFzcz0ibGVnZW5kdGV4dCIgdGV4dC1hbmNob3I9InN0YXJ0IiB4PSI0MCIgeT0iNC42ODAwMDAwMDAwMDAwMDEiIHN0eWxlPSJmb250LWZhbWlseTogJ09wZW4gU2FucycsIHZlcmRhbmEsIGFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHg7IGZpbGw6IHJnYig0MiwgNjMsIDk1KTsgZmlsbC1vcGFjaXR5OiAxOyB3aGl0ZS1zcGFjZTogcHJlOyI+TW9kZSAxICh3PTEuOTU0Mzk1MDc1ODQ4NTQ3OCk8L3RleHQ+PGcgY2xhc3M9ImxheWVycyIgc3R5bGU9Im9wYWNpdHk6IDE7Ij48ZyBjbGFzcz0ibGVnZW5kZmlsbCIvPjxnIGNsYXNzPSJsZWdlbmRsaW5lcyI+PHBhdGggY2xhc3M9ImpzLWxpbmUiIGQ9Ik01LDBoMzAiIHN0eWxlPSJmaWxsOiBub25lOyBzdHJva2U6IHJnYig1NSwgMTI2LCAxODQpOyBzdHJva2Utb3BhY2l0eTogMTsgc3Ryb2tlLXdpZHRoOiAycHg7Ii8+PC9nPjxnIGNsYXNzPSJsZWdlbmRzeW1ib2xzIj48ZyBjbGFzcz0ibGVnZW5kcG9pbnRzIi8+PC9nPjwvZz48cmVjdCBjbGFzcz0ibGVnZW5kdG9nZ2xlIiB4PSIwIiB5PSItOS41IiB3aWR0aD0iMjUyLjY4NzUiIGhlaWdodD0iMTkiIHN0eWxlPSJmaWxsOiByZ2IoMCwgMCwgMCk7IGZpbGwtb3BhY2l0eTogMDsiLz48L2c+PGcgY2xhc3M9InRyYWNlcyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwzMy41KSIgc3R5bGU9Im9wYWNpdHk6IDE7Ij48dGV4dCBjbGFzcz0ibGVnZW5kdGV4dCIgdGV4dC1hbmNob3I9InN0YXJ0IiB4PSI0MCIgeT0iNC42ODAwMDAwMDAwMDAwMDEiIHN0eWxlPSJmb250LWZhbWlseTogJ09wZW4gU2FucycsIHZlcmRhbmEsIGFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHg7IGZpbGw6IHJnYig0MiwgNjMsIDk1KTsgZmlsbC1vcGFjaXR5OiAxOyB3aGl0ZS1zcGFjZTogcHJlOyI+TW9kZSAyICh3PTQuNDcyMTM1OTU0OTk5NTgpPC90ZXh0PjxnIGNsYXNzPSJsYXllcnMiIHN0eWxlPSJvcGFjaXR5OiAxOyI+PGcgY2xhc3M9ImxlZ2VuZGZpbGwiLz48ZyBjbGFzcz0ibGVnZW5kbGluZXMiPjxwYXRoIGNsYXNzPSJqcy1saW5lIiBkPSJNNSwwaDMwIiBzdHlsZT0iZmlsbDogbm9uZTsgc3Ryb2tlOiByZ2IoMjI4LCAyNiwgMjgpOyBzdHJva2Utb3BhY2l0eTogMTsgc3Ryb2tlLXdpZHRoOiAycHg7Ii8+PC9nPjxnIGNsYXNzPSJsZWdlbmRzeW1ib2xzIj48ZyBjbGFzcz0ibGVnZW5kcG9pbnRzIi8+PC9nPjwvZz48cmVjdCBjbGFzcz0ibGVnZW5kdG9nZ2xlIiB4PSIwIiB5PSItOS41IiB3aWR0aD0iMjUyLjY4NzUiIGhlaWdodD0iMTkiIHN0eWxlPSJmaWxsOiByZ2IoMCwgMCwgMCk7IGZpbGwtb3BhY2l0eTogMDsiLz48L2c+PGcgY2xhc3M9InRyYWNlcyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCw1Mi41KSIgc3R5bGU9Im9wYWNpdHk6IDE7Ij48dGV4dCBjbGFzcz0ibGVnZW5kdGV4dCIgdGV4dC1hbmNob3I9InN0YXJ0IiB4PSI0MCIgeT0iNC42ODAwMDAwMDAwMDAwMDEiIHN0eWxlPSJmb250LWZhbWlseTogJ09wZW4gU2FucycsIHZlcmRhbmEsIGFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHg7IGZpbGw6IHJnYig0MiwgNjMsIDk1KTsgZmlsbC1vcGFjaXR5OiAxOyB3aGl0ZS1zcGFjZTogcHJlOyI+TW9kZSAzICh3PTUuMTE2NjcyNzM2MDE2OTI4KTwvdGV4dD48ZyBjbGFzcz0ibGF5ZXJzIiBzdHlsZT0ib3BhY2l0eTogMTsiPjxnIGNsYXNzPSJsZWdlbmRmaWxsIi8+PGcgY2xhc3M9ImxlZ2VuZGxpbmVzIj48cGF0aCBjbGFzcz0ianMtbGluZSIgZD0iTTUsMGgzMCIgc3R5bGU9ImZpbGw6IG5vbmU7IHN0cm9rZTogcmdiKDc3LCAxNzUsIDc0KTsgc3Ryb2tlLW9wYWNpdHk6IDE7IHN0cm9rZS13aWR0aDogMnB4OyIvPjwvZz48ZyBjbGFzcz0ibGVnZW5kc3ltYm9scyI+PGcgY2xhc3M9ImxlZ2VuZHBvaW50cyIvPjwvZz48L2c+PHJlY3QgY2xhc3M9ImxlZ2VuZHRvZ2dsZSIgeD0iMCIgeT0iLTkuNSIgd2lkdGg9IjI1Mi42ODc1IiBoZWlnaHQ9IjE5IiBzdHlsZT0iZmlsbDogcmdiKDAsIDAsIDApOyBmaWxsLW9wYWNpdHk6IDA7Ii8+PC9nPjwvZz48L2c+PHJlY3QgY2xhc3M9InNjcm9sbGJhciIgcng9IjIwIiByeT0iMyIgd2lkdGg9IjAiIGhlaWdodD0iMCIgc3R5bGU9ImZpbGw6IHJnYigxMjgsIDEzOSwgMTY0KTsgZmlsbC1vcGFjaXR5OiAxOyIgeD0iMCIgeT0iMCIvPjwvZz48ZyBjbGFzcz0iZy1ndGl0bGUiPjx0ZXh0IGNsYXNzPSJndGl0bGUiIHg9IjQwIiB5PSI1MCIgdGV4dC1hbmNob3I9InN0YXJ0IiBkeT0iMGVtIiBzdHlsZT0ib3BhY2l0eTogMTsgZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxN3B4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiPlZpYnJhdGlvbiBNb2RlIFNoYXBlcyAobm9ybWFsaXNlZCk8L3RleHQ+PC9nPjxnIGNsYXNzPSJnLXh0aXRsZSI+PHRleHQgY2xhc3M9Inh0aXRsZSIgeD0iMzAwLjUiIHk9IjQ2Mi43MDAzOTA2MjUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIHN0eWxlPSJvcGFjaXR5OiAxOyBmb250LWZhbWlseTogJ09wZW4gU2FucycsIHZlcmRhbmEsIGFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDE0cHg7IGZpbGw6IHJnYig0MiwgNjMsIDk1KTsgZmlsbC1vcGFjaXR5OiAxOyB3aGl0ZS1zcGFjZTogcHJlOyI+TWFzcyBwb3NpdGlvbjwvdGV4dD48L2c+PGcgY2xhc3M9ImcteXRpdGxlIj48dGV4dCBjbGFzcz0ieXRpdGxlIiB0cmFuc2Zvcm09InJvdGF0ZSgtOTAsMjcuNzQ2NDg0Mzc1LDI2MCkiIHg9IjI3Ljc0NjQ4NDM3NSIgeT0iMjYwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBzdHlsZT0ib3BhY2l0eTogMTsgZm9udC1mYW1pbHk6ICdPcGVuIFNhbnMnLCB2ZXJkYW5hLCBhcmlhbCwgc2Fucy1zZXJpZjsgZm9udC1zaXplOiAxNHB4OyBmaWxsOiByZ2IoNDIsIDYzLCA5NSk7IGZpbGwtb3BhY2l0eTogMTsgd2hpdGUtc3BhY2U6IHByZTsiPkRpc3BsYWNlbWVudDwvdGV4dD48L2c+PC9nPjwvc3ZnPg=="/>
 </div>
 </div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=dec708da">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=becd7762">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8210,7 +8210,7 @@ and the eigenvalues have a clean closed form.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=cac60680">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=287b205d">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8218,21 +8218,21 @@ and the eigenvalues have a clean closed form.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [135]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="mi">2</span><span class="o">-</span><span class="n">mass</span> <span class="n">system</span><span class="p">:</span> <span class="n">symbolic</span> <span class="o">*/</span>
-<span class="n">M2</span> <span class="p">:</span> <span class="n">matrix</span><span class="p">(</span>
-  <span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-  <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* 2-mass system: symbolic */</span>
+<span class="nv">M2</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span>
+<span class="w">  </span><span class="p">[</span><span class="nv">m</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span>
+<span class="w">  </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nv">m</span><span class="p">]</span>
 <span class="p">);</span>
 
-<span class="n">K2</span> <span class="p">:</span> <span class="n">matrix</span><span class="p">(</span>
-  <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="p">,</span> <span class="o">-</span><span class="n">k</span><span class="p">],</span>
-  <span class="p">[</span><span class="o">-</span><span class="n">k</span><span class="p">,</span>  <span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="p">]</span>
+<span class="nv">K2</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span>
+<span class="w">  </span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="nv">k</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="nv">k</span><span class="p">],</span>
+<span class="w">  </span><span class="p">[</span><span class="o">-</span><span class="nv">k</span><span class="p">,</span><span class="w">  </span><span class="mi">2</span><span class="o">*</span><span class="nv">k</span><span class="p">]</span>
 <span class="p">);</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"M:"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">M2</span><span class="p">;</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"K:"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">K2</span><span class="p">;</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"M:"</span><span class="p">)$</span>
+<span class="nv">M2</span><span class="p">;</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"K:"</span><span class="p">)$</span>
+<span class="nv">K2</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
@@ -8260,7 +8260,7 @@ K:</pre>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=f258b098">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=3e9d524a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8268,12 +8268,12 @@ K:</pre>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [136]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Compute</span> <span class="n">M</span><span class="o">^</span><span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">}</span> <span class="n">K</span> <span class="n">symbolically</span> <span class="o">*/</span>
-<span class="n">MinvK2</span> <span class="p">:</span> <span class="n">invert</span><span class="p">(</span><span class="n">M2</span><span class="p">)</span> <span class="o">.</span> <span class="n">K2</span><span class="p">;</span>
-<span class="n">MinvK2</span> <span class="p">:</span> <span class="n">ratsimp</span><span class="p">(</span><span class="n">MinvK2</span><span class="p">);</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* Compute M^{-1} K symbolically */</span>
+<span class="nv">MinvK2</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">invert</span><span class="p">(</span><span class="nv">M2</span><span class="p">)</span><span class="w"> </span><span class="o">.</span><span class="w"> </span><span class="nv">K2</span><span class="p">;</span>
+<span class="nv">MinvK2</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">ratsimp</span><span class="p">(</span><span class="nv">MinvK2</span><span class="p">);</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"M^{-1} K ="</span><span class="p">)</span><span class="err">$</span>
-<span class="n">MinvK2</span><span class="p">;</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"M^{-1} K ="</span><span class="p">)$</span>
+<span class="nv">MinvK2</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
@@ -8299,7 +8299,7 @@ M^{-1} K =</pre>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=d29d9805">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2cd0145c">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8307,15 +8307,15 @@ M^{-1} K =</pre>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [137]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Symbolic</span> <span class="n">eigenvalues</span> <span class="o">*/</span>
-<span class="n">evals2</span> <span class="p">:</span> <span class="n">eigenvalues</span><span class="p">(</span><span class="n">MinvK2</span><span class="p">);</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* Symbolic eigenvalues */</span>
+<span class="nv">evals2</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">eigenvalues</span><span class="p">(</span><span class="nv">MinvK2</span><span class="p">);</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Eigenvalues (omega^2):"</span><span class="p">)</span><span class="err">$</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">evals2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="err">$</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Eigenvalues (omega^2):"</span><span class="p">)$</span>
+<span class="nf">print</span><span class="p">(</span><span class="nv">evals2</span><span class="p">[</span><span class="mi">1</span><span class="p">])$</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Natural frequencies:"</span><span class="p">)</span><span class="err">$</span>
-<span class="k">for</span> <span class="n">ev</span> <span class="ow">in</span> <span class="n">evals2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="n">do</span>
-  <span class="nb">print</span><span class="p">(</span><span class="n">sconcat</span><span class="p">(</span><span class="s2">"  omega = sqrt("</span><span class="p">,</span> <span class="n">ev</span><span class="p">,</span> <span class="s2">") = "</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">ev</span><span class="p">)))</span><span class="err">$</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Natural frequencies:"</span><span class="p">)$</span>
+<span class="k">for</span><span class="w"> </span><span class="nv">ev</span><span class="w"> </span><span class="nv">in</span><span class="w"> </span><span class="nv">evals2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nf">print</span><span class="p">(</span><span class="nf">sconcat</span><span class="p">(</span><span class="s">"  omega = sqrt("</span><span class="p">,</span><span class="w"> </span><span class="nv">ev</span><span class="p">,</span><span class="w"> </span><span class="s">") = "</span><span class="p">,</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="nv">ev</span><span class="p">)))$</span>
 </pre></div>
 </div>
 </div>
@@ -8338,7 +8338,7 @@ Natural frequencies:
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e4b05e0a">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=1601cd52">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8346,21 +8346,21 @@ Natural frequencies:
 <div class="jp-InputPrompt jp-InputArea-prompt">In [138]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Verify</span> <span class="n">numerically</span><span class="p">:</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">1</span> <span class="o">*/</span>
-<span class="n">M2_num</span> <span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">subst</span><span class="p">([</span><span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">],</span> <span class="n">M2</span><span class="p">))</span><span class="err">$</span>
-<span class="n">K2_num</span> <span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">subst</span><span class="p">([</span><span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">],</span> <span class="n">K2</span><span class="p">))</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* Verify numerically: k=10, m=1 */</span>
+<span class="nv">M2_num</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">float</span><span class="p">(</span><span class="nf">subst</span><span class="p">([</span><span class="nv">m</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nv">k</span><span class="o">=</span><span class="mi">10</span><span class="p">],</span><span class="w"> </span><span class="nv">M2</span><span class="p">))$</span>
+<span class="nv">K2_num</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">float</span><span class="p">(</span><span class="nf">subst</span><span class="p">([</span><span class="nv">m</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nv">k</span><span class="o">=</span><span class="mi">10</span><span class="p">],</span><span class="w"> </span><span class="nv">K2</span><span class="p">))$</span>
 
-<span class="n">M2_nd</span> <span class="p">:</span> <span class="n">ndarray</span><span class="p">(</span><span class="n">M2_num</span><span class="p">)</span><span class="err">$</span>
-<span class="n">K2_nd</span> <span class="p">:</span> <span class="n">ndarray</span><span class="p">(</span><span class="n">K2_num</span><span class="p">)</span><span class="err">$</span>
+<span class="nv">M2_nd</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">ndarray</span><span class="p">(</span><span class="nv">M2_num</span><span class="p">)$</span>
+<span class="nv">K2_nd</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">ndarray</span><span class="p">(</span><span class="nv">K2_num</span><span class="p">)$</span>
 
-<span class="p">[</span><span class="n">evals2_nd</span><span class="p">,</span> <span class="n">evecs2_nd</span><span class="p">]</span> <span class="p">:</span> <span class="n">np_eig</span><span class="p">(</span><span class="n">np_matmul</span><span class="p">(</span><span class="n">np_inv</span><span class="p">(</span><span class="n">M2_nd</span><span class="p">),</span> <span class="n">K2_nd</span><span class="p">))</span><span class="err">$</span>
+<span class="p">[</span><span class="nv">evals2_nd</span><span class="p">,</span><span class="w"> </span><span class="nv">evecs2_nd</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_eig</span><span class="p">(</span><span class="nf">np_matmul</span><span class="p">(</span><span class="nf">np_inv</span><span class="p">(</span><span class="nv">M2_nd</span><span class="p">),</span><span class="w"> </span><span class="nv">K2_nd</span><span class="p">))$</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Numeric eigenvalues:"</span><span class="p">,</span> <span class="n">np_to_list</span><span class="p">(</span><span class="n">evals2_nd</span><span class="p">))</span><span class="err">$</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Expected: k/m = 10, 3k/m = 30"</span><span class="p">)</span><span class="err">$</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Numeric eigenvalues:"</span><span class="p">,</span><span class="w"> </span><span class="nf">np_to_list</span><span class="p">(</span><span class="nv">evals2_nd</span><span class="p">))$</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Expected: k/m = 10, 3k/m = 30"</span><span class="p">)$</span>
 
-<span class="o">/*</span> <span class="n">Symbolic</span> <span class="n">evaluation</span> <span class="k">for</span> <span class="n">comparison</span> <span class="o">*/</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Symbolic at k=10, m=1:"</span><span class="p">,</span>
-      <span class="nb">float</span><span class="p">(</span><span class="n">subst</span><span class="p">([</span><span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">],</span> <span class="n">evals2</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span><span class="err">$</span>
+<span class="cm">/* Symbolic evaluation for comparison */</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Symbolic at k=10, m=1:"</span><span class="p">,</span>
+<span class="w">      </span><span class="nf">float</span><span class="p">(</span><span class="nf">subst</span><span class="p">([</span><span class="nv">m</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nv">k</span><span class="o">=</span><span class="mi">10</span><span class="p">],</span><span class="w"> </span><span class="nv">evals2</span><span class="p">[</span><span class="mi">1</span><span class="p">])))$</span>
 </pre></div>
 </div>
 </div>
@@ -8381,7 +8381,7 @@ Symbolic at k=10, m=1: [10.0,30.0]</pre>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=62101eb3">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=81729ca2">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8395,7 +8395,7 @@ exactly.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=8624b239">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c7893c4f">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8410,7 +8410,7 @@ for the 3-mass system.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c6751afa">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=59929254">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8418,11 +8418,11 @@ for the 3-mass system.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [139]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">M</span><span class="o">-</span><span class="n">orthogonality</span> <span class="n">check</span><span class="p">:</span> <span class="n">V</span><span class="o">^</span><span class="n">T</span> <span class="n">M</span> <span class="n">V</span> <span class="n">should</span> <span class="n">be</span> <span class="n">diagonal</span> <span class="o">*/</span>
-<span class="n">VtMV</span> <span class="p">:</span> <span class="n">np_matmul</span><span class="p">(</span><span class="n">np_transpose</span><span class="p">(</span><span class="n">eigenvecs</span><span class="p">),</span> <span class="n">np_matmul</span><span class="p">(</span><span class="n">M_nd</span><span class="p">,</span> <span class="n">eigenvecs</span><span class="p">))</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* M-orthogonality check: V^T M V should be diagonal */</span>
+<span class="nv">VtMV</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_matmul</span><span class="p">(</span><span class="nf">np_transpose</span><span class="p">(</span><span class="nv">eigenvecs</span><span class="p">),</span><span class="w"> </span><span class="nf">np_matmul</span><span class="p">(</span><span class="nv">M_nd</span><span class="p">,</span><span class="w"> </span><span class="nv">eigenvecs</span><span class="p">))$</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"V^T M V (should be diagonal):"</span><span class="p">)</span><span class="err">$</span>
-<span class="n">np_to_matrix</span><span class="p">(</span><span class="n">VtMV</span><span class="p">);</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"V^T M V (should be diagonal):"</span><span class="p">)$</span>
+<span class="nf">np_to_matrix</span><span class="p">(</span><span class="nv">VtMV</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -8446,7 +8446,7 @@ for the 3-mass system.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=1d5954c5">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=6c30ad0a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -8454,23 +8454,23 @@ for the 3-mass system.</p>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [140]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="o">/*</span> <span class="n">Check</span> <span class="n">individual</span> <span class="n">inner</span> <span class="n">products</span> <span class="o">*/</span>
-<span class="n">V_cols</span> <span class="p">:</span> <span class="n">makelist</span><span class="p">(</span><span class="n">np_reshape</span><span class="p">(</span><span class="n">np_col</span><span class="p">(</span><span class="n">eigenvecs</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="err">$</span>
+<div class="highlight hl-maxima"><pre><span></span><span class="cm">/* Check individual inner products */</span>
+<span class="nv">V_cols</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">makelist</span><span class="p">(</span><span class="nf">np_reshape</span><span class="p">(</span><span class="nf">np_col</span><span class="p">(</span><span class="nv">eigenvecs</span><span class="p">,</span><span class="w"> </span><span class="nv">j</span><span class="p">),</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">]),</span><span class="w"> </span><span class="nv">j</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)$</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">"M-orthogonality check (phi_i^T M phi_j):"</span><span class="p">)</span><span class="err">$</span>
-<span class="k">for</span> <span class="n">i</span> <span class="p">:</span> <span class="mi">1</span> <span class="n">thru</span> <span class="mi">3</span> <span class="n">do</span>
-  <span class="k">for</span> <span class="n">j</span> <span class="p">:</span> <span class="n">i</span> <span class="n">thru</span> <span class="mi">3</span> <span class="n">do</span> <span class="n">block</span><span class="p">(</span>
-    <span class="p">[</span><span class="n">val</span><span class="p">],</span>
-    <span class="n">val</span> <span class="p">:</span> <span class="n">np_to_list</span><span class="p">(</span>
-      <span class="n">np_matmul</span><span class="p">(</span><span class="n">np_transpose</span><span class="p">(</span><span class="n">V_cols</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span>
-                <span class="n">np_matmul</span><span class="p">(</span><span class="n">M_nd</span><span class="p">,</span> <span class="n">V_cols</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
-    <span class="p">),</span>
-    <span class="k">if</span> <span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="n">then</span>
-      <span class="nb">print</span><span class="p">(</span><span class="n">sconcat</span><span class="p">(</span><span class="s2">"  &lt;phi_"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s2">", M phi_"</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="s2">"&gt; = "</span><span class="p">,</span> <span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">"  (modal mass)"</span><span class="p">))</span>
-    <span class="k">else</span>
-      <span class="nb">print</span><span class="p">(</span><span class="n">sconcat</span><span class="p">(</span><span class="s2">"  &lt;phi_"</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s2">", M phi_"</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="s2">"&gt; = "</span><span class="p">,</span> <span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mf">1e-10</span> <span class="n">then</span> <span class="s2">"  (orthogonal)"</span> <span class="k">else</span> <span class="s2">"  (NOT orthogonal!)"</span><span class="p">))</span>
-  <span class="p">)</span><span class="err">$</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"M-orthogonality check (phi_i^T M phi_j):"</span><span class="p">)$</span>
+<span class="k">for</span><span class="w"> </span><span class="nv">i</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">thru</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="nv">j</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nv">i</span><span class="w"> </span><span class="k">thru</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nf">block</span><span class="p">(</span>
+<span class="w">    </span><span class="p">[</span><span class="nv">val</span><span class="p">],</span>
+<span class="w">    </span><span class="nv">val</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="nf">np_to_list</span><span class="p">(</span>
+<span class="w">      </span><span class="nf">np_matmul</span><span class="p">(</span><span class="nf">np_transpose</span><span class="p">(</span><span class="nv">V_cols</span><span class="p">[</span><span class="nv">i</span><span class="p">]),</span>
+<span class="w">                </span><span class="nf">np_matmul</span><span class="p">(</span><span class="nv">M_nd</span><span class="p">,</span><span class="w"> </span><span class="nv">V_cols</span><span class="p">[</span><span class="nv">j</span><span class="p">]))</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nv">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">j</span><span class="w"> </span><span class="k">then</span>
+<span class="w">      </span><span class="nf">print</span><span class="p">(</span><span class="nf">sconcat</span><span class="p">(</span><span class="s">"  &lt;phi_"</span><span class="p">,</span><span class="w"> </span><span class="nv">i</span><span class="p">,</span><span class="w"> </span><span class="s">", M phi_"</span><span class="p">,</span><span class="w"> </span><span class="nv">j</span><span class="p">,</span><span class="w"> </span><span class="s">"&gt; = "</span><span class="p">,</span><span class="w"> </span><span class="nv">val</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="s">"  (modal mass)"</span><span class="p">))</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">      </span><span class="nf">print</span><span class="p">(</span><span class="nf">sconcat</span><span class="p">(</span><span class="s">"  &lt;phi_"</span><span class="p">,</span><span class="w"> </span><span class="nv">i</span><span class="p">,</span><span class="w"> </span><span class="s">", M phi_"</span><span class="p">,</span><span class="w"> </span><span class="nv">j</span><span class="p">,</span><span class="w"> </span><span class="s">"&gt; = "</span><span class="p">,</span><span class="w"> </span><span class="nv">val</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="nf">abs</span><span class="p">(</span><span class="nv">val</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">1e-10</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="s">"  (orthogonal)"</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s">"  (NOT orthogonal!)"</span><span class="p">))</span>
+<span class="w">  </span><span class="p">)$</span>
 </pre></div>
 </div>
 </div>
@@ -8495,7 +8495,7 @@ for the 3-mass system.</p>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=86be6276">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=47df0e4e">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>

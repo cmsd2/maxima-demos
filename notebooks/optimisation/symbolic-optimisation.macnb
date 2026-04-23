@@ -1,0 +1,171 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 5,
+  "metadata": {
+    "kernelspec": {
+      "name": "maxima",
+      "display_name": "Maxima",
+      "language": "maxima"
+    },
+    "aximar": {}
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "source": "# Symbolic Optimisation\n\nWrite the objective as a symbolic expression and let `numerics` handle differentiation, compilation, and optimisation.\n\n- **`np_minimize` expression mode** — gradient computed via `diff()` and compiled automatically\n- **`np_compile_gradient`** — compile expression + gradient for reuse\n- **`np_minimize_cobyla`** — constrained optimisation (derivative-free)",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "load(\"numerics\")$\nload(\"numerics-optimize\")$\nload(\"ax-plots\")$",
+      "metadata": {},
+      "execution_count": 9,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## 1. Expression-Mode `np_minimize`\n\nJust write the math — the gradient is derived and compiled behind the scenes.\n\n$$\\min_{x_1, x_2} \\; x_1^2 + x_2^2$$",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "[x_opt, f_opt, ok] : np_minimize(x1^2 + x2^2, [x1, x2],\n                        ndarray([3.0, 4.0]));\nprint(\"Minimum at:\", np_to_list(x_opt), \" f =\", f_opt)$",
+      "metadata": {},
+      "execution_count": 10,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "*************************************************\n  N=    2   NUMBER OF CORRECTIONS= 2\n       INITIAL VALUES\n F=  2.500000000000000D+01   GNORM=  1.000000000000000D+01\n*************************************************\n   I  NFN     FUNC                    GNORM                   STEPLENGTH\n   1    2     1.600000000000000D+01   8.000000000000000D+00   1.000000000000000D-01\n   2    3     1.972152263052530D-30   2.808666774861361D-15   1.000000000000000D+00\n THE MINIMIZATION TERMINATED WITHOUT DETECTING ERRORS.\n IFLAG = 0\n[ndarray(\\#\\<ndarray\\ 2\\ DOUBLE\\-FLOAT\\ \\(2\\)\\>),1.9721522630525295e-30,true]\nMinimum at: [-4.440892098500626e-16,-1.3322676295501878e-15]  f =\n           1.9721522630525295e-30"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "### Rosenbrock Function\n\n$$\\min_{x, y} \\; (1-x)^2 + 100(y - x^2)^2$$\n\nA classic benchmark with a narrow curved valley.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "[x_rb, f_rb, ok_rb] : np_minimize(\n  (1-x)^2 + 100*(y - x^2)^2, [x, y],\n  ndarray([-1.0, 1.0]), 1e-10, 500);\n\nprint(\"Rosenbrock minimum:\", np_to_list(x_rb))$\nprint(\"f =\", f_rb, \" converged:\", ok_rb)$",
+      "metadata": {},
+      "execution_count": 11,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "*************************************************\n  N=    2   NUMBER OF CORRECTIONS= 2\n       INITIAL VALUES\n F=  4.000000000000000D+00   GNORM=  4.000000000000000D+00\n*************************************************\n   I  NFN     FUNC                    GNORM                   STEPLENGTH\n   1    3     3.991066466970313D+00   2.971572623024246D+00   1.672278466186611D-03\n  42   55     0.000000000000000D+00   0.000000000000000D+00   1.000000000000000D+00\n THE MINIMIZATION TERMINATED WITHOUT DETECTING ERRORS.\n IFLAG = 0\n[ndarray(\\#\\<ndarray\\ 4\\ DOUBLE\\-FLOAT\\ \\(2\\)\\>),0.0,true]\nRosenbrock minimum: [1.0,1.0]\nf = 0.0  converged: true"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "### Comparison: Expression vs Function Mode\n\nExpression mode compiles the objective and its gradient (via `diff()`) into native Lisp closures — the L-BFGS loop does not involve the Maxima evaluator.\n\nFunction mode calls user-provided `f` and `grad` through the evaluator on each iteration, but can leverage vectorized ndarray operations (`np_matmul`, `np_dot`, etc.) backed by BLAS/LAPACK.\n\nBoth modes solve the same underlying L-BFGS problem.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Same Rosenbrock via function mode, for comparison */\nf_rosen(p) := block([px, py],\n  px : np_ref(p, 0), py : np_ref(p, 1),\n  (1 - px)^2 + 100*(py - px^2)^2)$\n\ng_rosen(p) := block([px, py],\n  px : np_ref(p, 0), py : np_ref(p, 1),\n  ndarray([-2*(1 - px) - 400*px*(py - px^2),\n           200*(py - px^2)]))$\n\n[x_fn, f_fn, ok_fn] : np_minimize(f_rosen, g_rosen,\n                        ndarray([-1.0, 1.0]), 1e-10, 500);\n\nprint(\"Function mode:\", np_to_list(x_fn), \" f =\", f_fn)$",
+      "metadata": {},
+      "execution_count": 12,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "*************************************************\n  N=    2   NUMBER OF CORRECTIONS= 2\n       INITIAL VALUES\n F=  4.000000000000000D+00   GNORM=  4.000000000000000D+00\n*************************************************\n   I  NFN     FUNC                    GNORM                   STEPLENGTH\n   1    3     3.991066466970313D+00   2.971572623024246D+00   1.672278466186611D-03\n  42   55     0.000000000000000D+00   0.000000000000000D+00   1.000000000000000D+00\n THE MINIMIZATION TERMINATED WITHOUT DETECTING ERRORS.\n IFLAG = 0\n[ndarray(\\#\\<ndarray\\ 62\\ DOUBLE\\-FLOAT\\ \\(2\\)\\>),0.0,true]\nFunction mode: [1.0,1.0]  f = 0.0"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## 2. `np_compile_gradient`\n\nCompile expression + gradient once, then use with `np_minimize` in function mode. Useful when you want to inspect or reuse the compiled functions.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Compile a 3-variable objective */\n[f_cg, g_cg] : np_compile_gradient(\n  (a - 1)^2 + 2*(b - 3)^2 + 5*(c + 1)^2, [a, b, c]);\n\n/* Evaluate at a test point */\nprint(\"f(0,0,0) =\", f_cg(ndarray([0.0, 0.0, 0.0])))$\nprint(\"grad(0,0,0) =\", np_to_list(g_cg(ndarray([0.0, 0.0, 0.0]))))$\n\n/* Minimize */\n[x_cg, f_cg_opt, ok_cg] : np_minimize(f_cg, g_cg,\n                            ndarray([0.0, 0.0, 0.0]));\nprint(\"Minimum at:\", np_to_list(x_cg))$",
+      "metadata": {},
+      "execution_count": 13,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "[np_compiled_f1,np_compiled_g1]\nf(0,0,0) = 24.0\ngrad(0,0,0) = [-2.0,-12.0,10.0]\n*************************************************\n  N=    3   NUMBER OF CORRECTIONS= 3\n       INITIAL VALUES\n F=  2.400000000000000D+01   GNORM=  1.574801574802362D+01\n*************************************************\n   I  NFN     FUNC                    GNORM                   STEPLENGTH\n   1    2     1.144553263907315D+01   9.823910534330865D+00   6.350006350009525D-02\n  10   13     6.162975822039155D-32   1.110223024625157D-15   1.000000000000000D+00\n THE MINIMIZATION TERMINATED WITHOUT DETECTING ERRORS.\n IFLAG = 0\n[ndarray(\\#\\<ndarray\\ 81\\ DOUBLE\\-FLOAT\\ \\(3\\)\\>),6.162975822039155e-32,true]\nMinimum at: [1.0,3.0,-0.9999999999999999]"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## 3. Constrained Optimisation with COBYLA\n\n`np_minimize_cobyla` handles inequality and equality constraints using a derivative-free trust-region method. Constraints are written as natural Maxima expressions.\n\n### Minimize on the Unit Disk\n\n$$\\min\\; x + 2y \\quad \\text{s.t.} \\quad x^2 + y^2 \\le 1$$",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "[x_disk, f_disk, nev, cob_info] : np_minimize_cobyla(\n  x1 + 2*x2, [x1, x2], [0.0, 0.0],\n  [1 - x1^2 - x2^2 >= 0]);\n\nprint(\"Minimum:\", np_to_list(x_disk))$\nprint(\"f =\", f_disk, \" evals:\", nev, \" info:\", cob_info)$",
+      "metadata": {},
+      "execution_count": 14,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "[ndarray(\\#\\<ndarray\\ 82\\ DOUBLE\\-FLOAT\\ \\(2\\)\\>),-2.2360679775019228,40,0]\nMinimum: [-0.44721448992757556,-0.8944267437871737]\nf = -2.2360679775019228  evals: 40  info: 0"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "### Equality Constraint\n\n$$\\min\\; x_1^2 + x_2^2 \\quad \\text{s.t.} \\quad x_1 + x_2 = 1$$\n\nThe minimum is at $(0.5, 0.5)$ with $f = 0.5$.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "[x_eq, f_eq, nev_eq, inf_eq] : np_minimize_cobyla(\n  x1^2 + x2^2, [x1, x2], [0.8, 0.2],\n  [x1 + x2 = 1]);\n\nprint(\"Minimum:\", np_to_list(x_eq), \" f =\", f_eq)$",
+      "metadata": {},
+      "execution_count": 15,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "[ndarray(\\#\\<ndarray\\ 83\\ DOUBLE\\-FLOAT\\ \\(2\\)\\>),0.500000000001141,52,0]\nMinimum: [0.5000007553481848,0.4999992446518151]  f = 0.500000000001141"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "### Mixed Constraints: Box + Budget\n\nA resource allocation problem:\n\n$$\\min\\; -(x_1 x_2) \\quad \\text{s.t.} \\quad x_1 + x_2 \\le 10, \\; x_1 \\ge 0, \\; x_2 \\ge 0$$\n\nMaximize the product of two non-negative quantities with a budget constraint. By AM-GM, the optimum is $x_1 = x_2 = 5$.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "[x_box, f_box, nev_box, inf_box] : np_minimize_cobyla(\n  -(x1 * x2), [x1, x2], [1.0, 1.0],\n  [10 - x1 - x2 >= 0, x1 >= 0, x2 >= 0]);\n\nprint(\"Optimal allocation:\", np_to_list(x_box))$\nprint(\"Max product:\", -f_box)$",
+      "metadata": {},
+      "execution_count": 16,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "[ndarray(\\#\\<ndarray\\ 84\\ DOUBLE\\-FLOAT\\ \\(2\\)\\>),-24.99999999999939,64,0]\nOptimal allocation: [5.00000078108792,4.99999921891208]\nMax product: 24.99999999999939"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Summary\n\n| Function | Gradient | Constraints | Use case |\n|----------|----------|-------------|----------|\n| `np_minimize` (expression) | Auto via `diff()` + compile | None | Small-dimensional, symbolic objectives |\n| `np_minimize` (function) | User-provided | None | Array-scale, procedural, or BLAS-backed objectives |\n| `np_compile_gradient` | Compile for reuse | None | Inspect or cache compiled gradient |\n| `np_minimize_cobyla` | Derivative-free | Inequality + equality | Constrained problems |",
+      "metadata": {}
+    }
+  ]
+}
