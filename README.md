@@ -4,7 +4,7 @@
 
 Notebook demos showcasing Maxima as a scientific computing platform, powered by the [numerics](https://github.com/cmsd2/maxima-numerics), [dataframes](https://github.com/cmsd2/maxima-dataframes), and [ax-plots](https://github.com/cmsd2/ax-plots) packages.
 
-Each notebook runs in [Aximar](https://github.com/cmsd2/aximar) (the Maxima notebook IDE).
+Each notebook runs in [Aximar](https://github.com/cmsd2/aximar) (Maxima notebook IDE) and [Maxima Notebook](https://marketplace.visualstudio.com/items?itemName=cmsd2.maxima-notebook) VSCode Extension.
 
 Many notebooks highlight the **symbolic-numeric bridge** — Maxima's unique ability to derive formulas symbolically and evaluate them numerically in the same session. These are marked with [S+N].
 
