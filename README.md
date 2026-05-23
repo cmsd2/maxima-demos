@@ -8,6 +8,8 @@ Each notebook runs in [Aximar](https://github.com/cmsd2/aximar) (Maxima notebook
 
 Many notebooks highlight the **symbolic-numeric bridge** — Maxima's unique ability to derive formulas symbolically and evaluate them numerically in the same session. These are marked with [S+N].
 
+Packages can be installed with [mxpm](https://github.com/cmsd2/maxima-mxpm), the Maxima package manager.
+
 ## Prerequisites
 
 ```
