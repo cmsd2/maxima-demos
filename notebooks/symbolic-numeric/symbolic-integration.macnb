@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 10,
+      "execution_count": 1,
       "outputs": []
     },
     {
@@ -31,7 +31,7 @@
       "cell_type": "code",
       "source": "/* Polynomial: integral of x^2 from 0 to 1 */\nexact1 : integrate(x^2, x, 0, 1);\n\n/* Trigonometric: integral of sin(x) from 0 to pi */\nexact2 : integrate(sin(x), x, 0, %pi);",
       "metadata": {},
-      "execution_count": 11,
+      "execution_count": 2,
       "outputs": [
         {
           "name": "stdout",
@@ -46,7 +46,7 @@
               "2"
             ]
           },
-          "execution_count": 11,
+          "execution_count": 2,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -61,7 +61,7 @@
       "cell_type": "code",
       "source": "/* Approximate integral of x^2 on [0,1] with 10 points */\nxs : np_linspace(0, 1, 10)$\nys : np_pow(xs, 2)$\nnumeric1 : np_trapz(ys, xs);\nprint(\"Exact:\", 1/3, \"  Numeric:\", numeric1)$",
       "metadata": {},
-      "execution_count": 12,
+      "execution_count": 3,
       "outputs": [
         {
           "name": "stdout",
@@ -76,7 +76,7 @@
       "cell_type": "code",
       "source": "/* Approximate integral of sin(x) on [0, pi] with 50 points */\nxs2 : np_linspace(0, float(%pi), 50)$\nys2 : np_map(sin, xs2)$\nnumeric2 : np_trapz(ys2, xs2);\nprint(\"Exact: 2\", \"  Numeric:\", numeric2)$",
       "metadata": {},
-      "execution_count": 13,
+      "execution_count": 4,
       "outputs": [
         {
           "name": "stdout",
@@ -96,7 +96,7 @@
       "cell_type": "code",
       "source": "/* Exact value via symbolic integration + float conversion */\nexact_gauss : float(integrate(exp(-t^2), t, 0, 3))$\nprint(\"Exact integral of exp(-x^2) on [0,3]:\", exact_gauss)$\n\n/* Sweep over increasing number of points */\nns : [10, 20, 50, 100, 200, 500, 1000]$\nerrors : makelist(\n  block([xg, yg, approx],\n    xg : np_linspace(0, 3, ns[i]),\n    yg : np_map(lambda([z], exp(-z^2)), xg),\n    approx : np_trapz(yg, xg),\n    abs(approx - exact_gauss)),\n  i, 1, length(ns))$\nprint(\"Errors:\", errors)$",
       "metadata": {},
-      "execution_count": 14,
+      "execution_count": 5,
       "outputs": [
         {
           "name": "stdout",
@@ -111,7 +111,7 @@
       "cell_type": "code",
       "source": "/* Log-log convergence plot */\nlog_ns : map(lambda([n], float(log(n))), ns)$\nlog_errs : map(lambda([e], float(log(e))), errors)$\nax_draw2d(\n  color=blue, name=\"measured error\",\n  points(log_ns, log_errs),\n  color=red, dash=\"dash\", name=\"O(1/n^2) reference\",\n  lines([float(log(10)), float(log(1000))],\n        [log_errs[1], log_errs[1] - 2*(float(log(1000))-float(log(10)))]),\n  title=\"Trapezoidal Rule Convergence\",\n  xlabel=\"log(n)\", ylabel=\"log(error)\", grid=true\n)$",
       "metadata": {},
-      "execution_count": 15,
+      "execution_count": 6,
       "outputs": [
         {
           "data": {
@@ -133,7 +133,7 @@
       "cell_type": "code",
       "source": "/* Exact symbolic result for an improper integral */\nexact_special : integrate(1/(1+x^4), x, 0, inf);\nprint(\"Exact:\", float(exact_special))$\n\n/* Numeric approximation on [0, 100] (truncated tail) */\nxs3 : np_linspace(0, 100, 5000)$\nys3 : np_map(lambda([z], 1/(1+z^4)), xs3)$\nprint(\"np_trapz on [0,100]:\", np_trapz(ys3, xs3))$",
       "metadata": {},
-      "execution_count": 16,
+      "execution_count": 7,
       "outputs": [
         {
           "name": "stdout",
@@ -153,7 +153,7 @@
       "cell_type": "code",
       "source": "/* Exact symbolic integral of sin(10*x)*exp(-x) on [0, 2*pi] */\nexact_osc : float(integrate(sin(10*t)*exp(-t), t, 0, 2*%pi));\n\n/* Numeric with n=100 (under-resolved) vs n=1000 */\nxo1 : np_linspace(0, float(2*%pi), 100)$\nyo1 : np_map(lambda([z], sin(10*z)*exp(-z)), xo1)$\nxo2 : np_linspace(0, float(2*%pi), 1000)$\nyo2 : np_map(lambda([z], sin(10*z)*exp(-z)), xo2)$\nprint(\"n=100:\", np_trapz(yo1, xo1),\n      \"  n=1000:\", np_trapz(yo2, xo2))$",
       "metadata": {},
-      "execution_count": 17,
+      "execution_count": 8,
       "outputs": [
         {
           "name": "stdout",
@@ -168,7 +168,7 @@
       "cell_type": "code",
       "source": "/* Plot the oscillatory integrand with shaded area */\nxp : np_linspace(0, float(2*%pi), 500)$\nyp : np_map(lambda([z], sin(10*z)*exp(-z)), xp)$\nax_draw2d(\n  color=blue, fill=\"tozeroy\", opacity=0.3,\n  name=\"sin(10x) exp(-x)\",\n  lines(xp, yp),\n  title=\"Oscillatory Integrand\",\n  xlabel=\"x\", ylabel=\"g(x)\", grid=true\n)$",
       "metadata": {},
-      "execution_count": 18,
+      "execution_count": 9,
       "outputs": [
         {
           "data": {
@@ -190,7 +190,7 @@
       "cell_type": "code",
       "source": "/* Symbolic FTC: integrate then differentiate */\nassume(x > 0)$\nF_sym : integrate(1/(1+t^2), t, 0, x);\nresult : diff(F_sym, x);\nis(ratsimp(result - 1/(1+x^2)) = 0);",
       "metadata": {},
-      "execution_count": 19,
+      "execution_count": 10,
       "outputs": [
         {
           "name": "stdout",
@@ -205,7 +205,7 @@
               "\\mathbf{true}"
             ]
           },
-          "execution_count": 19,
+          "execution_count": 10,
           "metadata": {},
           "output_type": "execute_result"
         }
@@ -215,14 +215,14 @@
       "cell_type": "code",
       "source": "/* Numeric FTC: accumulate trapezoid sums F(x_k), then\n   approximate F'(x_k) with finite differences */\nnpts : 500$\nxf : np_linspace(0, 5, npts)$\nyf : np_map(lambda([z], 1/(1+z^2)), xf)$\ny_list : np_to_list(yf)$\n\n/* F(x_k) = cumulative trapezoid sum from 0 to x_k */\ndx : 5.0 / (npts - 1)$\nF_vals : [0.0]$\nfor k : 2 thru npts do\n  F_vals : endcons(last(F_vals) + dx * (y_list[k-1] + y_list[k]) / 2, F_vals)$\n\n/* Numeric derivative: dF/dx via central differences */\ndFdx : makelist(\n  if i = 1 then (F_vals[2] - F_vals[1]) / dx\n  elseif i = npts then (F_vals[i] - F_vals[i-1]) / dx\n  else (F_vals[i+1] - F_vals[i-1]) / (2*dx),\n  i, 1, npts)$\n\n/* Compare against exact f(x) = 1/(1+x^2) */\nx_list : np_to_list(xf)$",
       "metadata": {},
-      "execution_count": 20,
+      "execution_count": 11,
       "outputs": []
     },
     {
       "cell_type": "code",
       "source": "ax_draw2d(\n  color=\"steelblue\", line_width=2, name=\"f(x) = 1/(1+x^2)\",\n  lines(x_list, y_list),\n  color=\"red\", dash=\"dash\", line_width=2, name=\"d/dx [trapz sum]\",\n  lines(x_list, dFdx),\n  title=\"FTC Verification: Numeric Derivative of Numeric Integral\",\n  xlabel=\"x\", ylabel=\"f(x)\", grid=true\n)$",
       "metadata": {},
-      "execution_count": 21,
+      "execution_count": 12,
       "outputs": [
         {
           "data": {

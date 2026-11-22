@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"numerics-integrate\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 15,
+      "execution_count": 1,
       "outputs": []
     },
     {
@@ -31,7 +31,7 @@
       "cell_type": "code",
       "source": "tspan : np_linspace(0.0, 5.0, 50)$\nresult : np_odeint([-y], [t, y], [1.0], tspan)$\n\n/* Extract columns and compare with exact solution */\nt_col : np_slice(result, all, 0)$\ny_col : np_slice(result, all, 1)$\ny_exact : np_exp(np_scale(-1.0, t_col))$\nmax_err : np_max(np_abs(np_sub(y_col, y_exact)))$\nprint(\"Max error vs exp(-t):\", max_err)$",
       "metadata": {},
-      "execution_count": 16,
+      "execution_count": 2,
       "outputs": [
         {
           "name": "stdout",
@@ -46,7 +46,7 @@
       "cell_type": "code",
       "source": "ax_draw2d(\n  color=\"blue\", line_width=2, name=\"np_odeint\",\n  lines(np_to_list(t_col), np_to_list(y_col)),\n  color=\"red\", dash=\"dash\", name=\"exp(-t)\",\n  explicit(exp(-t), t, 0, 5),\n  title=\"Exponential Decay\", xlabel=\"t\", ylabel=\"y\",\n  grid=true, showlegend=true\n)$",
       "metadata": {},
-      "execution_count": 17,
+      "execution_count": 3,
       "outputs": [
         {
           "data": {
@@ -68,14 +68,14 @@
       "cell_type": "code",
       "source": "tspan2 : np_linspace(0.0, float(4*%pi), 200)$\nres2 : np_odeint([v, -x], [t, x, v], [1.0, 0.0], tspan2)$\n\nt2 : np_slice(res2, all, 0)$\nx2 : np_slice(res2, all, 1)$\nv2 : np_slice(res2, all, 2)$",
       "metadata": {},
-      "execution_count": 18,
+      "execution_count": 4,
       "outputs": []
     },
     {
       "cell_type": "code",
       "source": "ax_draw2d(\n  color=\"blue\", line_width=2, name=\"x(t) = cos t\",\n  lines(np_to_list(t2), np_to_list(x2)),\n  color=\"orange\", line_width=2, name=\"v(t) = -sin t\",\n  lines(np_to_list(t2), np_to_list(v2)),\n  title=\"Harmonic Oscillator\", xlabel=\"t\", ylabel=\"\",\n  grid=true, showlegend=true\n)$",
       "metadata": {},
-      "execution_count": 19,
+      "execution_count": 5,
       "outputs": [
         {
           "data": {
@@ -92,7 +92,7 @@
       "cell_type": "code",
       "source": "/* Phase portrait: unit circle */\nax_draw2d(\n  color=\"blue\", line_width=2,\n  lines(np_to_list(x2), np_to_list(v2)),\n  title=\"Phase Portrait (unit circle)\", xlabel=\"x\", ylabel=\"v\",\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 20,
+      "execution_count": 6,
       "outputs": [
         {
           "data": {
@@ -114,14 +114,14 @@
       "cell_type": "code",
       "source": "/* Parameters: alpha=1.5, beta=1, delta=1, gamma=3 */\ntspan3 : np_linspace(0.0, 15.0, 500)$\nres3 : np_odeint(\n  [1.5*prey - prey*pred, prey*pred - 3*pred],\n  [t, prey, pred], [10.0, 5.0], tspan3)$\n\nt3 : np_slice(res3, all, 0)$\nprey3 : np_slice(res3, all, 1)$\npred3 : np_slice(res3, all, 2)$",
       "metadata": {},
-      "execution_count": 21,
+      "execution_count": 7,
       "outputs": []
     },
     {
       "cell_type": "code",
       "source": "ax_draw2d(\n  color=\"steelblue\", line_width=2, name=\"Prey\",\n  lines(np_to_list(t3), np_to_list(prey3)),\n  color=\"tomato\", line_width=2, name=\"Predator\",\n  lines(np_to_list(t3), np_to_list(pred3)),\n  title=\"Lotka-Volterra\", xlabel=\"t\", ylabel=\"Population\",\n  grid=true, showlegend=true\n)$",
       "metadata": {},
-      "execution_count": 22,
+      "execution_count": 8,
       "outputs": [
         {
           "data": {
@@ -138,7 +138,7 @@
       "cell_type": "code",
       "source": "/* Phase plane: closed orbits */\nax_draw2d(\n  color=\"purple\", line_width=2,\n  lines(np_to_list(prey3), np_to_list(pred3)),\n  title=\"Lotka-Volterra Phase Plane\",\n  xlabel=\"Prey\", ylabel=\"Predator\", grid=true\n)$",
       "metadata": {},
-      "execution_count": 23,
+      "execution_count": 9,
       "outputs": [
         {
           "data": {
@@ -160,14 +160,14 @@
       "cell_type": "code",
       "source": "tspan4 : np_linspace(0.0, 40.0, 2000)$\nres4 : np_odeint(\n  [vv, 10*(1 - xx^2)*vv - xx],\n  [t, xx, vv], [2.0, 0.0], tspan4, 1e-8, 1e-8, bdf)$\n\nt4 : np_slice(res4, all, 0)$\nx4 : np_slice(res4, all, 1)$\nv4 : np_slice(res4, all, 2)$",
       "metadata": {},
-      "execution_count": 24,
+      "execution_count": 10,
       "outputs": []
     },
     {
       "cell_type": "code",
       "source": "ax_draw2d(\n  color=\"blue\", line_width=1,\n  lines(np_to_list(t4), np_to_list(x4)),\n  title=\"Van der Pol (mu=10, BDF)\", xlabel=\"t\", ylabel=\"x\",\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 25,
+      "execution_count": 11,
       "outputs": [
         {
           "data": {
@@ -184,7 +184,7 @@
       "cell_type": "code",
       "source": "/* Relaxation oscillation in the phase plane */\nax_draw2d(\n  color=\"blue\", line_width=1,\n  lines(np_to_list(x4), np_to_list(v4)),\n  title=\"Van der Pol Phase Plane\", xlabel=\"x\", ylabel=\"v\",\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 26,
+      "execution_count": 12,
       "outputs": [
         {
           "data": {
@@ -206,14 +206,14 @@
       "cell_type": "code",
       "source": "lorenz(t_lr, y_lr) := block(\n  [lx, ly, lz, sigma_lr, rho_lr, beta_lr],\n  sigma_lr : 10,  rho_lr : 28,  beta_lr : 8/3,\n  lx : np_ref(y_lr, 0),\n  ly : np_ref(y_lr, 1),\n  lz : np_ref(y_lr, 2),\n  [sigma_lr*(ly - lx),\n   lx*(rho_lr - lz) - ly,\n   lx*ly - beta_lr*lz])$\n\ntspan5 : np_linspace(0.0, 40.0, 4000)$\nres5 : np_odeint(lorenz, [1.0, 1.0, 1.0], tspan5)$\n\nlx5 : np_slice(res5, all, 1)$\nly5 : np_slice(res5, all, 2)$\nlz5 : np_slice(res5, all, 3)$",
       "metadata": {},
-      "execution_count": 27,
+      "execution_count": 13,
       "outputs": []
     },
     {
       "cell_type": "code",
       "source": "/* x-z projection of the Lorenz attractor */\nax_draw2d(\n  color=\"navy\", marker_size=1,\n  points(np_to_list(lx5), np_to_list(lz5)),\n  title=\"Lorenz Attractor (x-z projection)\",\n  xlabel=\"x\", ylabel=\"z\", grid=true\n)$",
       "metadata": {},
-      "execution_count": 28,
+      "execution_count": 14,
       "outputs": [
         {
           "data": {

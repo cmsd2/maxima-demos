@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"numerics-learn\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 22,
+      "execution_count": 1,
       "outputs": []
     },
     {
@@ -31,7 +31,7 @@
       "cell_type": "code",
       "source": "/* Grid dimensions */\ngrid_rows : 5$  grid_cols : 5$\nn_states : grid_rows * grid_cols$\nn_actions : 4$\n\n/* State <-> (row, col) conversion (0-indexed) */\nstate_to_rc(s) := [floor(s / grid_cols), mod(s, grid_cols)]$\nrc_to_state(r, c) := r * grid_cols + c$\n\n/* Walls: set of blocked states */\nwall_states : setify([rc_to_state(1,1), rc_to_state(2,3), rc_to_state(3,1)])$\n\n/* Goal state */\ngoal_state : rc_to_state(4, 4)$\n\n/* Action deltas: up, right, down, left */\ndr : [-1, 0, 1, 0]$\ndc : [0, 1, 0, -1]$\naction_names : [\"up\", \"right\", \"down\", \"left\"]$\n\n/* Step function: (state, action) -> (next_state, reward, finished) */\nenv_step(s, a) := block([rc, r, c, nr, nc, ns, reward, finished],\n  rc : state_to_rc(s),\n  r : rc[1],  c : rc[2],\n  nr : r + dr[a+1],  nc : c + dc[a+1],\n  /* Clip to grid boundaries */\n  nr : max(0, min(grid_rows - 1, nr)),\n  nc : max(0, min(grid_cols - 1, nc)),\n  ns : rc_to_state(nr, nc),\n  /* Bounce off walls */\n  if elementp(ns, wall_states) then ns : s,\n  /* Reward */\n  finished : is(ns = goal_state),\n  reward : if finished then 10.0 else -0.1,\n  [ns, reward, finished]\n)$\n\nprint(\"Grid world: 5x5, goal at (4,4), 3 walls\")$\nprint(\"Walls at:\", listify(wall_states))$",
       "metadata": {},
-      "execution_count": 23,
+      "execution_count": 2,
       "outputs": [
         {
           "name": "stdout",
@@ -51,7 +51,7 @@
       "cell_type": "code",
       "source": "np_seed(42)$\n\n/* Train Q-table using np_qlearn.\n   env_step(s, a) -> [next_s, reward, done] is the only user-provided function.\n   Everything else (epsilon-greedy, Bellman updates, decay) is handled internally. */\n[Q, ep_rewards_arr, ep_lengths_arr] :\n  np_qlearn(env_step, n_states, n_actions,\n            n_episodes=500, alpha=0.1, discount=0.95,\n            epsilon=1.0, epsilon_decay=0.995, epsilon_min=0.05,\n            max_steps=100)$\n\n/* Convert to lists for plotting */\nepisode_rewards : np_to_list(ep_rewards_arr)$\nepisode_lengths : np_to_list(ep_lengths_arr)$\nn_episodes : 500$\n\nprint(\"Training complete.\")$\nprint(\"Final episode: reward =\", last(episode_rewards),\n      \"length =\", last(episode_lengths))$",
       "metadata": {},
-      "execution_count": 24,
+      "execution_count": 3,
       "outputs": [
         {
           "name": "stdout",
@@ -66,7 +66,7 @@
       "cell_type": "code",
       "source": "/* Smooth the reward curve with a running average */\nwindow : 20$\nsmoothed : makelist(\n  lsum(x, x, makelist(episode_rewards[j],\n    j, max(1, i - window + 1), i)) / min(i, window),\n  i, 1, n_episodes)$\n\nax_draw2d(\n  color = \"#ccc\",\n  name = \"Raw\",\n  points(makelist(i, i, 1, n_episodes), episode_rewards),\n  line_width = 2,\n  color = royalblue,\n  name = \"Smoothed (20-ep)\",\n  lines(makelist(i, i, 1, n_episodes), smoothed),\n  title = \"Q-Learning: Episode Reward\",\n  xlabel = \"Episode\",\n  ylabel = \"Total Reward\",\n  grid = true\n)$",
       "metadata": {},
-      "execution_count": 25,
+      "execution_count": 4,
       "outputs": [
         {
           "data": {
@@ -88,7 +88,7 @@
       "cell_type": "code",
       "source": "/* Extract greedy policy and state values */\narrow_symbols : [\"^\", \">\", \"v\", \"<\"]$\n\nprint(\"=== Learned Policy ===\")$\nfor r : 0 thru grid_rows - 1 do block([row_str],\n  row_str : \"\",\n  for c : 0 thru grid_cols - 1 do block([s, best_a, best_q, q_val],\n    s : rc_to_state(r, c),\n    if elementp(s, wall_states) then\n      row_str : sconcat(row_str, \"  # \")\n    elseif s = goal_state then\n      row_str : sconcat(row_str, \"  G \")\n    else (\n      best_a : 0,  best_q : np_ref(Q, s, 0),\n      for a : 1 thru n_actions - 1 do (\n        q_val : np_ref(Q, s, a),\n        if q_val > best_q then (best_a : a, best_q : q_val)\n      ),\n      row_str : sconcat(row_str, \"  \", arrow_symbols[best_a + 1], \" \")\n    )\n  ),\n  print(row_str)\n)$\n\nprint(\"\")$\nprint(\"=== State Values V(s) = max_a Q(s,a) ===\")$\nfor r : 0 thru grid_rows - 1 do block([row_str],\n  row_str : \"\",\n  for c : 0 thru grid_cols - 1 do block([s, v],\n    s : rc_to_state(r, c),\n    if elementp(s, wall_states) then\n      row_str : sconcat(row_str, \"  ###  \")\n    else (\n      v : np_ref(Q, s, 0),\n      for a : 1 thru n_actions - 1 do v : max(v, np_ref(Q, s, a)),\n      row_str : sconcat(row_str, printf(false, \"~6,2f \", float(v)))\n    )\n  ),\n  print(row_str)\n)$",
       "metadata": {},
-      "execution_count": 26,
+      "execution_count": 5,
       "outputs": [
         {
           "name": "stdout",
@@ -103,14 +103,14 @@
       "cell_type": "code",
       "source": "/* Visualize value function as a bar chart per row */\nv_list : []$\nstate_labels : []$\nbar_colors : []$\nfor r : 0 thru grid_rows - 1 do\n  for c : 0 thru grid_cols - 1 do block([s, v],\n    s : rc_to_state(r, c),\n    if elementp(s, wall_states) then (\n      v_list : endcons(0, v_list),\n      bar_colors : endcons(\"#333\", bar_colors)\n    ) else (\n      v : np_ref(Q, s, 0),\n      for a : 1 thru n_actions - 1 do v : max(v, np_ref(Q, s, a)),\n      v_list : endcons(float(v), v_list),\n      if s = goal_state then bar_colors : endcons(\"forestgreen\", bar_colors)\n      else bar_colors : endcons(\"royalblue\", bar_colors)\n    ),\n    state_labels : endcons(sconcat(\"(\", r, \",\", c, \")\"), state_labels)\n  )$\n\nax_bar(state_labels, v_list,\n  title = \"State Value Function V(s)\",\n  ylabel = \"V(s)\",\n  bar_color = bar_colors\n)$",
       "metadata": {},
-      "execution_count": 27,
+      "execution_count": 6,
       "outputs": []
     },
     {
       "cell_type": "code",
       "source": "/* Run the greedy policy and show the path */\npath : [0]$\ns : 0$\nfor step_i : 1 thru 20 do block([best_a, best_q, q_val, result],\n  if s = goal_state then return(false),\n  best_a : 0,  best_q : np_ref(Q, s, 0),\n  for a : 1 thru n_actions - 1 do (\n    q_val : np_ref(Q, s, a),\n    if q_val > best_q then (best_a : a, best_q : q_val)\n  ),\n  result : env_step(s, best_a),\n  s : result[1],\n  path : endcons(s, path)\n)$\n\nprint(\"Greedy path (states):\", path)$\nprint(\"Path (coords):\", map(state_to_rc, path))$\nprint(\"Path length:\", length(path) - 1, \"steps\")$",
       "metadata": {},
-      "execution_count": 28,
+      "execution_count": 7,
       "outputs": [
         {
           "name": "stdout",
