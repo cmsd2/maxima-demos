@@ -29,7 +29,7 @@
     },
     {
       "cell_type": "code",
-      "source": "[x_opt, rnorm, info] : np_fsolve([x^2 - 2], [x], [1.0]);\nprint(\"x =\", np_ref(x_opt, 0), \" residual =\", rnorm, \" info =\", info)$",
+      "source": "[x_opt, rnorm, info] : np_fsolve([x^2 - 2], [x], [1.0])$\nprint(\"x =\", np_ref(x_opt, 0), \" residual =\", rnorm, \" info =\", info)$",
       "metadata": {},
       "execution_count": 11,
       "outputs": [
@@ -49,7 +49,7 @@
     },
     {
       "cell_type": "code",
-      "source": "[xy_opt, rnorm2, info2] : np_fsolve(\n  [x^2 + y^2 - 1, y - x], [x, y], [0.5, 0.5]);\n\nprint(\"Intersection:\", np_to_list(xy_opt))$\nprint(\"Residual:\", rnorm2)$",
+      "source": "[xy_opt, rnorm2, info2] : np_fsolve(\n  [x^2 + y^2 - 1, y - x], [x, y], [0.5, 0.5])$\n\nprint(\"Intersection:\", np_to_list(xy_opt))$\nprint(\"Residual:\", rnorm2)$",
       "metadata": {},
       "execution_count": 12,
       "outputs": [
@@ -143,7 +143,7 @@
     },
     {
       "cell_type": "code",
-      "source": "/* np_fsolve function mode: same circle-line problem */\ncircle_line(w) := [np_ref(w, 0)^2 + np_ref(w, 1)^2 - 1,\n                    np_ref(w, 1) - np_ref(w, 0)]$\n\n[xy2, rn2, inf2] : np_fsolve(circle_line, [0.5, 0.5]);\nprint(\"Function mode solution:\", np_to_list(xy2))$",
+      "source": "/* np_fsolve function mode: same circle-line problem */\ncircle_line(w) := [np_ref(w, 0)^2 + np_ref(w, 1)^2 - 1,\n                    np_ref(w, 1) - np_ref(w, 0)]$\n\n[xy2, rn2, inf2] : np_fsolve(circle_line, [0.5, 0.5])$\nprint(\"Function mode solution:\", np_to_list(xy2))$",
       "metadata": {},
       "execution_count": 17,
       "outputs": [
@@ -158,7 +158,7 @@
     },
     {
       "cell_type": "code",
-      "source": "/* np_lsq_nonlinear function mode */\nexp_residuals(p) := block([a_v, b_v],\n  a_v : np_ref(p, 0),\n  b_v : np_ref(p, 1),\n  makelist(\n    a_v * exp(b_v * np_ref(x_data, i)) - np_ref(y_data, i),\n    i, 0, n_pts - 1))$\n\n[ab2, rn_fn, inf_fn] : np_lsq_nonlinear(exp_residuals, [1.0, 0.1]);\nprint(\"Function mode fit:\", np_to_list(ab2))$",
+      "source": "/* np_lsq_nonlinear function mode */\nexp_residuals(p) := block([a_v, b_v],\n  a_v : np_ref(p, 0),\n  b_v : np_ref(p, 1),\n  makelist(\n    a_v * exp(b_v * np_ref(x_data, i)) - np_ref(y_data, i),\n    i, 0, n_pts - 1))$\n\n[ab2, rn_fn, inf_fn] : np_lsq_nonlinear(exp_residuals, [1.0, 0.1])$\nprint(\"Function mode fit:\", np_to_list(ab2))$",
       "metadata": {},
       "execution_count": 18,
       "outputs": [

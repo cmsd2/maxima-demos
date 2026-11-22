@@ -224,7 +224,7 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Fit a symbolic model to the per-region data */\nstats : df_sql(\"SELECT region, AVG(units) as avg_u, AVG(price) as avg_p, AVG(revenue) as avg_r FROM sales GROUP BY region\")$\n/* Revenue should approximately equal units * price */\nprint(\"Revenue ~ units * price check:\")$\nfor i : 0 thru 3 do block([u, p, r],\n  u : np_ref(df_table_column(stats, \"avg_u\"), i),\n  p : np_ref(df_table_column(stats, \"avg_p\"), i),\n  r : np_ref(df_table_column(stats, \"avg_r\"), i),\n  print(\"  \", df_string_column_ref(df_table_column(stats, \"region\"), i+1),\n        \": u*p =\", float(u*p), \"actual =\", r)\n)$",
+      "source": "/* Fit a symbolic model to the per-region data */\nstats : df_sql(\"SELECT region, AVG(units) as avg_u, AVG(price) as avg_p, AVG(revenue) as avg_r FROM sales GROUP BY region ORDER BY region\")$\n/* Revenue should approximately equal units * price */\nprint(\"Revenue ~ units * price check:\")$\nfor i : 0 thru 3 do block([u, p, r],\n  u : np_ref(df_table_column(stats, \"avg_u\"), i),\n  p : np_ref(df_table_column(stats, \"avg_p\"), i),\n  r : np_ref(df_table_column(stats, \"avg_r\"), i),\n  print(\"  \", df_string_column_ref(df_table_column(stats, \"region\"), i+1),\n        \": u*p =\", float(u*p), \"actual =\", r)\n)$",
       "metadata": {},
       "execution_count": 12,
       "outputs": [

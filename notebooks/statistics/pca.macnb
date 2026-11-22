@@ -141,7 +141,7 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Compute the mean of x and y for centering the arrows */\nmx : np_mean(x)$\nmy : np_mean(y)$\n\n/* Extract eigenvectors and scale by sqrt(eigenvalue) */\nev1 : np_to_list(np_col(vecs, 0))$\nev2 : np_to_list(np_col(vecs, 1))$\nscale1 : sqrt(lam[1])$\nscale2 : sqrt(lam[2])$\n\nax_draw2d(\n  color=\"steelblue\", marker_size=4, opacity=0.4,\n  points(x, y),\n  /* First eigenvector (larger variance — dominant PC) */\n  color=\"darkred\", line_width=3,\n  lines([mx, mx + scale1 * ev1[1]], [my, my + scale1 * ev1[2]]),\n  /* Second eigenvector (smaller variance) */\n  color=\"red\", line_width=3,\n  lines([mx, mx + scale2 * ev2[1]], [my, my + scale2 * ev2[2]]),\n  title=\"Data with Principal Component Directions\",\n  xlabel=\"x\", ylabel=\"y\",\n  aspect_ratio=true\n)$",
+      "source": "/* Compute the mean of x and y for centering the arrows */\nmx : np_mean(x)$\nmy : np_mean(y)$\n\n/* Extract eigenvectors and scale by sqrt(eigenvalue) */\nev1 : np_to_list(np_col(vecs, 0))$\nev2 : np_to_list(np_col(vecs, 1))$\nscale1 : sqrt(np_ref(vals, 0))$\nscale2 : sqrt(np_ref(vals, 1))$\n\nax_draw2d(\n  color=\"steelblue\", marker_size=4, opacity=0.4,\n  points(x, y),\n  /* First eigenvector (larger variance — dominant PC) */\n  color=\"darkred\", line_width=3,\n  lines([mx, mx + scale1 * ev1[1]], [my, my + scale1 * ev1[2]]),\n  /* Second eigenvector (smaller variance) */\n  color=\"red\", line_width=3,\n  lines([mx, mx + scale2 * ev2[1]], [my, my + scale2 * ev2[2]]),\n  title=\"Data with Principal Component Directions\",\n  xlabel=\"x\", ylabel=\"y\",\n  aspect_ratio=true\n)$",
       "metadata": {},
       "execution_count": 18,
       "outputs": [

@@ -164,7 +164,7 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Source flow: vector field + streamlines */\nSx : x/(x^2 + y^2 + 0.1)$\nSy : y/(x^2 + y^2 + 0.1)$\n\nax_draw2d(\n  color=\"#cccccc\", name=\"F\", ngrid=12, ax_vector_field(Sx, Sy, x, -3, 3, y, -3, 3),\n  color=\"blue\", name=\"streamline\", ax_streamline(Sx, Sy, x, -3, 3, y, -3, 3),\n  aspect_ratio=true, title=\"Source Flow\"\n)$",
+      "source": "/* Source flow: vector field + streamlines */\nSx : x/(x^2 + y^2 + 1/10)$\nSy : y/(x^2 + y^2 + 1/10)$\n\nax_draw2d(\n  color=\"#cccccc\", name=\"F\", ngrid=12, ax_vector_field(Sx, Sy, x, -3, 3, y, -3, 3),\n  color=\"blue\", name=\"streamline\", ax_streamline(Sx, Sy, x, -3, 3, y, -3, 3),\n  aspect_ratio=true, title=\"Source Flow\"\n)$",
       "metadata": {},
       "execution_count": 97,
       "outputs": [

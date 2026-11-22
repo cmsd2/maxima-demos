@@ -54,7 +54,7 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Substitute numeric values: R=1 Ohm, L=0.5 H, C=1 F */\nparams : [R=1, L=1/2, C_cap=1]$\nA_num : subst(params, A_sym)$\nprint(\"A (numeric) =\", A_num)$\n\nA : ndarray(float(A_num))$\nB : ndarray(float(subst(params, B_sym)))$\nprint(\"A ndarray:\", A)$\nprint(\"B ndarray:\", B)$",
+      "source": "/* Substitute numeric values: R=1 Ohm, L=0.5 H, C=1 F */\nparams : [R=1, L=1/2, C_cap=1]$\nA_num : subst(params, A_sym)$\nprint(\"A (numeric) =\", A_num)$\n\nA : ndarray(float(A_num))$\nB : ndarray(float(subst(params, B_sym)))$\nprint(\"A ndarray:\", np_to_matrix(A))$\nprint(\"B ndarray:\", np_to_matrix(B))$",
       "metadata": {},
       "execution_count": 15,
       "outputs": [
@@ -74,7 +74,7 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Symbolic eigenvalue analysis */\nchar_poly : charpoly(A_sym, s);\nprint(\"Characteristic polynomial:\", char_poly)$\n\n/* Solve for eigenvalues symbolically */\nevals_sym : solve(char_poly, s);\nprint(\"Symbolic eigenvalues:\", evals_sym)$\n\n/* Numeric eigenvalue computation via np_eig */\n[evals_nd, evecs_nd] : np_eig(A)$\nprint(\"Numeric eigenvalues:\", evals_nd)$",
+      "source": "/* Symbolic eigenvalue analysis */\nchar_poly : charpoly(A_sym, s);\nprint(\"Characteristic polynomial:\", char_poly)$\n\n/* Solve for eigenvalues symbolically */\nevals_sym : solve(char_poly, s);\nprint(\"Symbolic eigenvalues:\", evals_sym)$\n\n/* Numeric eigenvalue computation via np_eig */\n[evals_nd, evecs_nd] : np_eig(A)$\nprint(\"Numeric eigenvalues:\", np_to_list(evals_nd))$",
       "metadata": {},
       "execution_count": 16,
       "outputs": [

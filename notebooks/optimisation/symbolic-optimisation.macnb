@@ -29,7 +29,7 @@
     },
     {
       "cell_type": "code",
-      "source": "[x_opt, f_opt, ok] : np_minimize(x1^2 + x2^2, [x1, x2],\n                        ndarray([3.0, 4.0]));\nprint(\"Minimum at:\", np_to_list(x_opt), \" f =\", f_opt)$",
+      "source": "[x_opt, f_opt, ok] : np_minimize(x1^2 + x2^2, [x1, x2],\n                        ndarray([3.0, 4.0]))$\nprint(\"Minimum at:\", np_to_list(x_opt), \" f =\", f_opt)$",
       "metadata": {},
       "execution_count": 10,
       "outputs": [
@@ -49,7 +49,7 @@
     },
     {
       "cell_type": "code",
-      "source": "[x_rb, f_rb, ok_rb] : np_minimize(\n  (1-x)^2 + 100*(y - x^2)^2, [x, y],\n  ndarray([-1.0, 1.0]), 1e-10, 500);\n\nprint(\"Rosenbrock minimum:\", np_to_list(x_rb))$\nprint(\"f =\", f_rb, \" converged:\", ok_rb)$",
+      "source": "[x_rb, f_rb, ok_rb] : np_minimize(\n  (1-x)^2 + 100*(y - x^2)^2, [x, y],\n  ndarray([-1.0, 1.0]), 1e-10, 500)$\n\nprint(\"Rosenbrock minimum:\", np_to_list(x_rb))$\nprint(\"f =\", f_rb, \" converged:\", ok_rb)$",
       "metadata": {},
       "execution_count": 11,
       "outputs": [
@@ -69,7 +69,7 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Same Rosenbrock via function mode, for comparison */\nf_rosen(p) := block([px, py],\n  px : np_ref(p, 0), py : np_ref(p, 1),\n  (1 - px)^2 + 100*(py - px^2)^2)$\n\ng_rosen(p) := block([px, py],\n  px : np_ref(p, 0), py : np_ref(p, 1),\n  ndarray([-2*(1 - px) - 400*px*(py - px^2),\n           200*(py - px^2)]))$\n\n[x_fn, f_fn, ok_fn] : np_minimize(f_rosen, g_rosen,\n                        ndarray([-1.0, 1.0]), 1e-10, 500);\n\nprint(\"Function mode:\", np_to_list(x_fn), \" f =\", f_fn)$",
+      "source": "/* Same Rosenbrock via function mode, for comparison */\nf_rosen(p) := block([px, py],\n  px : np_ref(p, 0), py : np_ref(p, 1),\n  (1 - px)^2 + 100*(py - px^2)^2)$\n\ng_rosen(p) := block([px, py],\n  px : np_ref(p, 0), py : np_ref(p, 1),\n  ndarray([-2*(1 - px) - 400*px*(py - px^2),\n           200*(py - px^2)]))$\n\n[x_fn, f_fn, ok_fn] : np_minimize(f_rosen, g_rosen,\n                        ndarray([-1.0, 1.0]), 1e-10, 500)$\n\nprint(\"Function mode:\", np_to_list(x_fn), \" f =\", f_fn)$",
       "metadata": {},
       "execution_count": 12,
       "outputs": [
@@ -89,7 +89,7 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Compile a 3-variable objective */\n[f_cg, g_cg] : np_compile_gradient(\n  (a - 1)^2 + 2*(b - 3)^2 + 5*(c + 1)^2, [a, b, c]);\n\n/* Evaluate at a test point */\nprint(\"f(0,0,0) =\", f_cg(ndarray([0.0, 0.0, 0.0])))$\nprint(\"grad(0,0,0) =\", np_to_list(g_cg(ndarray([0.0, 0.0, 0.0]))))$\n\n/* Minimize */\n[x_cg, f_cg_opt, ok_cg] : np_minimize(f_cg, g_cg,\n                            ndarray([0.0, 0.0, 0.0]));\nprint(\"Minimum at:\", np_to_list(x_cg))$",
+      "source": "/* Compile a 3-variable objective */\n[f_cg, g_cg] : np_compile_gradient(\n  (a - 1)^2 + 2*(b - 3)^2 + 5*(c + 1)^2, [a, b, c]);\n\n/* Evaluate at a test point */\nprint(\"f(0,0,0) =\", f_cg(ndarray([0.0, 0.0, 0.0])))$\nprint(\"grad(0,0,0) =\", np_to_list(g_cg(ndarray([0.0, 0.0, 0.0]))))$\n\n/* Minimize */\n[x_cg, f_cg_opt, ok_cg] : np_minimize(f_cg, g_cg,\n                            ndarray([0.0, 0.0, 0.0]))$\nprint(\"Minimum at:\", np_to_list(x_cg))$",
       "metadata": {},
       "execution_count": 13,
       "outputs": [
@@ -109,7 +109,7 @@
     },
     {
       "cell_type": "code",
-      "source": "[x_disk, f_disk, nev, cob_info] : np_minimize_cobyla(\n  x1 + 2*x2, [x1, x2], [0.0, 0.0],\n  [1 - x1^2 - x2^2 >= 0]);\n\nprint(\"Minimum:\", np_to_list(x_disk))$\nprint(\"f =\", f_disk, \" evals:\", nev, \" info:\", cob_info)$",
+      "source": "[x_disk, f_disk, nev, cob_info] : np_minimize_cobyla(\n  x1 + 2*x2, [x1, x2], [0.0, 0.0],\n  [1 - x1^2 - x2^2 >= 0])$\n\nprint(\"Minimum:\", np_to_list(x_disk))$\nprint(\"f =\", f_disk, \" evals:\", nev, \" info:\", cob_info)$",
       "metadata": {},
       "execution_count": 14,
       "outputs": [
@@ -129,7 +129,7 @@
     },
     {
       "cell_type": "code",
-      "source": "[x_eq, f_eq, nev_eq, inf_eq] : np_minimize_cobyla(\n  x1^2 + x2^2, [x1, x2], [0.8, 0.2],\n  [x1 + x2 = 1]);\n\nprint(\"Minimum:\", np_to_list(x_eq), \" f =\", f_eq)$",
+      "source": "[x_eq, f_eq, nev_eq, inf_eq] : np_minimize_cobyla(\n  x1^2 + x2^2, [x1, x2], [0.8, 0.2],\n  [x1 + x2 = 1])$\n\nprint(\"Minimum:\", np_to_list(x_eq), \" f =\", f_eq)$",
       "metadata": {},
       "execution_count": 15,
       "outputs": [
@@ -149,7 +149,7 @@
     },
     {
       "cell_type": "code",
-      "source": "[x_box, f_box, nev_box, inf_box] : np_minimize_cobyla(\n  -(x1 * x2), [x1, x2], [1.0, 1.0],\n  [10 - x1 - x2 >= 0, x1 >= 0, x2 >= 0]);\n\nprint(\"Optimal allocation:\", np_to_list(x_box))$\nprint(\"Max product:\", -f_box)$",
+      "source": "[x_box, f_box, nev_box, inf_box] : np_minimize_cobyla(\n  -(x1 * x2), [x1, x2], [1.0, 1.0],\n  [10 - x1 - x2 >= 0, x1 >= 0, x2 >= 0])$\n\nprint(\"Optimal allocation:\", np_to_list(x_box))$\nprint(\"Max product:\", -f_box)$",
       "metadata": {},
       "execution_count": 16,
       "outputs": [

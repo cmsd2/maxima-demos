@@ -17,7 +17,7 @@
     },
     {
       "cell_type": "code",
-      "source": "load(\"numerics\")$\nload(\"numerics-sundials\")$\nload(\"numerics-learn\")$\nload(\"ax-plots\")$",
+      "source": "load(\"numerics\")$\nload(\"numerics-sundials\")$\nload(\"numerics-learn\")$\nload(\"ax-plots\")$\n/* np_cvode prints a rat: line for each float in a right-hand side that uses\n   max or min.  Hide them. */\nratprint : false$",
       "metadata": {},
       "execution_count": 59,
       "outputs": []
@@ -205,7 +205,7 @@
     },
     {
       "cell_type": "markdown",
-      "source": "### Still not upright — why?\n\nThe torque limit is no longer the bottleneck ($u_{\\max} = 12 > mgl = 9.81$), yet the pendulum settles at $\\theta^* \\approx 28°$. The problem is the **policy structure**.\n\nNear upright ($\\theta \\approx 0$), $\\cos\\theta \\approx 1$, so the policy becomes:\n\n$$u \\approx w_1\\theta + w_2 + w_3\\omega$$\n\nThe $w_2$ term is a **constant bias** that shifts the equilibrium away from $\\theta = 0$. Setting $w_2 = 0$ would fix the equilibrium, but then the policy has no mechanism to initiate the swing from hanging ($\\theta = \\pi$). A linear policy in $[\\sin\\theta, \\cos\\theta, \\omega]$ cannot express both \"push hard when hanging\" and \"stop pushing at upright.\"",
+      "source": "### Still not upright — why?\n\nThe torque limit is no longer the bottleneck ($u_{\\max} = 12 > mgl = 9.81$), yet the pendulum settles at $\\theta^* \\approx 27°$. The problem is the **policy structure**.\n\nNear upright ($\\theta \\approx 0$), $\\cos\\theta \\approx 1$, so the policy becomes:\n\n$$u \\approx w_1\\theta + w_2 + w_3\\omega$$\n\nThe $w_2$ term is a **constant bias** that shifts the equilibrium away from $\\theta = 0$. Setting $w_2 = 0$ would fix the equilibrium, but then the policy has no mechanism to initiate the swing from hanging ($\\theta = \\pi$). A linear policy in $[\\sin\\theta, \\cos\\theta, \\omega]$ cannot express both \"push hard when hanging\" and \"stop pushing at upright.\"",
       "metadata": {}
     },
     {
