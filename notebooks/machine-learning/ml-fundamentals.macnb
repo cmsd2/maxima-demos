@@ -59,7 +59,7 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Generate synthetic data: y = 2x + 1 + noise */\nn : 80$\nx_data : np_scale(6.0, np_rand([n]))$\nnoise : np_scale(1.5, np_randn([n]))$\ny_data : np_add(np_add(np_scale(2.0, x_data), 1.0), noise)$\n\nprint(\"Generated\", n, \"data points\")$\nprint(\"True parameters: a = 1, b = 2\")$",
+      "source": "np_seed(42)$\n\n/* Generate synthetic data: y = 2x + 1 + noise */\nn : 80$\nx_data : np_scale(6.0, np_rand([n]))$\nnoise : np_scale(1.5, np_randn([n]))$\ny_data : np_add(np_add(np_scale(2.0, x_data), 1.0), noise)$\n\nprint(\"Generated\", n, \"data points\")$\nprint(\"True parameters: a = 1, b = 2\")$",
       "metadata": {},
       "execution_count": 139,
       "outputs": [

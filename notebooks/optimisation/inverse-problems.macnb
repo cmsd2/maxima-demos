@@ -88,7 +88,7 @@
     },
     {
       "cell_type": "code",
-      "source": "/* True parameters */\ntrue_params : [k_spring = 8, c_damp = 0.5]$\nx_true_sym : subst(true_params, x_sym)$\nprint(\"True solution:\", x_true_sym)$\n\n/* Sample at discrete times */\nn_obs : 40$\nt_obs : np_linspace(0, 6, n_obs)$\nt_list : np_to_list(t_obs)$\n\n/* Evaluate symbolic solution at observation times */\nx_true_nd : np_eval(x_true_sym, t, t_obs)$\n\n/* Add noise */\nnoise_level : 0.05$\nx_noisy : np_add(x_true_nd, np_scale(noise_level, np_randn([n_obs])))$\nprint(\"Generated\", n_obs, \"noisy observations\")$",
+      "source": "np_seed(42)$\n\n/* True parameters */\ntrue_params : [k_spring = 8, c_damp = 0.5]$\nx_true_sym : subst(true_params, x_sym)$\nprint(\"True solution:\", x_true_sym)$\n\n/* Sample at discrete times */\nn_obs : 40$\nt_obs : np_linspace(0, 6, n_obs)$\nt_list : np_to_list(t_obs)$\n\n/* Evaluate symbolic solution at observation times */\nx_true_nd : np_eval(x_true_sym, t, t_obs)$\n\n/* Add noise */\nnoise_level : 0.05$\nx_noisy : np_add(x_true_nd, np_scale(noise_level, np_randn([n_obs])))$\nprint(\"Generated\", n_obs, \"noisy observations\")$",
       "metadata": {},
       "execution_count": 61,
       "outputs": [

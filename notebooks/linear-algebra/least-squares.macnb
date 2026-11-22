@@ -29,7 +29,7 @@
     },
     {
       "cell_type": "code",
-      "source": "/* True function: f(x) = 0.5*x^2 - 2*x + 1 */\nn : 20$\nx : np_linspace(0, 5, n)$\n\n/* Evaluate f at each x and add noise */\ny : np_add(\n  np_add(\n    np_scale(0.5, np_pow(x, 2)),\n    np_scale(-2.0, x)\n  ),\n  np_add(\n    np_ones([n]),\n    np_scale(0.3, np_randn([n]))\n  )\n)$\n\nprint(\"x (first 5):\", np_to_list(np_slice(x, [0, 5])))$\nprint(\"y (first 5):\", np_to_list(np_slice(y, [0, 5])))$",
+      "source": "np_seed(42)$\n\n/* True function: f(x) = 0.5*x^2 - 2*x + 1 */\nn : 20$\nx : np_linspace(0, 5, n)$\n\n/* Evaluate f at each x and add noise */\ny : np_add(\n  np_add(\n    np_scale(0.5, np_pow(x, 2)),\n    np_scale(-2.0, x)\n  ),\n  np_add(\n    np_ones([n]),\n    np_scale(0.3, np_randn([n]))\n  )\n)$\n\nprint(\"x (first 5):\", np_to_list(np_slice(x, [0, 5])))$\nprint(\"y (first 5):\", np_to_list(np_slice(y, [0, 5])))$",
       "metadata": {},
       "execution_count": 128,
       "outputs": [

@@ -106,7 +106,7 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Generate noisy exponential data: y = 2*exp(0.3*x) + noise */\nn_pts : 20$\nx_data : np_linspace(0.0, 3.0, n_pts)$\ny_true : np_scale(2.0, np_exp(np_scale(0.3, x_data)))$\ny_data : np_add(y_true, np_scale(0.15, np_randn([n_pts])))$\n\n/* Build residual list: a*exp(b*x_i) - y_i for each point */\nresiduals : makelist(\n  a_fit * exp(b_fit * np_ref(x_data, i)) - np_ref(y_data, i),\n  i, 0, n_pts - 1)$\n\n[ab_opt, res_norm, lsq_info] : np_lsq_nonlinear(\n  residuals, [a_fit, b_fit], [1.0, 0.1])$\n\na_found : np_ref(ab_opt, 0)$\nb_found : np_ref(ab_opt, 1)$\nprint(\"Fitted: a =\", a_found, \" b =\", b_found)$\nprint(\"True:   a = 2, b = 0.3\")$",
+      "source": "np_seed(42)$\n\n/* Generate noisy exponential data: y = 2*exp(0.3*x) + noise */\nn_pts : 20$\nx_data : np_linspace(0.0, 3.0, n_pts)$\ny_true : np_scale(2.0, np_exp(np_scale(0.3, x_data)))$\ny_data : np_add(y_true, np_scale(0.15, np_randn([n_pts])))$\n\n/* Build residual list: a*exp(b*x_i) - y_i for each point */\nresiduals : makelist(\n  a_fit * exp(b_fit * np_ref(x_data, i)) - np_ref(y_data, i),\n  i, 0, n_pts - 1)$\n\n[ab_opt, res_norm, lsq_info] : np_lsq_nonlinear(\n  residuals, [a_fit, b_fit], [1.0, 0.1])$\n\na_found : np_ref(ab_opt, 0)$\nb_found : np_ref(ab_opt, 1)$\nprint(\"Fitted: a =\", a_found, \" b =\", b_found)$\nprint(\"True:   a = 2, b = 0.3\")$",
       "metadata": {},
       "execution_count": 15,
       "outputs": [

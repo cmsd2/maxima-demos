@@ -29,7 +29,7 @@
     },
     {
       "cell_type": "code",
-      "source": "n : 200$\n\n/* Independent standard-normal sources */\nz1 : np_randn([n])$\nz2 : np_randn([n])$\nz3 : np_randn([n])$\n\n/* Build variables with known correlation structure */\nx1 : z1$\nx2 : np_add(np_scale(0.8, z1), np_scale(0.6, z2))$\nx3 : z3$\nx4 : np_add(np_scale(-0.7, z1), np_scale(0.714, z3))$\n\nprint(\"Generated\", n, \"observations of 4 variables\")$",
+      "source": "np_seed(42)$\n\nn : 200$\n\n/* Independent standard-normal sources */\nz1 : np_randn([n])$\nz2 : np_randn([n])$\nz3 : np_randn([n])$\n\n/* Build variables with known correlation structure */\nx1 : z1$\nx2 : np_add(np_scale(0.8, z1), np_scale(0.6, z2))$\nx3 : z3$\nx4 : np_add(np_scale(-0.7, z1), np_scale(0.714, z3))$\n\nprint(\"Generated\", n, \"observations of 4 variables\")$",
       "metadata": {},
       "execution_count": 2,
       "outputs": [

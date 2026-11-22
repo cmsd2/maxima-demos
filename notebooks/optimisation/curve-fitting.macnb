@@ -59,7 +59,7 @@
     },
     {
       "cell_type": "code",
-      "source": "/* True parameters: A=5, k=0.3, c=1 */\nn : 50$\nt_data : np_linspace(0, 10, n)$\nnoise : np_scale(0.3, np_randn([n]))$\ny_data : np_add(\n  np_add(np_scale(5.0, np_exp(np_scale(-0.3, t_data))), 1.0),\n  noise)$\nprint(\"Generated\", n, \"noisy observations\")$\nprint(\"True: A=5, k=0.3, c=1\")$",
+      "source": "np_seed(42)$\n\n/* True parameters: A=5, k=0.3, c=1 */\nn : 50$\nt_data : np_linspace(0, 10, n)$\nnoise : np_scale(0.3, np_randn([n]))$\ny_data : np_add(\n  np_add(np_scale(5.0, np_exp(np_scale(-0.3, t_data))), 1.0),\n  noise)$\nprint(\"Generated\", n, \"noisy observations\")$\nprint(\"True: A=5, k=0.3, c=1\")$",
       "metadata": {},
       "execution_count": 3,
       "outputs": [

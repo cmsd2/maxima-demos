@@ -29,7 +29,7 @@
     },
     {
       "cell_type": "code",
-      "source": "n : 200$\nangle : float(%pi/6)$   /* 30 degrees */\n\n/* Generate data along the true principal axes */\npc1 : np_scale(3.0, np_randn([n]))$   /* high variance axis */\npc2 : np_scale(0.5, np_randn([n]))$   /* low variance axis */\n\n/* Rotate into x-y coordinates */\nx : np_add(np_scale(cos(angle), pc1), np_scale(-sin(angle), pc2))$\ny : np_add(np_scale(sin(angle), pc1), np_scale(cos(angle), pc2))$\n\nprint(\"Generated\", n, \"points with sigma1=3, sigma2=0.5, angle=30 deg\")$",
+      "source": "np_seed(42)$\n\nn : 200$\nangle : float(%pi/6)$   /* 30 degrees */\n\n/* Generate data along the true principal axes */\npc1 : np_scale(3.0, np_randn([n]))$   /* high variance axis */\npc2 : np_scale(0.5, np_randn([n]))$   /* low variance axis */\n\n/* Rotate into x-y coordinates */\nx : np_add(np_scale(cos(angle), pc1), np_scale(-sin(angle), pc2))$\ny : np_add(np_scale(sin(angle), pc1), np_scale(cos(angle), pc2))$\n\nprint(\"Generated\", n, \"points with sigma1=3, sigma2=0.5, angle=30 deg\")$",
       "metadata": {},
       "execution_count": 13,
       "outputs": [

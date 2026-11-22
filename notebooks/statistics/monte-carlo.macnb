@@ -29,7 +29,7 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Generate N random points in [0,1)^2 */\nN : 10000$\npts : np_rand([N, 2])$\nx : np_col(pts, 0)$\ny : np_col(pts, 1)$\n\n/* Distance from origin for each point */\nd : np_sqrt(np_add(np_pow(x, 2), np_pow(y, 2)))$\n\n/* Count points inside the quarter unit circle */\ninside_mask : np_less_equal(d, 1.0)$\ncount_inside : np_sum(inside_mask)$\n\npi_estimate : 4.0 * count_inside / N$\nprint(\"Monte Carlo pi estimate:\", pi_estimate)$\nprint(\"True pi:\", float(%pi))$\nprint(\"Error:\", abs(pi_estimate - float(%pi)))$",
+      "source": "np_seed(42)$\n\n/* Generate N random points in [0,1)^2 */\nN : 10000$\npts : np_rand([N, 2])$\nx : np_col(pts, 0)$\ny : np_col(pts, 1)$\n\n/* Distance from origin for each point */\nd : np_sqrt(np_add(np_pow(x, 2), np_pow(y, 2)))$\n\n/* Count points inside the quarter unit circle */\ninside_mask : np_less_equal(d, 1.0)$\ncount_inside : np_sum(inside_mask)$\n\npi_estimate : 4.0 * count_inside / N$\nprint(\"Monte Carlo pi estimate:\", pi_estimate)$\nprint(\"True pi:\", float(%pi))$\nprint(\"Error:\", abs(pi_estimate - float(%pi)))$",
       "metadata": {},
       "execution_count": 90,
       "outputs": [

@@ -29,7 +29,7 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Column vector u (6x1) and row vector v (1x4) */\nu : np_reshape(ndarray([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]), [6, 1])$\nv : np_reshape(ndarray([1.0, 0.5, 0.3, 0.1]), [1, 4])$\n\n/* Data = outer product + small noise */\nA : np_add(np_matmul(u, v), np_scale(0.1, np_randn([6, 4])))$\n\nprint(\"Data matrix A (6x4):\")$\nnp_to_matrix(A);",
+      "source": "np_seed(42)$\n\n/* Column vector u (6x1) and row vector v (1x4) */\nu : np_reshape(ndarray([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]), [6, 1])$\nv : np_reshape(ndarray([1.0, 0.5, 0.3, 0.1]), [1, 4])$\n\n/* Data = outer product + small noise */\nA : np_add(np_matmul(u, v), np_scale(0.1, np_randn([6, 4])))$\n\nprint(\"Data matrix A (6x4):\")$\nnp_to_matrix(A);",
       "metadata": {},
       "execution_count": 90,
       "outputs": [
