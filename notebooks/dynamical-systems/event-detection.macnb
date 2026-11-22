@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"numerics-sundials\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 31,
+      "execution_count": 1,
       "outputs": []
     },
     {
@@ -31,13 +31,13 @@
       "cell_type": "code",
       "source": "g : 9.81$\ntspan1 : np_linspace(0.0, 3.0, 300)$\n\n[traj1, events1] : np_cvode(\n    [v, -g], [t, h, v], [10.0, 0.0], tspan1,\n    1e-12, 1e-12, adams, [h])$\n\nprintf(true, \"Number of events: ~d~%\", length(events1))$\nev1 : first(events1)$\nprintf(true, \"Impact time: ~,6f s  (exact: ~,6f)~%\",\n       first(ev1), sqrt(2*10.0/g))$\nprintf(true, \"Impact velocity: ~,4f m/s~%\", second(ev1)[2])$",
       "metadata": {},
-      "execution_count": 32,
+      "execution_count": 2,
       "outputs": [
         {
           "name": "stdout",
           "output_type": "stream",
           "text": [
-            "Number of events: 1\no114Impact time: 1.427843 s  (exact: 1.427843)\no114Impact velocity: -14.0071 m/s\no114$$\\mathbf{false}$$\nfalse"
+            "Number of events: 1\nImpact time: 1.427843 s  (exact: 1.427843)\nImpact velocity: -14.0071 m/s"
           ]
         }
       ]
@@ -46,7 +46,7 @@
       "cell_type": "code",
       "source": "t1 : np_slice(traj1, all, 0)$\nh1 : np_slice(traj1, all, 1)$\n\nax_draw2d(\n  color=\"#2563eb\", line_width=2, name=\"h(t)\",\n  lines(t1, h1),\n  color=\"#dc2626\", marker_size=8, name=\"impact\",\n  points([first(ev1)], [second(ev1)[1]]),\n  title=\"Bouncing Ball (single bounce)\",\n  xlabel=\"t (s)\", ylabel=\"h (m)\",\n  grid=true, showlegend=true\n)$",
       "metadata": {},
-      "execution_count": 33,
+      "execution_count": 3,
       "outputs": [
         {
           "data": {
@@ -68,13 +68,13 @@
       "cell_type": "code",
       "source": "/* Multi-bounce via stateful CVODE handle.\n   rootdir = [-1] only fires on falling crossings of bh, so the post-bounce\n   state (bh = 0, bv > 0) doesn't immediately re-trigger the root. */\ncor : 0.8$\nt_end : 8.0$\ndt : 0.01$\n\nt_all : [0.0]$  h_all : [10.0]$  v_all : [0.0]$\nevent_times : []$\n\nsolver : np_cvode_create([bv, -g], [bt, bh, bv],\n                         [10.0, 0.0], 0.0,\n                         1e-12, 1e-12, adams, [bh], 5000, [-1])$\n\nt_now : 0.0$\nwhile t_now < t_end do block([res, ev],\n  res : np_cvode_step(solver, min(t_now + dt, t_end)),\n  if length(res[3]) > 0 then (\n    /* An event fired during this step.  Record the event point and\n       reinit; the integrator continued past the event to res[1]\n       without knowing about the bounce, so we discard that state. */\n    ev : first(res[3]),\n    event_times : endcons(ev[1], event_times),\n    t_now : ev[1],\n    t_all : endcons(ev[1], t_all),\n    h_all : endcons(ev[2][1], h_all),\n    v_all : endcons(ev[2][2], v_all),\n    np_cvode_reinit(solver, ev[1], [0.0, -cor * ev[2][2]])\n  ) else (\n    t_now : res[1],\n    t_all : endcons(res[1], t_all),\n    h_all : endcons(res[2][1], h_all),\n    v_all : endcons(res[2][2], v_all)\n  )\n)$\n\nprintf(true, \"~d bounces detected~%\", length(event_times))$",
       "metadata": {},
-      "execution_count": 34,
+      "execution_count": 4,
       "outputs": [
         {
           "name": "stdout",
           "output_type": "stream",
           "text": [
-            "4 bounces detected\no130$$\\mathbf{false}$$\nfalse"
+            "4 bounces detected"
           ]
         }
       ]
@@ -83,7 +83,7 @@
       "cell_type": "code",
       "source": "ax_draw2d(\n  color=\"#2563eb\", line_width=1.5,\n  lines(t_all, h_all),\n  title=\"Bouncing Ball with Restitution (e=0.8)\",\n  xlabel=\"t (s)\", ylabel=\"h (m)\",\n  grid=true\n)$",
       "metadata": {},
-      "execution_count": 35,
+      "execution_count": 5,
       "outputs": [
         {
           "data": {
@@ -105,13 +105,13 @@
       "cell_type": "code",
       "source": "/* Physical parameters */\nmass : 1.0$    /* kg */\nCd : 0.47$     /* drag coefficient (sphere) */\nAcs : 0.01$    /* cross-section area m^2 */\nrho : 1.225$   /* air density kg/m^3 */\ndrag_coeff : rho * Cd * Acs / (2 * mass)$\n\n/* v*abs(v) for correct drag direction */\ntspan3 : np_linspace(0.0, 12.0, 600)$\n\n[traj3, events3] : np_cvode(\n    [pv, -g - drag_coeff * pv * abs(pv)],\n    [pt, ph, pv], [0.0, 50.0], tspan3,\n    1e-10, 1e-10, adams, [ph - 50.0])$\n\nprintf(true, \"Events at h=50m:~%\")$\nfor ev in events3 do\n  printf(true, \"  t = ~,4f s, h = ~,4f m, v = ~,4f m/s~%\",\n         first(ev), second(ev)[1], second(ev)[2])$",
       "metadata": {},
-      "execution_count": 36,
+      "execution_count": 6,
       "outputs": [
         {
           "name": "stdout",
           "output_type": "stream",
           "text": [
-            "Events at h=50m:\no148  t = 1.2329 s, h = 50.0000 m, v = 31.9721 m/s\no148  t = 7.3296 s, h = 50.0000 m, v = -28.0417 m/s\no148$$\\mathbf{done}$$\nfalse"
+            "Events at h=50m:\n  t = 1.2329 s, h = 50.0000 m, v = 31.9721 m/s\n  t = 7.3296 s, h = 50.0000 m, v = -28.0417 m/s"
           ]
         }
       ]
@@ -120,7 +120,7 @@
       "cell_type": "code",
       "source": "t3 : np_slice(traj3, all, 0)$\nh3 : np_slice(traj3, all, 1)$\n\nev_t3 : map(first, events3)$\nev_h3 : map(lambda([e], second(e)[1]), events3)$\n\nax_draw2d(\n  color=\"#2563eb\", line_width=2, name=\"h(t)\",\n  lines(t3, h3),\n  color=\"#dc2626\", marker_size=8, name=\"h=50m crossings\",\n  points(ev_t3, ev_h3),\n  color=\"#9ca3af\", dash=\"dash\",\n  explicit(50, t, 0, 12),\n  title=\"Projectile with Drag\",\n  xlabel=\"t (s)\", ylabel=\"h (m)\",\n  grid=true, showlegend=true\n)$",
       "metadata": {},
-      "execution_count": 37,
+      "execution_count": 7,
       "outputs": [
         {
           "data": {
@@ -142,13 +142,13 @@
       "cell_type": "code",
       "source": "omega0 : 2*float(%pi)$  /* natural frequency: 1 Hz */\nzeta : 0.05$             /* light damping */\n\ntspan4 : np_linspace(0.0, 10.0, 2000)$\n\n[traj4, events4] : np_cvode(\n    [w, -2*zeta*omega0*w - omega0^2*sin(th)],\n    [t, th, w], [float(%pi/4), 0.0], tspan4,\n    1e-12, 1e-12, adams, [th])$\n\nprintf(true, \"Zero crossings of theta:~%\")$\nfor ev in events4 do\n  printf(true, \"  t = ~,4f s, omega = ~,4f rad/s~%\",\n         first(ev), second(ev)[2])$",
       "metadata": {},
-      "execution_count": 38,
+      "execution_count": 8,
       "outputs": [
         {
           "name": "stdout",
           "output_type": "stream",
           "text": [
-            "Zero crossings of theta:\no168  t = 0.2688 s, omega = -4.4271 rad/s\no168  t = 0.7836 s, omega = 3.7745 rad/s\no168  t = 1.2944 s, omega = -3.2202 rad/s\no168  t = 1.8023 s, omega = 2.7484 rad/s\no168  t = 2.3082 s, omega = -2.3465 rad/s\no168  t = 2.8126 s, omega = 2.0038 rad/s\no168  t = 3.3160 s, omega = -1.7115 rad/s\no168  t = 3.8186 s, omega = 1.4619 rad/s\no168  t = 4.3207 s, omega = -1.2489 rad/s\no168  t = 4.8224 s, omega = 1.0669 rad/s\no168  t = 5.3238 s, omega = -0.9116 rad/s\no168  t = 5.8250 s, omega = 0.7788 rad/s\no168  t = 6.3261 s, omega = -0.6654 rad/s\no168  t = 6.8270 s, omega = 0.5686 rad/s\no168  t = 7.3278 s, omega = -0.4858 rad/s\no168  t = 7.8286 s, omega = 0.4151 rad/s\no168  t = 8.3294 s, omega = -0.3547 rad/s\no168  t = 8.8301 s, omega = 0.3031 rad/s\no168  t = 9.3308 s, omega = -0.2590 rad/s\no168  t = 9.8314 s, omega = 0.2213 rad/s\no168$$\\mathbf{done}$$\nfalse"
+            "Zero crossings of theta:\n  t = 0.2688 s, omega = -4.4271 rad/s\n  t = 0.7836 s, omega = 3.7745 rad/s\n  t = 1.2944 s, omega = -3.2202 rad/s\n  t = 1.8023 s, omega = 2.7484 rad/s\n  t = 2.3082 s, omega = -2.3465 rad/s\n  t = 2.8126 s, omega = 2.0038 rad/s\n  t = 3.3160 s, omega = -1.7115 rad/s\n  t = 3.8186 s, omega = 1.4619 rad/s\n  t = 4.3207 s, omega = -1.2489 rad/s\n  t = 4.8224 s, omega = 1.0669 rad/s\n  t = 5.3238 s, omega = -0.9116 rad/s\n  t = 5.8250 s, omega = 0.7788 rad/s\n  t = 6.3261 s, omega = -0.6654 rad/s\n  t = 6.8270 s, omega = 0.5686 rad/s\n  t = 7.3278 s, omega = -0.4858 rad/s\n  t = 7.8286 s, omega = 0.4151 rad/s\n  t = 8.3294 s, omega = -0.3547 rad/s\n  t = 8.8301 s, omega = 0.3031 rad/s\n  t = 9.3308 s, omega = -0.2590 rad/s\n  t = 9.8314 s, omega = 0.2213 rad/s"
           ]
         }
       ]
@@ -157,7 +157,7 @@
       "cell_type": "code",
       "source": "t4 : np_slice(traj4, all, 0)$\nth4 : np_slice(traj4, all, 1)$\n\nev_t4 : map(first, events4)$\n\nax_draw2d(\n  color=\"#2563eb\", line_width=1.5, name=\"theta(t)\",\n  lines(t4, th4),\n  color=\"#dc2626\", marker_size=6, name=\"zero crossings\",\n  points(ev_t4, makelist(0, i, 1, length(ev_t4))),\n  color=\"#9ca3af\", dash=\"dot\",\n  explicit(float(%pi/4) * exp(-zeta*omega0*t), t, 0, 10),\n  title=\"Damped Pendulum\",\n  xlabel=\"t (s)\", ylabel=\"theta (rad)\",\n  grid=true, showlegend=true\n)$",
       "metadata": {},
-      "execution_count": 39,
+      "execution_count": 9,
       "outputs": [
         {
           "data": {
@@ -179,13 +179,13 @@
       "cell_type": "code",
       "source": "[traj5, events5] : np_cvode(\n    [1], [t, y], [0.0], [0.0, 0.5, 1.0],\n    1e-12, 1e-12, adams, [y - 0.3, y - 0.7])$\n\nfor ev in events5 do\n  printf(true, \"t = ~,6f, y = ~,6f, event indices = ~a~%\",\n         first(ev), second(ev)[1], third(ev))$",
       "metadata": {},
-      "execution_count": 40,
+      "execution_count": 10,
       "outputs": [
         {
           "name": "stdout",
           "output_type": "stream",
           "text": [
-            "t = 0.300000, y = 0.300000, event indices = [0]\no184t = 0.700000, y = 0.700000, event indices = [1]\no184$$\\mathbf{done}$$\nfalse"
+            "t = 0.300000, y = 0.300000, event indices = [0]\nt = 0.700000, y = 0.700000, event indices = [1]"
           ]
         }
       ]

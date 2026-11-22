@@ -56,7 +56,7 @@
         {
           "data": {
             "text/latex": [
-              "\\begin{array}{lll} \\textbf{region} & \\textbf{n} & \\textbf{total\\_rev} \\\\\\\\ \\textit{str} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & 35.00     & 1.1290e+5 \\\\\\\\ \\text{North} & 32.00     & 8.9261e+4 \\\\\\\\ \\text{West} & 17.00     & 1.8711e+4 \\\\\\\\ \\text{South} & 16.00     & 1.2042e+4 \\\\\\\\ \\hline \\text{4 rows} \\times \\text{3 cols} \\end{array}"
+              " \\begin{array}{lll} \\textbf{region} & \\textbf{n} & \\textbf{total\\_rev} \\\\\\\\ \\textit{str} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & 35.00     & 1.1290e+5 \\\\\\\\ \\text{North} & 32.00     & 8.9261e+4 \\\\\\\\ \\text{West} & 17.00     & 1.8711e+4 \\\\\\\\ \\text{South} & 16.00     & 1.2042e+4 \\\\\\\\ \\hline \\text{4 rows} \\times \\text{3 cols} \\end{array}"
             ]
           },
           "execution_count": 3,
@@ -74,7 +74,7 @@
         {
           "data": {
             "text/latex": [
-              "\\begin{array}{lll} \\textbf{product} & \\textbf{avg\\_price} & \\textbf{avg\\_units} \\\\\\\\ \\textit{str} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{Gizmo} & 44.49     & 101.8     \\\\\\\\ \\text{Widget} & 16.99     & 97.83     \\\\\\\\ \\text{Gadget} & 29.49     & 93.83     \\\\\\\\ \\hline \\text{3 rows} \\times \\text{3 cols} \\end{array}"
+              " \\begin{array}{lll} \\textbf{product} & \\textbf{avg\\_price} & \\textbf{avg\\_units} \\\\\\\\ \\textit{str} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{Widget} & 16.99     & 97.83     \\\\\\\\ \\text{Gadget} & 29.49     & 93.83     \\\\\\\\ \\text{Gizmo} & 44.49     & 101.8     \\\\\\\\ \\hline \\text{3 rows} \\times \\text{3 cols} \\end{array}"
             ]
           },
           "execution_count": 4,
@@ -97,7 +97,7 @@
         {
           "data": {
             "text/latex": [
-              "\\begin{array}{llll} \\textbf{region} & \\textbf{product} & \\textbf{revenue} & \\textbf{running\\_total} \\\\\\\\ \\textit{str} & \\textit{str} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & \\text{Widget} & 1130.     & 1130.     \\\\\\\\ \\text{East} & \\text{Widget} & 1228.     & 2358.     \\\\\\\\ \\text{East} & \\text{Widget} & 1237.     & 3594.     \\\\\\\\ \\text{East} & \\text{Widget} & 1511.     & 5105.     \\\\\\\\ \\text{East} & \\text{Widget} & 1518.     & 6623.     \\\\\\\\ \\text{East} & \\text{Widget} & 1533.     & 8156.     \\\\\\\\ \\text{East} & \\text{Widget} & 1574.     & 9730.     \\\\\\\\ \\text{East} & \\text{Widget} & 1619.     & 1.1349e+4 \\\\\\\\ \\text{East} & \\text{Widget} & 1733.     & 1.3082e+4 \\\\\\\\ \\text{East} & \\text{Widget} & 1871.     & 1.4953e+4 \\\\\\\\ \\cdots & \\cdots & \\cdots & \\cdots \\\\\\\\ \\text{East} & \\text{Widget} & 2241.     & 2.1229e+4 \\\\\\\\ \\text{East} & \\text{Widget} & 2374.     & 2.3603e+4 \\\\\\\\ \\text{East} & \\text{Gadget} & 2419.     & 2.6022e+4 \\\\\\\\ \\hline \\text{15 rows} \\times \\text{4 cols} \\end{array}"
+              " \\begin{array}{llll} \\textbf{region} & \\textbf{product} & \\textbf{revenue} & \\textbf{running\\_total} \\\\\\\\ \\textit{str} & \\textit{str} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & \\text{Widget} & 1130.     & 1130.     \\\\\\\\ \\text{East} & \\text{Widget} & 1228.     & 2358.     \\\\\\\\ \\text{East} & \\text{Widget} & 1237.     & 3594.     \\\\\\\\ \\text{East} & \\text{Widget} & 1511.     & 5105.     \\\\\\\\ \\text{East} & \\text{Widget} & 1518.     & 6623.     \\\\\\\\ \\text{East} & \\text{Widget} & 1533.     & 8156.     \\\\\\\\ \\text{East} & \\text{Widget} & 1574.     & 9730.     \\\\\\\\ \\text{East} & \\text{Widget} & 1619.     & 1.1349e+4 \\\\\\\\ \\text{East} & \\text{Widget} & 1733.     & 1.3082e+4 \\\\\\\\ \\text{East} & \\text{Widget} & 1871.     & 1.4953e+4 \\\\\\\\ \\cdots & \\cdots & \\cdots & \\cdots \\\\\\\\ \\text{East} & \\text{Widget} & 2241.     & 2.1229e+4 \\\\\\\\ \\text{East} & \\text{Widget} & 2374.     & 2.3603e+4 \\\\\\\\ \\text{East} & \\text{Gadget} & 2419.     & 2.6022e+4 \\\\\\\\ \\hline \\text{15 rows} \\times \\text{4 cols} \\end{array}"
             ]
           },
           "execution_count": 5,
@@ -115,7 +115,7 @@
         {
           "data": {
             "text/latex": [
-              "\\begin{array}{llll} \\textbf{region} & \\textbf{product} & \\textbf{revenue} & \\textbf{rank} \\\\\\\\ \\textit{str} & \\textit{str} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & \\text{Gizmo} & 8598.     & 1.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 8138.     & 2.000     \\\\\\\\ \\text{East} & \\text{Gadget} & 6368.     & 3.000     \\\\\\\\ \\text{East} & \\text{Gadget} & 5374.     & 4.000     \\\\\\\\ \\text{East} & \\text{Gadget} & 4768.     & 5.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 4591.     & 6.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 4493.     & 7.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 4218.     & 8.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 3943.     & 9.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 3905.     & 10.00     \\\\\\\\ \\cdots & \\cdots & \\cdots & \\cdots \\\\\\\\ \\text{East} & \\text{Gadget} & 2669.     & 18.00     \\\\\\\\ \\text{East} & \\text{Gadget} & 2521.     & 19.00     \\\\\\\\ \\text{East} & \\text{Widget} & 2473.     & 20.00     \\\\\\\\ \\hline \\text{20 rows} \\times \\text{4 cols} \\end{array}"
+              " \\begin{array}{llll} \\textbf{region} & \\textbf{product} & \\textbf{revenue} & \\textbf{rank} \\\\\\\\ \\textit{str} & \\textit{str} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & \\text{Gizmo} & 8598.     & 1.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 8138.     & 2.000     \\\\\\\\ \\text{East} & \\text{Gadget} & 6368.     & 3.000     \\\\\\\\ \\text{East} & \\text{Gadget} & 5374.     & 4.000     \\\\\\\\ \\text{East} & \\text{Gadget} & 4768.     & 5.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 4591.     & 6.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 4493.     & 7.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 4218.     & 8.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 3943.     & 9.000     \\\\\\\\ \\text{East} & \\text{Gizmo} & 3905.     & 10.00     \\\\\\\\ \\cdots & \\cdots & \\cdots & \\cdots \\\\\\\\ \\text{East} & \\text{Gadget} & 2669.     & 18.00     \\\\\\\\ \\text{East} & \\text{Gadget} & 2521.     & 19.00     \\\\\\\\ \\text{East} & \\text{Widget} & 2473.     & 20.00     \\\\\\\\ \\hline \\text{20 rows} \\times \\text{4 cols} \\end{array}"
             ]
           },
           "execution_count": 6,
@@ -138,7 +138,7 @@
         {
           "data": {
             "text/latex": [
-              "\\begin{array}{llll} \\textbf{region} & \\textbf{avg\\_rev} & \\textbf{n} & \\textbf{diff\\_from\\_avg} \\\\\\\\ \\textit{str} & \\textit{f64} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & 3226.     & 35.00     & 896.5     \\\\\\\\ \\text{North} & 2789.     & 32.00     & 460.3     \\\\\\\\ \\text{West} & 1101.     & 17.00     & -1228.     \\\\\\\\ \\text{South} & 752.6     & 16.00     & -1577.     \\\\\\\\ \\hline \\text{4 rows} \\times \\text{4 cols} \\end{array}"
+              " \\begin{array}{llll} \\textbf{region} & \\textbf{avg\\_rev} & \\textbf{n} & \\textbf{diff\\_from\\_avg} \\\\\\\\ \\textit{str} & \\textit{f64} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & 3226.     & 35.00     & 896.5     \\\\\\\\ \\text{North} & 2789.     & 32.00     & 460.3     \\\\\\\\ \\text{West} & 1101.     & 17.00     & -1228.     \\\\\\\\ \\text{South} & 752.6     & 16.00     & -1577.     \\\\\\\\ \\hline \\text{4 rows} \\times \\text{4 cols} \\end{array}"
             ]
           },
           "execution_count": 7,
@@ -168,7 +168,7 @@
         {
           "data": {
             "text/latex": [
-              "\\begin{array}{lllll} \\textbf{region} & \\textbf{type} & \\textbf{market\\_factor} & \\textbf{total\\_rev} & \\textbf{adjusted\\_rev} \\\\\\\\ \\textit{str} & \\textit{str} & \\textit{f64} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & \\text{Urban} & 1.100     & 1.1290e+5 & 1.2419e+5 \\\\\\\\ \\text{North} & \\text{Urban} & 1.200     & 8.9261e+4 & 1.0711e+5 \\\\\\\\ \\text{West} & \\text{Rural} & 0.8000     & 1.8711e+4 & 1.4969e+4 \\\\\\\\ \\text{South} & \\text{Suburban} & 0.9000     & 1.2042e+4 & 1.0837e+4 \\\\\\\\ \\hline \\text{4 rows} \\times \\text{5 cols} \\end{array}"
+              " \\begin{array}{lllll} \\textbf{region} & \\textbf{type} & \\textbf{market\\_factor} & \\textbf{total\\_rev} & \\textbf{adjusted\\_rev} \\\\\\\\ \\textit{str} & \\textit{str} & \\textit{f64} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & \\text{Urban} & 1.100     & 1.1290e+5 & 1.2419e+5 \\\\\\\\ \\text{North} & \\text{Urban} & 1.200     & 8.9261e+4 & 1.0711e+5 \\\\\\\\ \\text{West} & \\text{Rural} & 0.8000     & 1.8711e+4 & 1.4969e+4 \\\\\\\\ \\text{South} & \\text{Suburban} & 0.9000     & 1.2042e+4 & 1.0837e+4 \\\\\\\\ \\hline \\text{4 rows} \\times \\text{5 cols} \\end{array}"
             ]
           },
           "execution_count": 9,
@@ -208,7 +208,7 @@
         {
           "data": {
             "text/latex": [
-              "\\begin{array}{lll} \\textbf{region} & \\textbf{product} & \\textbf{rev} \\\\\\\\ \\textit{str} & \\textit{str} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & \\text{Gadget} & 4.0793e+4 \\\\\\\\ \\text{East} & \\text{Gizmo} & 4.5317e+4 \\\\\\\\ \\text{East} & \\text{Widget} & 2.6786e+4 \\\\\\\\ \\text{North} & \\text{Gadget} & 3.3048e+4 \\\\\\\\ \\text{North} & \\text{Gizmo} & 3.6185e+4 \\\\\\\\ \\text{North} & \\text{Widget} & 2.0028e+4 \\\\\\\\ \\text{South} & \\text{Gadget} & 3505.     \\\\\\\\ \\text{South} & \\text{Gizmo} & 5487.     \\\\\\\\ \\text{South} & \\text{Widget} & 3050.     \\\\\\\\ \\text{West} & \\text{Gadget} & 5264.     \\\\\\\\ \\text{West} & \\text{Gizmo} & 8902.     \\\\\\\\ \\text{West} & \\text{Widget} & 4545.     \\\\\\\\ \\hline \\text{12 rows} \\times \\text{3 cols} \\end{array}"
+              " \\begin{array}{lll} \\textbf{region} & \\textbf{product} & \\textbf{rev} \\\\\\\\ \\textit{str} & \\textit{str} & \\textit{f64} \\\\\\\\ \\hline \\text{East} & \\text{Gadget} & 4.0793e+4 \\\\\\\\ \\text{East} & \\text{Gizmo} & 4.5317e+4 \\\\\\\\ \\text{East} & \\text{Widget} & 2.6786e+4 \\\\\\\\ \\text{North} & \\text{Gadget} & 3.3048e+4 \\\\\\\\ \\text{North} & \\text{Gizmo} & 3.6185e+4 \\\\\\\\ \\text{North} & \\text{Widget} & 2.0028e+4 \\\\\\\\ \\text{South} & \\text{Gadget} & 3505.     \\\\\\\\ \\text{South} & \\text{Gizmo} & 5487.     \\\\\\\\ \\text{South} & \\text{Widget} & 3050.     \\\\\\\\ \\text{West} & \\text{Gadget} & 5264.     \\\\\\\\ \\text{West} & \\text{Gizmo} & 8902.     \\\\\\\\ \\text{West} & \\text{Widget} & 4545.     \\\\\\\\ \\hline \\text{12 rows} \\times \\text{3 cols} \\end{array}"
             ]
           },
           "execution_count": 11,
@@ -224,7 +224,7 @@
     },
     {
       "cell_type": "code",
-      "source": "/* Fit a symbolic model to the per-region data */\nstats : df_sql(\"SELECT region, AVG(units) as avg_u, AVG(price) as avg_p, AVG(revenue) as avg_r FROM sales GROUP BY region\")$\n/* Revenue should approximately equal units * price */\nprint(\"Revenue ~ units * price check:\")$\nfor i : 0 thru 3 do block([u, p, r],\n  u : np_ref(df_table_column(stats, \"avg_u\"), i),\n  p : np_ref(df_table_column(stats, \"avg_p\"), i),\n  r : np_ref(df_table_column(stats, \"avg_r\"), i),\n  print(\"  \", df_string_column_ref(df_table_column(stats, \"region\"), i+1),\n        \": u*p =\", float(u*p), \"actual =\", r)\n)$",
+      "source": "/* Fit a symbolic model to the per-region data */\nstats : df_sql(\"SELECT region, AVG(units) as avg_u, AVG(price) as avg_p, AVG(revenue) as avg_r FROM sales GROUP BY region ORDER BY region\")$\n/* Revenue should approximately equal units * price */\nprint(\"Revenue ~ units * price check:\")$\nfor i : 0 thru 3 do block([u, p, r],\n  u : np_ref(df_table_column(stats, \"avg_u\"), i),\n  p : np_ref(df_table_column(stats, \"avg_p\"), i),\n  r : np_ref(df_table_column(stats, \"avg_r\"), i),\n  print(\"  \", df_string_column_ref(df_table_column(stats, \"region\"), i+1),\n        \": u*p =\", float(u*p), \"actual =\", r)\n)$",
       "metadata": {},
       "execution_count": 12,
       "outputs": [
@@ -232,7 +232,7 @@
           "name": "stdout",
           "output_type": "stream",
           "text": [
-            "Revenue ~ units * price check:\n   East : u*p = 3185.6314285714293 actual = 3225.6028571428574\n   West : u*p = 1089.2702422145333 actual = 1100.664705882353\n   North : u*p = 2778.5151562500005 actual = 2789.4175\n   South : u*p = 714.5910937500001 actual = 752.5949999999999"
+            "Revenue ~ units * price check:\n   East : u*p = 3185.6314285714293 actual = 3225.6028571428574\n   North : u*p = 2778.5151562500005 actual = 2789.4175\n   South : u*p = 714.5910937500001 actual = 752.5949999999999\n   West : u*p = 1089.2702422145333 actual = 1100.664705882353"
           ]
         }
       ]

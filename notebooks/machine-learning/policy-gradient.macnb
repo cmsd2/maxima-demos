@@ -19,7 +19,7 @@
       "cell_type": "code",
       "source": "load(\"numerics\")$\nload(\"numerics-learn\")$\nload(\"ax-plots\")$",
       "metadata": {},
-      "execution_count": 37,
+      "execution_count": 1,
       "outputs": []
     },
     {
@@ -31,7 +31,7 @@
       "cell_type": "code",
       "source": "/* Pendulum parameters */\ngv : 9.81$  lp : 1.0$  mp : 1.0$  bp : 0.1$\ndt_sim : 0.05$\nhorizon : 80$  /* Steps per episode (4 seconds) */\nu_max : 5.0$  /* Torque clamp */\n\nprint(\"Pendulum: g =\", gv, \" l =\", lp, \" b =\", bp)$\nprint(\"Episode: \", horizon, \"steps x\", dt_sim, \"s =\", horizon * dt_sim, \"s\")$",
       "metadata": {},
-      "execution_count": 38,
+      "execution_count": 2,
       "outputs": [
         {
           "name": "stdout",
@@ -51,7 +51,7 @@
       "cell_type": "code",
       "source": "/* Symbolic policy mean */\nmu_expr : w1 * sin(th) + w2 * cos(th) + w3 * om$\n\n/* Symbolic log-probability (up to constant) */\nlog_pi : -(u_sym - mu_expr)^2 / (2 * sig^2) - log(sig)$\n\n/* Exact score functions via Maxima's symbolic diff() */\nscore_exprs : [diff(log_pi, w1), diff(log_pi, w2), diff(log_pi, w3)]$\n\nprint(\"Policy mean: μ =\", mu_expr)$\nprint(\"Score ∂log π/∂w₁ =\", score_exprs[1])$\nprint(\"Score ∂log π/∂w₂ =\", score_exprs[2])$\nprint(\"Score ∂log π/∂w₃ =\", score_exprs[3])$",
       "metadata": {},
-      "execution_count": 39,
+      "execution_count": 3,
       "outputs": [
         {
           "name": "stdout",
@@ -71,7 +71,7 @@
       "cell_type": "code",
       "source": "np_seed(42)$\n\n/* Policy parameters */\nww : [0.0, 0.0, 0.0]$\nsigma_pol : 1.5$\n\n/* Hyperparameters */\nalpha_lr : 0.01$\ndisc : 0.97$\nn_epochs : 40$\nn_batch : 5$\nsigma_decay : 0.98$\nsigma_min : 0.3$\n\n/* Tracking */\nreturn_history : []$\nbaseline : 0.0$\nbeta_bl : 0.9$  /* Baseline smoothing */\n\nfor epoch : 1 thru n_epochs do (\n  batch_grad : [0.0, 0.0, 0.0],\n  batch_ret : 0.0,\n\n  for b : 1 thru n_batch do (\n    /* Random initial state near upright */\n    theta_v : 0.4 * float(random(2.0) - 1.0),\n    omega_v : 0.2 * float(random(2.0) - 1.0),\n\n    /* Pre-generate noise for episode */\n    noise_arr : np_randn(horizon),\n\n    /* Collect trajectory: rewards and score vectors */\n    rew_arr : np_zeros(horizon),\n    score_list : [],\n\n    for k : 0 thru horizon - 1 do (\n      /* Evaluate policy mean numerically */\n      mu_val : float(subst([w1=ww[1], w2=ww[2], w3=ww[3],\n                            th=theta_v, om=omega_v], mu_expr)),\n\n      /* Sample action from N(mu, sigma^2) */\n      u_raw : mu_val + sigma_pol * np_ref(noise_arr, k),\n      u_act : max(-u_max, min(u_max, float(u_raw))),\n\n      /* Record reward */\n      rwd : -(theta_v^2 + 0.1*omega_v^2 + 0.01*u_act^2),\n      np_set(rew_arr, k, float(rwd)),\n\n      /* Evaluate symbolic score function at current (s, a, w) */\n      sv : float(subst([w1=ww[1], w2=ww[2], w3=ww[3],\n                        th=theta_v, om=omega_v, u_sym=u_act, sig=sigma_pol],\n                       score_exprs)),\n      score_list : endcons(sv, score_list),\n\n      /* Euler step */\n      omega_new : omega_v + dt_sim * (-gv/lp * sin(theta_v) - bp*omega_v\n                                       + u_act/(mp*lp^2)),\n      theta_v : theta_v + dt_sim * omega_new,\n      omega_v : omega_new\n    ),\n\n    /* Discounted returns via np_discount */\n    returns_arr : np_discount(rew_arr, disc),\n    ep_return : np_ref(returns_arr, 0),\n\n    /* Accumulate policy gradient with baseline */\n    for k : 1 thru horizon do (\n      gt : np_ref(returns_arr, k - 1) - baseline,\n      batch_grad : batch_grad + gt * score_list[k]\n    ),\n\n    batch_ret : batch_ret + ep_return\n  ),\n\n  /* Update policy weights */\n  ww : float(ww + (alpha_lr / n_batch) * batch_grad),\n\n  /* Update baseline and exploration */\n  avg_ret : batch_ret / n_batch,\n  baseline : beta_bl * baseline + (1 - beta_bl) * avg_ret,\n  sigma_pol : max(sigma_min, sigma_pol * sigma_decay),\n\n  return_history : endcons(avg_ret, return_history),\n\n  if mod(epoch, 10) = 0 then\n    print(\"Epoch\", epoch, \": avg return =\", avg_ret, \" w =\", ww, \" σ =\", sigma_pol)\n)$\n\nprint(\"\\nFinal policy weights:\", ww)$\nprint(\"Final σ:\", sigma_pol)$",
       "metadata": {},
-      "execution_count": 40,
+      "execution_count": 4,
       "outputs": [
         {
           "name": "stdout",
@@ -96,7 +96,7 @@
       "cell_type": "code",
       "source": "/* Learning curve */\nepoch_list : makelist(i, i, 1, n_epochs)$\nax_draw2d(\n  line_width = 2,\n  color = royalblue,\n  name = \"Avg return\",\n  lines(epoch_list, return_history),\n  title = \"REINFORCE Learning Curve\",\n  xlabel = \"Epoch\",\n  ylabel = \"Average Return\",\n  grid = true\n)$",
       "metadata": {},
-      "execution_count": 41,
+      "execution_count": 5,
       "outputs": [
         {
           "data": {
@@ -118,7 +118,7 @@
       "cell_type": "code",
       "source": "/* Define step function and learned deterministic policy for np_rollout */\ntest_theta0 : 0.4$  /* ~23 degrees */\ntest_omega0 : 0.0$\n\npend_step(sv, u_act) := block([theta_v, omega_v, u_clip, omega_new, rwd],\n  theta_v : sv[1],  omega_v : sv[2],\n  u_clip : max(-u_max, min(u_max, float(u_act))),\n  rwd : -(theta_v^2 + 0.1*omega_v^2 + 0.01*u_clip^2),\n  omega_new : omega_v + dt_sim*(-gv/lp*sin(theta_v) - bp*omega_v + u_clip/(mp*lp^2)),\n  [[theta_v + dt_sim*omega_new, omega_new], rwd, false]\n)$\n\ndet_policy(sv) := block([mu_val],\n  mu_val : float(subst([w1=ww[1], w2=ww[2], w3=ww[3],\n                        th=sv[1], om=sv[2]], mu_expr)),\n  max(-u_max, min(u_max, mu_val))\n)$\n\n/* Collect evaluation trajectory using np_rollout */\n[states_eval, actions_eval, rewards_eval, len_eval] :\n  np_rollout(pend_step, det_policy, [test_theta0, test_omega0], horizon)$\n\n/* Extract histories for plotting */\ntheta_hist : map(first, states_eval)$\nomega_hist : map(second, states_eval)$\nu_hist : listify(actions_eval)$\ntime_hist : makelist((k-1) * dt_sim, k, 1, length(states_eval))$\n\n/* Convert to degrees for readability */\ntheta_deg : map(lambda([x], float(x * 180 / %pi)), theta_hist)$\n\nax_multi(2, 1,\n  ax_draw2d(\n    line_width = 2,\n    color = royalblue,\n    name = \"theta (deg)\",\n    lines(time_hist, theta_deg),\n    color = tomato,\n    dash = \"dash\",\n    name = \"omega (rad/s)\",\n    lines(time_hist, omega_hist),\n    title = sconcat(\"Learned Policy (theta_0 = \", test_theta0, \" rad)\"),\n    xlabel = \"Time (s)\",\n    ylabel = \"State\",\n    grid = true\n  ),\n  ax_draw2d(\n    line_width = 2,\n    color = forestgreen,\n    lines(rest(time_hist), u_hist),\n    title = \"Control Effort\",\n    xlabel = \"Time (s)\",\n    ylabel = \"Torque u\",\n    grid = true\n  )\n)$",
       "metadata": {},
-      "execution_count": 42,
+      "execution_count": 6,
       "outputs": [
         {
           "data": {
@@ -140,7 +140,7 @@
       "cell_type": "code",
       "source": "/* Uncontrolled trajectory for comparison using np_rollout */\nfree_step(sv, u_act) := block([theta_v, omega_v, omega_new],\n  theta_v : sv[1],  omega_v : sv[2],\n  omega_new : omega_v + dt_sim*(-gv/lp*sin(theta_v) - bp*omega_v),\n  [[theta_v + dt_sim*omega_new, omega_new], 0.0, false]\n)$\n\nzero_policy(sv) := 0.0$\n\n[free_states, _, _, _] :\n  np_rollout(free_step, zero_policy, [test_theta0, test_omega0], horizon)$\n\nfree_theta : map(first, free_states)$\nfree_omega : map(second, free_states)$\n\nax_draw2d(\n  line_width = 2,\n  color = royalblue,\n  name = \"Learned policy\",\n  lines(theta_hist, omega_hist),\n  color = tomato,\n  dash = \"dash\",\n  name = \"Uncontrolled\",\n  lines(free_theta, free_omega),\n  marker_symbol = \"triangle-up-open\",\n  marker_size = 10,\n  color = black,\n  name = \"Start\",\n  points([[test_theta0, test_omega0]]),\n  marker_symbol = \"circle\",\n  color = forestgreen,\n  name = \"Goal\",\n  points([[0, 0]]),\n  title = \"Phase Portrait: theta vs omega\",\n  xlabel = \"theta (rad)\",\n  ylabel = \"omega (rad/s)\",\n  grid = true\n)$",
       "metadata": {},
-      "execution_count": 43,
+      "execution_count": 7,
       "outputs": [
         {
           "data": {
