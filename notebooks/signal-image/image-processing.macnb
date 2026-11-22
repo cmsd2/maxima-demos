@@ -34,13 +34,6 @@
       "execution_count": 2,
       "outputs": [
         {
-          "name": "stdout",
-          "output_type": "stream",
-          "text": [
-            "WARNING:\n   Extension chunk type not implemented: \"eXIf\" (101 88 73 102) in stream: NIL."
-          ]
-        },
-        {
           "data": {
             "text/latex": [
               "\\left[ 512 , 512 , 3 \\right] "

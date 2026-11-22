@@ -74,7 +74,7 @@
         {
           "data": {
             "text/latex": [
-              " \\begin{array}{lll} \\textbf{product} & \\textbf{avg\\_price} & \\textbf{avg\\_units} \\\\\\\\ \\textit{str} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{Gadget} & 29.49     & 93.83     \\\\\\\\ \\text{Gizmo} & 44.49     & 101.8     \\\\\\\\ \\text{Widget} & 16.99     & 97.83     \\\\\\\\ \\hline \\text{3 rows} \\times \\text{3 cols} \\end{array}"
+              " \\begin{array}{lll} \\textbf{product} & \\textbf{avg\\_price} & \\textbf{avg\\_units} \\\\\\\\ \\textit{str} & \\textit{f64} & \\textit{f64} \\\\\\\\ \\hline \\text{Widget} & 16.99     & 97.83     \\\\\\\\ \\text{Gadget} & 29.49     & 93.83     \\\\\\\\ \\text{Gizmo} & 44.49     & 101.8     \\\\\\\\ \\hline \\text{3 rows} \\times \\text{3 cols} \\end{array}"
             ]
           },
           "execution_count": 4,
