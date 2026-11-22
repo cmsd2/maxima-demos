@@ -1,0 +1,271 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 5,
+  "metadata": {
+    "kernelspec": {
+      "name": "maxima",
+      "display_name": "Maxima",
+      "language": "maxima"
+    },
+    "aximar": {}
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "source": "# Bridge Truss Analysis: Direct Stiffness Method\n\nThis notebook analyses a steel bridge truss with the direct stiffness method, the matrix technique behind structural analysis software. We derive the stiffness matrix of a single bar symbolically, solve a two-bar truss in closed form, then assemble and solve a 21-member Pratt bridge numerically.\n\nTwo independent checks confirm the numbers: the support reactions must balance the applied load, and a hand calculation by the method of sections must reproduce the force in a chord member. A final comparison with the Howe truss shows why the direction of the diagonals matters.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "load(\"numerics\")$\nload(\"ax-plots\")$",
+      "metadata": {},
+      "execution_count": 1,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## The Bar Element [S]\n\nA truss member carries only axial force. Along its own axis a bar of length $L$, Young's modulus $E$ and cross-section $A$ behaves as a spring of stiffness $EA/L$:\n\n$$\\begin{pmatrix} N_i \\\\ N_j \\end{pmatrix} = \\frac{EA}{L} \\begin{pmatrix} 1 & -1 \\\\ -1 & 1 \\end{pmatrix} \\begin{pmatrix} u_i \\\\ u_j \\end{pmatrix}$$\n\nIn the plane each end node has two displacements $(u, v)$. With $c = \\cos\\theta$ and $s = \\sin\\theta$ for the bar's angle $\\theta$, the axial displacement of an end is $c\\,u + s\\,v$. The transformation $T$ maps the four global displacements onto the two axial ones, and the element stiffness in global coordinates is $T^{\\mathsf T} k_{\\text{local}}\\, T$.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "k_local : EA/L * matrix([1, -1], [-1, 1])$\nT_rot : matrix([c, s, 0, 0], [0, 0, c, s])$\nk_e : expand(transpose(T_rot) . k_local . T_rot);",
+      "metadata": {},
+      "execution_count": 2,
+      "outputs": [
+        {
+          "data": {
+            "text/latex": [
+              "\\ifx\\endpmatrix\\undefined\\pmatrix{\\else\\begin{pmatrix}\\fi {{{\\it EA}\\,c^2 }\\over{L}}&{{{\\it EA}\\,c\\,s}\\over{L}}&-\\left({{{\\it EA}\\,c^2}\\over{L}}\\right) &-\\left({{{\\it EA}\\,c\\,s}\\over{L}}\\right)\\cr {{{\\it EA}\\,c\\,s}\\over{L}}&{{ {\\it EA}\\,s^2}\\over{L}}&-\\left({{{\\it EA}\\,c\\,s}\\over{L}}\\right)&-\\left({{ {\\it EA}\\,s^2}\\over{L}}\\right)\\cr -\\left({{{\\it EA}\\,c^2}\\over{L}}\\right)&- \\left({{{\\it EA}\\,c\\,s}\\over{L}}\\right)&{{{\\it EA}\\,c^2}\\over{L}}&{{{\\it EA} \\,c\\,s}\\over{L}}\\cr -\\left({{{\\it EA}\\,c\\,s}\\over{L}}\\right)&-\\left({{ {\\it EA}\\,s^2}\\over{L}}\\right)&{{{\\it EA}\\,c\\,s}\\over{L}}&{{{\\it EA}\\,s^2 }\\over{L}}\\cr \\ifx\\endpmatrix\\undefined}\\else\\end{pmatrix}\\fi "
+            ]
+          },
+          "execution_count": 2,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## A Two-Bar Truss in Closed Form [S+N]\n\nTwo identical bars hang from supports at $(-b, h)$ and $(b, h)$ and meet at a free node at the origin, which carries a downward load $P$. Only the free node can move, so the global system shrinks to the $2 \\times 2$ block of the free node's two displacements. The free node is each bar's first node, so each bar contributes the upper-left block of its element matrix.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "/* Bar 1 runs from the free node (0,0) to (-b, h); bar 2 to (b, h) */\nL_bar : sqrt(b^2 + h^2)$\nk_block(cv, sv) := submatrix(3, 4, subst([c = cv, s = sv, L = L_bar], k_e), 3, 4)$\nK_free : k_block(-b/L_bar, h/L_bar) + k_block(b/L_bar, h/L_bar)$\nuv : factor(linsolve(flatten(args(K_free . matrix([u0], [v0]) - matrix([0], [-P]))), [u0, v0]));",
+      "metadata": {},
+      "execution_count": 3,
+      "outputs": [
+        {
+          "data": {
+            "text/latex": [
+              "\\left[ u_{0}=0 , v_{0}=-\\left({{P\\,\\left(h^2+b^2\\right)^{{{3}\\over{2}}} }\\over{2\\,{\\it EA}\\,h^2}}\\right) \\right] "
+            ]
+          },
+          "execution_count": 3,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "The node moves straight down by symmetry, by $\\delta = P L^3 / (2 E A h^2)$. Steep bars (large $h$) give a stiff structure, and shallow bars deflect a great deal, because a shallow bar must carry a large axial force to supply a small vertical component.\n\nFor $b = h = 2$ m, $EA = 10^9$ N and $P = 100$ kN:",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "float(subst([b = 2, h = 2, EA = 1.0e9, P = 1.0e5], rhs(uv[2])));",
+      "metadata": {},
+      "execution_count": 4,
+      "outputs": [
+        {
+          "data": {
+            "text/latex": [
+              "-2.8284271247461907 \\times 10^{-4}"
+            ]
+          },
+          "execution_count": 4,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## A Pratt Bridge [N]\n\nThe bridge spans 24 m in six 4 m panels and stands 4 m tall. Seven nodes form the bottom chord, which carries the deck, and five form the top chord. In a Pratt truss the diagonals slope down towards the centre, so under deck load they carry tension.\n\nEvery member is a steel section with $E = 200$ GPa and $A = 50$ cm², so $EA = 10^9$ N. A pin at the left end and a roller at the right support the bridge, and each of the five interior deck nodes carries 50 kN.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "d : 4.0$   /* panel length (m) */\nht : 4.0$  /* height (m) */\nEA_v : 1.0e9$\nP_node : 50.0e3$\n\n/* Node numbers: bottom chord B(0..6) are 1..7, top chord T(1..5) are 8..12 */\nB(i) := i + 1$\nT(i) := 7 + i$\nnodes : append(makelist([d*i, 0.0], i, 0, 6), makelist([d*i, ht], i, 1, 5))$\n\nchords : append(makelist([B(i), B(i+1)], i, 0, 5),\n                makelist([T(i), T(i+1)], i, 1, 4),\n                [[B(0), T(1)], [B(6), T(5)]])$\nverticals : makelist([B(i), T(i)], i, 1, 5)$\npratt_diagonals : [[T(1), B(2)], [T(2), B(3)], [T(4), B(3)], [T(5), B(4)]]$\nhowe_diagonals : [[B(1), T(2)], [B(2), T(3)], [B(4), T(3)], [B(5), T(4)]]$\npratt : append(chords, verticals, pratt_diagonals)$\nprint(length(nodes), \"nodes,\", length(pratt), \"members\")$",
+      "metadata": {},
+      "execution_count": 5,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "12 nodes, 21 members"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Assembly [S+N]\n\nAssembly adds each element matrix into the global matrix at the rows and columns of its two nodes' degrees of freedom. The numeric element matrix comes straight from the symbolic `k_e` derived above.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "geometry(m) := block([xi, yi, xj, yj, len],\n  [xi, yi] : nodes[m[1]],\n  [xj, yj] : nodes[m[2]],\n  len : sqrt((xj - xi)^2 + (yj - yi)^2),\n  [len, (xj - xi)/len, (yj - yi)/len])$\n\nassemble(members) := block([K : zeromatrix(2*length(nodes), 2*length(nodes)), g, ke, dofs],\n  for m in members do (\n    g : geometry(m),\n    ke : float(subst([EA = EA_v, L = g[1], c = g[2], s = g[3]], k_e)),\n    dofs : [2*m[1] - 1, 2*m[1], 2*m[2] - 1, 2*m[2]],\n    for p : 1 thru 4 do for q : 1 thru 4 do\n      K[dofs[p], dofs[q]] : K[dofs[p], dofs[q]] + ke[p, q]),\n  K)$\n\nK_pratt : assemble(pratt)$\nprint(\"Global stiffness matrix:\", length(K_pratt), \"x\", length(K_pratt))$\nprint(\"Symmetric:\", is(K_pratt = transpose(K_pratt)))$",
+      "metadata": {},
+      "execution_count": 6,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Global stiffness matrix: 24 x 24\nSymmetric: true"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Solving for Displacements [N]\n\nThe pin fixes both displacements of node $B_0$, and the roller fixes the vertical displacement of $B_6$. Deleting those three rows and columns leaves a $21 \\times 21$ system $K_{ff}\\,\\mathbf{u}_f = \\mathbf{F}_f$, which `np_solve` handles directly.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "n_dof : 2*length(nodes)$\nfixed : [2*B(0) - 1, 2*B(0), 2*B(6)]$\nfree : sublist(makelist(i, i, 1, n_dof), lambda([dof], not member(dof, fixed)))$\n\nF : makelist(0.0, i, 1, n_dof)$\nfor i : 1 thru 5 do F[2*B(i)] : -P_node$\n\nsolve_truss(members) := block([K, K_ff, F_f, u_f, u, R],\n  K : assemble(members),\n  K_ff : genmatrix(lambda([i, j], K[free[i], free[j]]), length(free), length(free)),\n  F_f : makelist(F[free[i]], i, 1, length(free)),\n  u_f : np_to_list(np_flatten(np_solve(ndarray(K_ff), ndarray(transpose(matrix(F_f)))))),\n  u : makelist(0.0, i, 1, n_dof),\n  for i : 1 thru length(free) do u[free[i]] : u_f[i],\n  R : makelist((K . transpose(matrix(u)))[dof, 1] - F[dof], dof, fixed),\n  [u, R])$\n\n[u_pratt, R_pratt] : solve_truss(pratt)$\nprintf(true, \"Midspan deflection: ~,2f mm~%\", u_pratt[2*B(3)]*1000)$",
+      "metadata": {},
+      "execution_count": 7,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Midspan deflection: -9.55 mm"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Member Forces [N]\n\nEach member's axial force follows from the stretch of its ends along its own axis: $N = \\frac{EA}{L}\\left[c\\,(u_j - u_i) + s\\,(v_j - v_i)\\right]$. Positive $N$ is tension.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "member_force(m, u) := block([g : geometry(m)],\n  EA_v/g[1] * (g[2]*(u[2*m[2] - 1] - u[2*m[1] - 1]) + g[3]*(u[2*m[2]] - u[2*m[1]])))$\n\nN_pratt : makelist(member_force(m, u_pratt), m, pratt)$\nnode_name(k) := if k <= 7 then sconcat(\"B\", k - 1) else sconcat(\"T\", k - 7)$\nmember_name(m) := sconcat(node_name(m[1]), \"-\", node_name(m[2]))$\nfor k : 1 thru length(pratt) do\n  printf(true, \"~6a ~10,1f kN ~a~%\", member_name(pratt[k]), N_pratt[k]/1000,\n         if abs(N_pratt[k]) < 1.0 then \"zero force\"\n         elseif N_pratt[k] > 0 then \"tension\" else \"compression\")$",
+      "metadata": {},
+      "execution_count": 8,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "B0-B1       125.0 kN tension\nB1-B2       125.0 kN tension\nB2-B3       200.0 kN tension\nB3-B4       200.0 kN tension\nB4-B5       125.0 kN tension\nB5-B6       125.0 kN tension\nT1-T2      -200.0 kN compression\nT2-T3      -225.0 kN compression\nT3-T4      -225.0 kN compression\nT4-T5      -200.0 kN compression\nB0-T1      -176.8 kN compression\nB6-T5      -176.8 kN compression\nB1-T1        50.0 kN tension\nB2-T2       -25.0 kN compression\nB3-T3         0.0 kN zero force\nB4-T4       -25.0 kN compression\nB5-T5        50.0 kN tension\nT1-B2       106.1 kN tension\nT2-B3        35.4 kN tension\nT4-B3        35.4 kN tension\nT5-B4       106.1 kN tension"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "The plot draws the deformed bridge with displacements magnified 50 times. Blue members are in tension and red ones in compression, labelled in kN. The top chord is in compression and the bottom chord in tension, as in a simply supported beam, and every diagonal is in tension. The centre vertical carries nothing under this symmetric load: it only braces the top chord.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "scale : 50$\npos(k, u) := [nodes[k][1] + scale*u[2*k - 1], nodes[k][2] + scale*u[2*k]]$\n\ndraw_truss(members, u, N, title_text) := block([objs : []],\n  for k : 1 thru length(members) do block([m : members[k], p1, p2],\n    p1 : pos(m[1], u), p2 : pos(m[2], u),\n    objs : append(objs, [\n      color = \"lightgray\", dash = \"dash\",\n      lines([nodes[m[1]][1], nodes[m[2]][1]], [nodes[m[1]][2], nodes[m[2]][2]]),\n      color = if N[k] > 0 then \"steelblue\" else \"crimson\", dash = \"solid\", line_width = 3,\n      lines([p1[1], p2[1]], [p1[2], p2[2]]),\n      label([string(round(N[k]/1000)), (p1[1] + p2[1])/2, (p1[2] + p2[2])/2 + 0.35])])),\n  apply(ax_draw2d, append(objs, [\n    color = \"black\", marker_size = 12, marker_symbol = \"triangle-up\",\n    points([0.0, 24.0], [-0.4, -0.4]),\n    title = title_text, xlabel = \"x (m)\", ylabel = \"y (m)\",\n    aspect_ratio = true, showlegend = false, yrange = [-1.5, 5.5]])))$\n\ndraw_truss(pratt, u_pratt, N_pratt,\n  \"Pratt Truss: Deformed Shape (x50), Forces in kN\")$",
+      "metadata": {},
+      "execution_count": 9,
+      "outputs": [
+        {
+          "data": {
+            "application/x-maxima-plotly": [
+              "{\"data\":[{\"x\":[0.0,4.0],\"y\":[0.0,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":2,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[0.0,4.025],\"y\":[0.0,-0.25571067811865633],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[4.0,8.0],\"y\":[0.0,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[4.025,8.05],\"y\":[-0.25571067811865633,-0.4131370849898502],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[8.0,12.0],\"y\":[0.0,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[8.05,12.09],\"y\":[-0.4131370849898502,-0.47727922061358136],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[12.0,16.0],\"y\":[0.0,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[12.09,16.130000000000003],\"y\":[-0.47727922061358136,-0.41313708498985],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[16.0,20.0],\"y\":[0.0,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[16.130000000000003,20.155],\"y\":[-0.41313708498985,-0.25571067811865605],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[20.0,24.0],\"y\":[0.0,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[20.155,24.18],\"y\":[-0.25571067811865605,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[4.0,8.0],\"y\":[4.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[4.175000000000002,8.135000000000002],\"y\":[3.754289321881344,3.5818629150101495],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[8.0,12.0],\"y\":[4.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[8.135000000000002,12.09],\"y\":[3.5818629150101495,3.5227207793864186],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[12.0,16.0],\"y\":[4.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[12.09,16.045],\"y\":[3.5227207793864186,3.58186291501015],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[16.0,20.0],\"y\":[4.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[16.045,20.005],\"y\":[3.58186291501015,3.754289321881344],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[0.0,4.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[0.0,4.175000000000002],\"y\":[0.0,3.754289321881344],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[24.0,20.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[24.18,20.005],\"y\":[0.0,3.754289321881344],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[4.0,4.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[4.025,4.175000000000002],\"y\":[-0.25571067811865633,3.754289321881344],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[8.0,8.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[8.05,8.135000000000002],\"y\":[-0.4131370849898502,3.5818629150101495],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[12.0,12.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[12.09,12.09],\"y\":[-0.47727922061358136,3.5227207793864186],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[16.0,16.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[16.130000000000003,16.045],\"y\":[-0.41313708498985,3.58186291501015],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[20.0,20.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[20.155,20.005],\"y\":[-0.25571067811865605,3.754289321881344],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[4.0,8.0],\"y\":[4.0,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[4.175000000000002,8.05],\"y\":[3.754289321881344,-0.4131370849898502],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[8.0,12.0],\"y\":[4.0,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[8.135000000000002,12.09],\"y\":[3.5818629150101495,-0.47727922061358136],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[16.0,12.0],\"y\":[4.0,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[16.045,12.09],\"y\":[3.58186291501015,-0.47727922061358136],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[20.0,16.0],\"y\":[4.0,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[20.005,16.130000000000003],\"y\":[3.754289321881344,-0.41313708498985],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[0.0,24.0],\"y\":[-0.4,-0.4],\"type\":\"scatter\",\"mode\":\"markers\",\"marker\":{\"color\":\"black\",\"size\":12,\"symbol\":\"triangle-up\"},\"name\":\"points\"}],\"layout\":{\"title\":{\"text\":\"Pratt Truss: Deformed Shape (x50), Forces in kN\"},\"showlegend\":false,\"width\":700,\"height\":700,\"plot_bgcolor\":\"white\",\"paper_bgcolor\":\"white\",\"xaxis\":{\"title\":{\"text\":\"x (m)\"},\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"yaxis\":{\"title\":{\"text\":\"y (m)\"},\"scaleanchor\":\"x\",\"scaleratio\":1.0,\"range\":[-1.5,5.5],\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"annotations\":[{\"text\":\"125\",\"x\":2.0125,\"y\":0.2221446609406718,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"125\",\"x\":6.0375000000000005,\"y\":0.01557611844574669,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"200\",\"x\":10.07,\"y\":-0.0952081528017158,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"200\",\"x\":14.110000000000001,\"y\":-0.09520815280171568,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"125\",\"x\":18.142500000000002,\"y\":0.015576118445746912,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"125\",\"x\":22.1675,\"y\":0.22214466094067195,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"-200\",\"x\":6.155000000000001,\"y\":4.018076118445746,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}},{\"text\":\"-225\",\"x\":10.1125,\"y\":3.9022918471982844,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}},{\"text\":\"-225\",\"x\":14.0675,\"y\":3.9022918471982844,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}},{\"text\":\"-200\",\"x\":18.025,\"y\":4.018076118445746,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}},{\"text\":\"-177\",\"x\":2.087500000000001,\"y\":2.227144660940672,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}},{\"text\":\"-177\",\"x\":22.0925,\"y\":2.227144660940672,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}},{\"text\":\"50\",\"x\":4.100000000000001,\"y\":2.0992893218813435,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"-25\",\"x\":8.092500000000001,\"y\":1.9343629150101496,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}},{\"text\":\"0\",\"x\":12.09,\"y\":1.8727207793864187,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"-25\",\"x\":16.087500000000002,\"y\":1.93436291501015,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}},{\"text\":\"50\",\"x\":20.08,\"y\":2.099289321881344,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"106\",\"x\":6.112500000000001,\"y\":2.0205761184457467,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"35\",\"x\":10.1125,\"y\":1.902291847198284,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"35\",\"x\":14.0675,\"y\":1.9022918471982844,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"106\",\"x\":18.067500000000003,\"y\":2.0205761184457467,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}}]}}"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Check 1: Equilibrium [N]\n\nThe reactions are the forces the supports must supply, $\\mathbf{R} = K\\mathbf{u} - \\mathbf{F}$ at the fixed degrees of freedom. Together they must cancel the 250 kN of deck load, and by symmetry each support takes half.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "printf(true, \"Horizontal reaction at the pin: ~,3f kN~%\", R_pratt[1]/1000)$\nprintf(true, \"Vertical reactions: ~,3f kN and ~,3f kN~%\", R_pratt[2]/1000, R_pratt[3]/1000)$\nprintf(true, \"Sum of vertical reactions: ~,3f kN~%\", (R_pratt[2] + R_pratt[3])/1000)$",
+      "metadata": {},
+      "execution_count": 10,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Horizontal reaction at the pin: -0.000 kN\nVertical reactions: 125.000 kN and 125.000 kN\nSum of vertical reactions: 250.000 kN"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Check 2: The Method of Sections [S+N]\n\nCut the bridge through the third panel, between $x = 2d$ and $x = 3d$. The cut crosses the top chord $T_2$–$T_3$, the diagonal $T_2$–$B_3$ and the bottom chord $B_2$–$B_3$. Taking moments about $B_3$, where the diagonal and the bottom chord meet, eliminates both of them and leaves only the top chord, whose lever arm is the height $h$:\n\n$$F_{T_2T_3} = -\\frac{M(3d)}{h}$$\n\nwhere $M(3d)$ is the bending moment the loads and the left reaction produce at $B_3$.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "R_left : 5*Pn/2$\nM_B3 : R_left*3*dp - Pn*(2*dp) - Pn*dp$\nF_top : ratsimp(-M_B3/hp);\nprintf(true, \"Method of sections: ~,3f kN~%\", float(subst([Pn = P_node, dp = d, hp = ht], F_top))/1000)$\nprintf(true, \"Stiffness method:   ~,3f kN~%\", N_pratt[sublist_indices(pratt, lambda([m], is(m = [T(2), T(3)])))[1]]/1000)$",
+      "metadata": {},
+      "execution_count": 11,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "-((9*Pn*dp)/(2*hp))\nMethod of sections: -225.000 kN\nStiffness method:   -225.000 kN"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "The two methods agree. This bridge is statically determinate (21 members plus 3 reactions equal 24 equilibrium equations), so statics alone fixes the member forces, and the stiffness method must reproduce them whatever the cross-sections. The stiffness method also gives the displacements, and it works unchanged for indeterminate structures, where statics alone is not enough.\n\n## Pratt versus Howe [N]\n\nA Howe truss uses the same chords and verticals with the diagonals reversed. They now slope up towards the centre and carry compression, and the verticals carry tension instead. Long compression members can buckle, so steel bridges favour the Pratt layout and timber ones, which have stronger compression joints, historically used the Howe.",
+      "metadata": {}
+    },
+    {
+      "cell_type": "code",
+      "source": "howe : append(chords, verticals, howe_diagonals)$\n[u_howe, R_howe] : solve_truss(howe)$\nN_howe : makelist(member_force(m, u_howe), m, howe)$\n\ndiag_forces(members, N) := makelist(N[k]/1000, k, length(members) - 3, length(members))$\nprintf(true, \"Pratt diagonals: ~{~8,1f~} kN~%\", diag_forces(pratt, N_pratt))$\nprintf(true, \"Howe diagonals:  ~{~8,1f~} kN~%\", diag_forces(howe, N_howe))$\nprintf(true, \"Midspan deflection: Pratt ~,2f mm, Howe ~,2f mm~%\", u_pratt[2*B(3)]*1000, u_howe[2*B(3)]*1000)$\n\ndraw_truss(howe, u_howe, N_howe,\n  \"Howe Truss: Deformed Shape (x50), Forces in kN\")$",
+      "metadata": {},
+      "execution_count": 12,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Pratt diagonals:    106.1    35.4    35.4   106.1 kN\nHowe diagonals:    -106.1   -35.4   -35.4  -106.1 kN\nMidspan deflection: Pratt -9.55 mm, Howe -10.45 mm"
+          ]
+        },
+        {
+          "data": {
+            "application/x-maxima-plotly": [
+              "{\"data\":[{\"x\":[0.0,4.0],\"y\":[0.0,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":2,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[0.0,4.025],\"y\":[0.0,-0.2707106781186554],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[4.0,8.0],\"y\":[0.0,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[4.025,8.065],\"y\":[-0.2707106781186554,-0.45313708498984884],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[8.0,12.0],\"y\":[0.0,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[8.065,12.11],\"y\":[-0.45313708498984884,-0.5222792206135801],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[12.0,16.0],\"y\":[0.0,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[12.11,16.155],\"y\":[-0.5222792206135801,-0.45313708498984906],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[16.0,20.0],\"y\":[0.0,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[16.155,20.195],\"y\":[-0.45313708498984906,-0.2707106781186555],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[20.0,24.0],\"y\":[0.0,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[20.195,24.22],\"y\":[-0.2707106781186555,0.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[4.0,8.0],\"y\":[4.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[4.175000000000001,8.15],\"y\":[3.7542893218813447,3.5618629150101513],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[8.0,12.0],\"y\":[4.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[8.15,12.11],\"y\":[3.5618629150101513,3.48772077938642],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[12.0,16.0],\"y\":[4.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[12.11,16.07],\"y\":[3.48772077938642,3.561862915010151],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[16.0,20.0],\"y\":[4.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[16.07,20.045],\"y\":[3.561862915010151,3.7542893218813447],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[0.0,4.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[0.0,4.175000000000001],\"y\":[0.0,3.7542893218813447],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[24.0,20.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[24.22,20.045],\"y\":[0.0,3.7542893218813447],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[4.0,4.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[4.025,4.175000000000001],\"y\":[-0.2707106781186554,3.7542893218813447],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[8.0,8.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[8.065,8.15],\"y\":[-0.45313708498984884,3.5618629150101513],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[12.0,12.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[12.11,12.11],\"y\":[-0.5222792206135801,3.48772077938642],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[16.0,16.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[16.155,16.07],\"y\":[-0.45313708498984906,3.561862915010151],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[20.0,20.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[20.195,20.045],\"y\":[-0.2707106781186555,3.7542893218813447],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"steelblue\",\"width\":3},\"name\":\"lines\"},{\"x\":[4.0,8.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[4.025,8.15],\"y\":[-0.2707106781186554,3.5618629150101513],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[8.0,12.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[8.065,12.11],\"y\":[-0.45313708498984884,3.48772077938642],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[16.0,12.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[16.155,12.11],\"y\":[-0.45313708498984906,3.48772077938642],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[20.0,16.0],\"y\":[0.0,4.0],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"lightgray\",\"width\":3,\"dash\":\"dash\"},\"name\":\"lines\"},{\"x\":[20.195,16.07],\"y\":[-0.2707106781186555,3.561862915010151],\"type\":\"scatter\",\"mode\":\"lines\",\"line\":{\"color\":\"crimson\",\"width\":3},\"name\":\"lines\"},{\"x\":[0.0,24.0],\"y\":[-0.4,-0.4],\"type\":\"scatter\",\"mode\":\"markers\",\"marker\":{\"color\":\"black\",\"size\":12,\"symbol\":\"triangle-up\"},\"name\":\"points\"}],\"layout\":{\"title\":{\"text\":\"Howe Truss: Deformed Shape (x50), Forces in kN\"},\"showlegend\":false,\"width\":700,\"height\":700,\"plot_bgcolor\":\"white\",\"paper_bgcolor\":\"white\",\"xaxis\":{\"title\":{\"text\":\"x (m)\"},\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"yaxis\":{\"title\":{\"text\":\"y (m)\"},\"scaleanchor\":\"x\",\"scaleratio\":1.0,\"range\":[-1.5,5.5],\"gridcolor\":\"#ddd\",\"linecolor\":\"#ddd\",\"linewidth\":1,\"zerolinecolor\":\"black\",\"zerolinewidth\":1},\"annotations\":[{\"text\":\"125\",\"x\":2.0125,\"y\":0.21464466094067228,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"200\",\"x\":6.045,\"y\":-0.01192388155425217,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"225\",\"x\":10.087499999999999,\"y\":-0.1377081528017145,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"225\",\"x\":14.1325,\"y\":-0.1377081528017146,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"200\",\"x\":18.175,\"y\":-0.01192388155425228,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"125\",\"x\":22.2075,\"y\":0.21464466094067222,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"-125\",\"x\":6.1625000000000005,\"y\":4.008076118445747,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}},{\"text\":\"-200\",\"x\":10.129999999999999,\"y\":3.8747918471982854,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}},{\"text\":\"-200\",\"x\":14.09,\"y\":3.8747918471982854,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}},{\"text\":\"-125\",\"x\":18.0575,\"y\":4.008076118445747,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}},{\"text\":\"-177\",\"x\":2.0875000000000004,\"y\":2.2271446609406724,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}},{\"text\":\"-177\",\"x\":22.1325,\"y\":2.2271446609406724,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}},{\"text\":\"125\",\"x\":4.1000000000000005,\"y\":2.0917893218813446,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"75\",\"x\":8.1075,\"y\":1.904362915010151,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"50\",\"x\":12.11,\"y\":1.83272077938642,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"75\",\"x\":16.1125,\"y\":1.904362915010151,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"125\",\"x\":20.12,\"y\":2.0917893218813446,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"steelblue\"}},{\"text\":\"-106\",\"x\":6.0875,\"y\":1.9955761184457481,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}},{\"text\":\"-35\",\"x\":10.087499999999999,\"y\":1.8672918471982856,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}},{\"text\":\"-35\",\"x\":14.1325,\"y\":1.8672918471982856,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}},{\"text\":\"-106\",\"x\":18.1325,\"y\":1.9955761184457477,\"xref\":\"x\",\"yref\":\"y\",\"showarrow\":false,\"font\":{\"color\":\"crimson\"}}]}}"
+            ]
+          },
+          "metadata": {},
+          "output_type": "display_data"
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": "## Summary\n\n| Step | Method |\n|------|--------|\n| Element stiffness | Symbolic: $T^{\\mathsf T} k_{\\text{local}} T$ for a bar at any angle |\n| Two-bar truss | Symbolic: closed-form deflection $P L^3 / (2EAh^2)$ |\n| Bridge assembly | Numeric: 21 element matrices added into a $24 \\times 24$ system |\n| Solution | `np_solve` on the $21 \\times 21$ free block |\n| Verification | Reactions balance the load; method of sections matches the chord force |\n\nThe same few functions, `assemble`, `solve_truss` and `member_force`, analyse any pin-jointed plane truss. Changing the node and member lists is enough to study another design.",
+      "metadata": {}
+    }
+  ]
+}
