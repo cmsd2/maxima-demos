@@ -17,7 +17,7 @@
     },
     {
       "cell_type": "code",
-      "source": "load(\"numerics\")$\nload(\"numerics-sundials\")$\nload(\"numerics-learn\")$\nload(\"ax-plots\")$\n/* np_cvode prints a rat: line for each float in a right-hand side that uses\n   max or min.  Hide them. */\nratprint : false$",
+      "source": "load(\"numerics\")$\nload(\"numerics-sundials\")$\nload(\"numerics-learn\")$\nload(\"ax-plots\")$\n/* Maxima prints a rat: line for each float when it simplifies max or min of\n   expressions with float coefficients, as the clipped torque below does.\n   Hide them. */\nratprint : false$",
       "metadata": {},
       "execution_count": 1,
       "outputs": []
